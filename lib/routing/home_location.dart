@@ -1,5 +1,3 @@
-import 'package:activity_guide/screens/admin/template/template_builder.dart';
-import 'package:activity_guide/screens/users/testHome.dart';
 import 'package:activity_guide/views/home_page.dart';
 import 'package:beamer/beamer.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -15,7 +13,7 @@ class HomeLocation extends BeamLocation{
   @override
   // TODO: implement pathPatterns
   List<Pattern> get pathPatterns => ['/home','/home/template','/home/welcome',
-    '/home/dashboard','/home/notification'];
+    '/home/dashboard','/home/notification','/home/feedback'];
 
 
 }

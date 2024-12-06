@@ -36,9 +36,9 @@ class CustomTable extends StatelessWidget {
     return  Row( mainAxisAlignment: MainAxisAlignment.center,
       children: [
         CustomTableCell(size: 50, child: Text((index+1).toString(),style: AppTextStyles.tableColumns,)),
-        CustomTableCell(size: 330, child: TextFormField(controller: rowData.variableNameController,
+        CustomTableCell(size: 330, child: TextField(controller: rowData.variableNameController,
           onChanged: (v){
-          rowData.variableNameController.text = v;
+        //  rowData.variableNameController.text = v;
           onRowUpdate(index,rowData);
           },
          decoration: const InputDecoration(
@@ -75,9 +75,9 @@ class CustomTable extends StatelessWidget {
     ),
  CustomTableCell(size: 310, child:
         Tooltip( message: rowData.info,
-          child: TextFormField(controller: rowData.rangeController,enabled: rowData.rangeStatus,
+          child: TextField(controller: rowData.rangeController,enabled: rowData.rangeStatus,
             onChanged: (value){
-            rowData.rangeController.text = value;
+          //  rowData.rangeController.text = value;
             onRowUpdate(index,rowData);
             },
               decoration: const InputDecoration(focusedBorder: OutlineInputBorder()),),

@@ -13,7 +13,7 @@ class TemplateProvider with ChangeNotifier {
   // Method to print rows data
   Future<void> printRowsData() async {
     jsonObject.clear();
-    EasyLoading.show(status: 'Loading...');
+   // EasyLoading.show(status: 'Loading...');
     for (int i = 0; i<rows.length;i++) {
       if(rows[i].variableNameController.text.isEmpty || rows[i].dataTypeController.text.isEmpty ||
           rows[i].rangeController.text.isEmpty){
@@ -73,6 +73,7 @@ class TemplateProvider with ChangeNotifier {
   Future<void> editTemplate() async{
     rows.clear();
     String? template = await MysharedPreference().getPreferences('template');
+    print(template);
     //Decode the JSON
     List<dynamic> jsonList = jsonDecode(template!);
     //converting JSON array to map

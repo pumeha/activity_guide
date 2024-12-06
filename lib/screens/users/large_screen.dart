@@ -22,7 +22,8 @@ class LargeScreen extends StatelessWidget {
         Expanded(child: SideMenu()),
         Expanded(flex: 5,
           child: Beamer(routerDelegate: BeamerDelegate(locationBuilder: BeamerLocationBuilder(beamLocations: [
-            WelcomeLocation(),TemplateLocation(),DashboardLocation(),NotificationLocation()
+            WelcomeLocation(),TemplateLocation(),DashboardLocation(),NotificationLocation(),
+            FeedbackLocation()
           ])),key: _beamerKey,),)
       ],
     );

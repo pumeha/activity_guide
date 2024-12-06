@@ -6,6 +6,6 @@ class FeedbackPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(child: const CustomText(text: 'Feedback',size: 60,color: Colors.red,));
+    return Center(child: const CustomText(text: 'Feedback'));
   }
 }
