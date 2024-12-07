@@ -28,7 +28,6 @@ class _CustomTableState extends State<CustomTable> {
   List<GridColumn> _columns = [];
 
 
-
   @override
   void initState() {
     super.initState();
@@ -37,32 +36,37 @@ class _CustomTableState extends State<CustomTable> {
   }
 
   void _addColumnsFromJson() {
+   // print(_jsonColumns.length);
     setState(() {
+
       for (var col in _jsonColumns) {
         _columns.add(_buildGridColumn(
           col['name'],
           col['Type'],
-          range: col['Range'],
+          width: col['name'] == 'S/N' ? 50 : 200
         ));
         _dataSource.addColumn(col['name']);
       }
+
+
     });
   }
 
-  GridColumn _buildGridColumn(String columnName, String type, {String? range}) {
+  GridColumn _buildGridColumn(String columnName, String type,{double width = 200}) {
     return GridColumn(
       columnName: columnName,
       label: Container(
         padding: EdgeInsets.all(8.0),
         alignment: Alignment.center,
         child: Text(columnName),
-      ),width: 200
+      ),width: width
     );
   }
 
   Future<void> loadJSONFromPrefs() async{
     String? template = await MysharedPreference().getPreferences('template');
-    _jsonColumns = List<Map<String,dynamic>>.from(jsonDecode(template!));
+    _jsonColumns = List<Map<String,dynamic>>.from(jsonDecode('[{"ID": 0,"name": "S/N","Type": "Dynamic","Range": "No default value required"}]'));
+    _jsonColumns.addAll(List<Map<String,dynamic>>.from(jsonDecode(template!)));
     _addColumnsFromJson();
 
   }
@@ -99,9 +103,6 @@ class _CustomTableState extends State<CustomTable> {
 
           footer: MaterialButton(onPressed: (){
             setState(() {
-           //   _dataSource.rows.add(DataGridRow(cells: _dataSource.rows[0].getCells()));
-             // _dataSource.notifyListeners();
-              print('add row');
               _dataSource.addRow();
             });
           },color: Colors.green,
@@ -112,8 +113,8 @@ class _CustomTableState extends State<CustomTable> {
           // final Workbook workbook = key.currentState!.exportToExcelWorkbook();
           // final List<int> bytes = workbook.saveAsCSV(',');
           // File('Test.csv').writeAsBytes(bytes,flush: true);
-
-
+          _dataSource.rows.removeLast();
+          _dataSource.notifyListeners();
       },
         child: const Icon(Icons.save),backgroundColor: Colors.green.shade50,),
     );

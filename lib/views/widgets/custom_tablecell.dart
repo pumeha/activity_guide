@@ -31,6 +31,7 @@ class CustomTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
   const  List<String> datatypes = ['Dynamic','Dropdown','Date'];
     List<String> info = ['No default value required','Dropdown items are seperated by comma','Enter Start Date MM/DD/YYYY'];
     return  Row( mainAxisAlignment: MainAxisAlignment.center,

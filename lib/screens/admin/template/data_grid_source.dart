@@ -19,7 +19,8 @@ class MyDataSource extends DataGridSource {
 
   Future<void> loadJSONFromPrefs() async{
     String? template = await MysharedPreference().getPreferences('template');
-    _jsonColumns = List<Map<String,dynamic>>.from(jsonDecode(template!));
+    _jsonColumns = List<Map<String,dynamic>>.from(jsonDecode('[{"ID": 0,"name": "S/N","Type": "Dynamic","Range": "No default value required"}]'));
+    _jsonColumns.addAll(List<Map<String,dynamic>>.from(jsonDecode(template!)));
 
 
   }
@@ -32,19 +33,29 @@ class MyDataSource extends DataGridSource {
 
   void addColumn(String columnName) {
     _columnNames.add(columnName);
-    for (var row in _rows) {
-      row.getCells().add(DataGridCell(columnName: columnName, value: ''));
+
+    if(columnName == 'S/N'){
+      for(int i = 0; i<_rows.length; i++){
+          _rows[i].getCells().add(DataGridCell(columnName: columnName, value: (i+1).toString()));
+      }
+    }else{
+      for (var row in _rows) {
+        row.getCells().add(DataGridCell(columnName: columnName, value: ''));
+      }
     }
+
     notifyListeners(); // Refresh the grid
   }
 
   void addRow() {
     var newRow = DataGridRow(
       cells: _columnNames.map((columnName) {
+        if(columnName == 'S/N'){
+          return DataGridCell(columnName: columnName, value: (_rows.length+1).toString());
+        }
         return DataGridCell(columnName: columnName, value: ''); // Default empty value
       }).toList(),
     );
-
     _rows.add(newRow); // Add the new row to the list
     notifyListeners(); // Refresh the grid to show the new row
   }
@@ -52,6 +63,7 @@ class MyDataSource extends DataGridSource {
 
   @override
   List<DataGridRow> get rows => _rows;
+
 
   @override
   DataGridRowAdapter? buildRow(DataGridRow row) {
@@ -73,13 +85,14 @@ class MyDataSource extends DataGridSource {
                 DropdownMenuEntry(value: e, label: e)).toList(),
             inputFormatters: [FilteringTextInputFormatter.deny(RegExp(r'.'))],),
         );
-      } else {
+      }else {
         // Render text fields for other columns
         return Container(
           padding: EdgeInsets.all(8.0),
           alignment: Alignment.center,
-          child: const TextField(
+          child:  columnName == 'S/N' ? Text((cell.value.toString()).toString()) :const TextField(
            maxLines: 3,
+
           ),
         );
       }
