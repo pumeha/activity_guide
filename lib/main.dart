@@ -4,16 +4,13 @@ import 'package:activity_guide/routing/home_location.dart';
 import 'package:activity_guide/routing/login_location.dart';
 import 'package:activity_guide/routing/splash_location.dart';
 import 'package:activity_guide/routing/template_location.dart';
-import 'package:activity_guide/screens/admin/template/template_builder.dart';
 import 'package:activity_guide/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'providers/template_provider.dart';
-import 'screens/onboarding/landing_page.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:beamer/beamer.dart';
-import 'dart:html' as html;
 
 void main() {
   Beamer.setPathUrlStrategy();// it removes the # in the url

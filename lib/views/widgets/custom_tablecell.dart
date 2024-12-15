@@ -33,6 +33,7 @@ class CustomTable extends StatelessWidget {
   Widget build(BuildContext context) {
 
   const  List<String> datatypes = ['Dynamic','Dropdown','Date'];
+  const List<String> datepickertypes = ['Single Date','Double Date'];
     List<String> info = ['No default value required','Dropdown items are seperated by comma','Enter Start Date MM/DD/YYYY'];
     return  Row( mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -44,7 +45,7 @@ class CustomTable extends StatelessWidget {
           },
          decoration: const InputDecoration(
             focusedBorder: OutlineInputBorder(),focusColor: Colors.green),
-        inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]'))],)),
+        inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))],)),
         CustomTableCell(size: 160, child: DropdownMenu<String>(
     initialSelection: '',controller: rowData.dataTypeController,
     onSelected: (value){
@@ -76,12 +77,19 @@ class CustomTable extends StatelessWidget {
     ),
  CustomTableCell(size: 310, child:
         Tooltip( message: rowData.info,
-          child: TextField(controller: rowData.rangeController,enabled: rowData.rangeStatus,
+          child: rowData.dataTypeController.text == 'Date' ?
+          DropdownMenu<String>( controller: rowData.rangeController,
+            initialSelection: '',
+            onSelected: (v){
+            onRowUpdate(index,rowData);
+            },
+            dropdownMenuEntries: datepickertypes.map<DropdownMenuEntry<String>>((e) =>
+                DropdownMenuEntry(value: e, label: e)).toList(),inputFormatters: [FilteringTextInputFormatter.deny(RegExp(r'.'))],) :
+          TextField(controller: rowData.rangeController,enabled: rowData.rangeStatus,
             onChanged: (value){
           //  rowData.rangeController.text = value;
             onRowUpdate(index,rowData);
-            },
-              decoration: const InputDecoration(focusedBorder: OutlineInputBorder()),),
+            }, decoration: const InputDecoration(focusedBorder: OutlineInputBorder()),),
         )),
       ],);
   }

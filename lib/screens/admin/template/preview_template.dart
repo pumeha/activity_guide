@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:activity_guide/models/myshared_preference.dart';
+import 'package:activity_guide/utils/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
@@ -31,7 +32,7 @@ class _CustomTableState extends State<CustomTable> {
   @override
   void initState() {
     super.initState();
-    _dataSource = MyDataSource(4);
+    _dataSource = MyDataSource(4,context);
     loadJSONFromPrefs();
   }
 
@@ -101,20 +102,42 @@ class _CustomTableState extends State<CustomTable> {
           columnResizeMode: ColumnResizeMode.onResize,
           sortingGestureType: SortingGestureType.tap,
 
-          footer: MaterialButton(onPressed: (){
-            setState(() {
-              _dataSource.addRow();
-            });
-          },color: Colors.green,
-            child: const Text('Add Row',style: TextStyle(color: Colors.black),),),
+          footer: Row( mainAxisSize: MainAxisSize.max,
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: MaterialButton(onPressed: (){
+                    setState(() {
+                      _dataSource.addRow();
+                    });
+                  },color: Colors.green[50],
+                    child: const Text('Add Row',style: TextStyle(color: Colors.black,
+                    fontWeight: FontWeight.bold),),),
+                ),
+              ),
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: MaterialButton(onPressed: (){
+                    setState(() {
+                      _dataSource.rows.removeLast();
+                      _dataSource.notifyListeners();
+                    });
+                  },color: Colors.red.shade400,
+                    child: const Text('Remove Row',style: TextStyle(color: light,
+                    fontWeight: FontWeight.bold),),),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(tooltip: 'Save',onPressed: () {
           // final Workbook workbook = key.currentState!.exportToExcelWorkbook();
           // final List<int> bytes = workbook.saveAsCSV(',');
           // File('Test.csv').writeAsBytes(bytes,flush: true);
-          _dataSource.rows.removeLast();
-          _dataSource.notifyListeners();
+
       },
         child: const Icon(Icons.save),backgroundColor: Colors.green.shade50,),
     );

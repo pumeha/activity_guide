@@ -1,3 +1,4 @@
+import 'package:activity_guide/screens/users/responsiveness.dart';
 import 'package:activity_guide/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -17,12 +18,18 @@ class SideMenu extends StatelessWidget {
             leading: const Icon(Icons.home,color: active,),
             title: const Text('Home'),
             onTap: () {
+            if(ResponsiveWidget.isSmallScreen(context)){
+              Navigator.pop(context);
+            }
             Beamer.of(context).beamToNamed('/home/welcome',replaceRouteInformation: true);
             },),
           ListTile( hoverColor: active,
             leading: const Icon(Icons.edit,color: active,),
             title: const Text('Template Builder'),
             onTap: () {
+            if(ResponsiveWidget.isSmallScreen(context)){
+              Navigator.pop(context);
+            }
             Beamer.of(context).beamToNamed('/home/template',replaceRouteInformation: true);
             },
           ),
@@ -30,7 +37,10 @@ class SideMenu extends StatelessWidget {
             leading: const Icon(Icons.dashboard,color: active,),
             title: const Text('Dashboard'),
             onTap: () {
-              Beamer.of(context).beamToNamed('/home/dashboard',replaceRouteInformation: true);
+            if(ResponsiveWidget.isSmallScreen(context)){
+              Navigator.pop(context);
+            }
+            Beamer.of(context).beamToNamed('/home/dashboard',replaceRouteInformation: true);
 
             },
           ),
@@ -38,16 +48,20 @@ class SideMenu extends StatelessWidget {
             leading: const Icon(Icons.notifications_active,color: active,),
             title: const Text('Notification'),
             onTap: () {
+            if(ResponsiveWidget.isSmallScreen(context)){
+              Navigator.pop(context);
+            }
               Beamer.of(context).beamToNamed('/home/notification',replaceRouteInformation: true);
-
             },
           ),
           ListTile(hoverColor: active,
             leading: Icon(Icons.feedback,color: active,),
             title: Text('Feedback'),
             onTap: (){
-              Beamer.of(context).beamToNamed('/home/feedback',
-              replaceRouteInformation: true);
+            if(ResponsiveWidget.isSmallScreen(context)){
+              Navigator.pop(context);
+            }
+              Beamer.of(context).beamToNamed('/home/feedback', replaceRouteInformation: true);
             },
           )
         ],
@@ -56,6 +70,3 @@ class SideMenu extends StatelessWidget {
   }
 
 }
-
-
-
