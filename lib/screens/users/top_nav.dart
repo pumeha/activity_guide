@@ -15,16 +15,12 @@ AppBar topNavigationBar(BuildContext context,GlobalKey<ScaffoldState> key) =>
                     color: Colors.green[900]),),
         Expanded(child: Container()),
 
-            Container(
-                width: 1,
-                height: 22,
-                color: lightGrey,
-            ),
+
             const SizedBox(
                 width: 24,
             ),
             const CustomText(
-                text: "Santos Enoque",
+                text: "Hi Jen!",
                 color: lightGrey,
             ),
             const SizedBox(

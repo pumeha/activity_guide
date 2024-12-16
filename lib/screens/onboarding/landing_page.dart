@@ -2,6 +2,7 @@
 import 'package:activity_guide/views/widgets/flip_image.dart';
 import 'package:flutter/material.dart';
 import 'package:beamer/beamer.dart';
+import '../users/responsiveness.dart';
 import 'authentication.dart';
 
 class LandingPage extends StatefulWidget {
@@ -44,11 +45,12 @@ class _LandingPageState extends State<LandingPage> {
           Row(mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(' ACTIVITY ', style: TextStyle(
-                  backgroundColor: Colors.green[900], fontSize: 48,
+                  backgroundColor: Colors.green[900], fontSize: ResponsiveWidget.isSmallScreen(context) == true ? 36 :48,
                   fontWeight: FontWeight.bold, color: Colors.white),),
               Text('GUIDE',
-                style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold,
+                style: TextStyle(fontSize: ResponsiveWidget.isSmallScreen(context) == true ? 36 :48, fontWeight: FontWeight.bold,
                     color: Colors.green[900]),)],),
+          SizedBox(height: 12,),
           Text('MONITORING AND EVALUTING WORKPLANS OF 16 DEPTS/UNITS',
             style: TextStyle(fontSize: 12,fontWeight: FontWeight.bold),),
           SizedBox(height: 80,),

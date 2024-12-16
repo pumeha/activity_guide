@@ -16,7 +16,8 @@ class WelcomePage extends StatelessWidget {
           child: Column(
             children: [
               Container(
-                  child: Text(welcome_note,style: TextStyle(fontSize: 24,fontWeight: FontWeight.w600))
+                  child: Text(welcome_note,style: TextStyle(fontSize: 24,fontWeight: FontWeight.w600),
+                  textAlign: TextAlign.justify,)
               ),
               SizedBox(height: 24,),
               Text('Features of Activity Guide',style: GoogleFonts.actor(fontSize: 24,color: active,fontWeight: FontWeight.bold),),
@@ -65,7 +66,8 @@ class WelcomePage extends StatelessWidget {
               Text('Powered by'),
               Text('SmarterWay Solutions Ltd',
                 style: TextStyle(fontWeight: FontWeight.bold,
-                    fontSize: 24),)
+                    fontSize: 24),),
+              SizedBox(height: 20,)
 
 
 
@@ -79,7 +81,7 @@ class WelcomePage extends StatelessWidget {
 
 Widget listTitle(String title) =>
     Text(title,
-      style: GoogleFonts.adamina(fontSize: 24,fontWeight: FontWeight.bold,color: active),);
+      style: GoogleFonts.adamina(fontSize: 18,fontWeight: FontWeight.bold,color: active),);
 Widget listSubTitle(String subtitle) =>
     Text(subtitle,
-      style: GoogleFonts.roboto(fontSize: 16),);
+      style: GoogleFonts.roboto(fontSize: 16),textAlign: TextAlign.justify,);

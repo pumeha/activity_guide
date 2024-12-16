@@ -60,8 +60,11 @@ class SideMenu extends StatelessWidget {
             onTap: (){
             if(ResponsiveWidget.isSmallScreen(context)){
               Navigator.pop(context);
-            }
               Beamer.of(context).beamToNamed('/home/feedback', replaceRouteInformation: true);
+            }else {
+                Beamer.of(context).beamToNamed('/home/feedback',
+                    replaceRouteInformation: true);
+              }
             },
           )
         ],
