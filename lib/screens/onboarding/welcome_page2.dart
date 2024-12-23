@@ -1,23 +1,45 @@
+import 'package:activity_guide/screens/onboarding/feedback_dialog.dart';
 import 'package:activity_guide/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-class WelcomePage2 extends StatelessWidget {
-  WelcomePage2({super.key});
+import 'package:provider/provider.dart';
+import '../../providers/template_provider.dart';
+
+class WelcomePage2 extends StatefulWidget {
+  const WelcomePage2({super.key});
+
+  @override
+  State<WelcomePage2> createState() => _WelcomePage2State();
+}
+
+
+
+class _WelcomePage2State extends State<WelcomePage2> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
   String welcome_note = 'Welcome to Activity Guide. Our app provides essential tools for effective project management,'
       ' from comprehensive activity templates to real-time dashboards, ensuring your corporate planning runs smoothly.';
   String about = 'At Activity Guide, we focus on empowering corporate planning departments with a robust platform for tracking and analyzing work plans. '
       'Our dedicated application offers a seamless experience for monitoring activities and gathering feedback, making your project oversight efficient and effective. Welcome to Activity Guide.';
   @override
   Widget build(BuildContext context) {
+    Future.microtask(() async{
+      await Provider.of<TemplateProvider>(context,listen: false).currentUser();
+    });
+
     return Scaffold( backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.only(top: 80,left: 36,right: 36),
+          padding: EdgeInsets.only(top: 40,left: 36,right: 36),
           child: Column(
             children: [
               Container(
                   child: Text(welcome_note,style: TextStyle(fontSize: 24,fontWeight: FontWeight.w600),
-                  textAlign: TextAlign.justify,)
+                    textAlign: TextAlign.justify,)
               ),
               SizedBox(height: 24,),
               Text('Features of Activity Guide',style: GoogleFonts.actor(fontSize: 24,color: active,fontWeight: FontWeight.bold),),
@@ -67,9 +89,20 @@ class WelcomePage2 extends StatelessWidget {
           ),
         ),
       ),
+      floatingActionButton: Visibility(
+        visible: context.watch<TemplateProvider>().isAdmin,
+        child: Tooltip(
+          message: 'Send us a feedback',
+          child: FloatingActionButton(onPressed: (){
+            showCustomDialog(context);
+          },child: Icon(Icons.feedback,color: light,),
+            backgroundColor: active,),
+        ),
+      ),
     );
   }
 }
+
 
 Widget listTitle(String title) =>
     Column(

@@ -66,16 +66,16 @@ class _CustomTableState extends State<CustomTable> {
 
   Future<void> loadJSONFromPrefs() async{
     String? template = await MysharedPreference().getPreferences('template');
+    print(template);
     _jsonColumns = List<Map<String,dynamic>>.from(jsonDecode('[{"ID": 0,"name": "S/N","Type": "Dynamic","Range": "No default value required"}]'));
     _jsonColumns.addAll(List<Map<String,dynamic>>.from(jsonDecode(template!)));
     _addColumnsFromJson();
-
   }
 
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
-      appBar: const MyAppBar(title: 'Preview Template'),
+      appBar: AppBar(title: Text('Preview Template'),),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: SfDataGrid(
@@ -133,13 +133,12 @@ class _CustomTableState extends State<CustomTable> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(tooltip: 'Save',onPressed: () {
+      floatingActionButton: FloatingActionButton(tooltip: 'Download Sample Data',onPressed: () {
           // final Workbook workbook = key.currentState!.exportToExcelWorkbook();
           // final List<int> bytes = workbook.saveAsCSV(',');
           // File('Test.csv').writeAsBytes(bytes,flush: true);
-
       },
-        child: const Icon(Icons.save),backgroundColor: Colors.green.shade50,),
+        child: const Icon(Icons.save_alt),backgroundColor: Colors.green.shade50,),
     );
   }
 }

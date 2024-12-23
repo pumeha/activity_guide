@@ -34,24 +34,30 @@ class CustomTable extends StatelessWidget {
 
     const  List<String> datatypes = ['Dynamic','Dropdown','Date'];
     const List<String> datepickertypes = ['Single Date','Double Date'];
-    List<String> info = ['No default value required','Dropdown items are seperated by comma','Enter Start Date MM/DD/YYYY'];
+    List<String> info = ['No default value required','Dropdown items are seperated by comma','Select DatePicker Type'];
     return  Padding(
-      padding: const EdgeInsets.only(bottom: 40,right: 50),
+      padding: const EdgeInsets.only(bottom: 40,right: 50,left: 50),
       child: Column(
         children: [
           CustomTableCell2(size: 50, child: Text((index+1).toString(),style: AppTextStyles.tableColumns,)),
-          CustomTableCell2(size: 330, child: TextField(controller: rowData.variableNameController,
-            onChanged: (v){
-              //  rowData.variableNameController.text = v;
-              onRowUpdate(index,rowData);
-            },
-            decoration: const InputDecoration(
-                focusedBorder: OutlineInputBorder(),focusColor: Colors.green),
-            inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))],)),
+          CustomTableCell2(size: 330, child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: TextField(controller: rowData.variableNameController,
+              onChanged: (v){
+                //  rowData.variableNameController.text = v;
+                onRowUpdate(index,rowData);
+              },
+              decoration: const InputDecoration(
+                  focusedBorder: OutlineInputBorder(),focusColor: Colors.green,
+              labelText: 'Variable Name',border: OutlineInputBorder()),
+              inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z\s]'))],
+
+            ),
+          )),
           CustomTableCell2(size: 160, child: DropdownMenu<String>(
             initialSelection: '',controller: rowData.dataTypeController,
+            hintText: 'Data Type',
             onSelected: (value){
-
 
               if(value == datatypes[0]){
                 rowData.dataTypeController.text = value!;
@@ -80,18 +86,26 @@ class CustomTable extends StatelessWidget {
           CustomTableCell2(size: 310, child:
           Tooltip( message: rowData.info,
             child: rowData.dataTypeController.text == 'Date' ?
-            DropdownMenu<String>( controller: rowData.rangeController,
-              initialSelection: '',
-              onSelected: (v){
-                onRowUpdate(index,rowData);
-              },
-              dropdownMenuEntries: datepickertypes.map<DropdownMenuEntry<String>>((e) =>
-                  DropdownMenuEntry(value: e, label: e)).toList(),inputFormatters: [FilteringTextInputFormatter.deny(RegExp(r'.'))],) :
-            TextField(controller: rowData.rangeController,enabled: rowData.rangeStatus,
-              onChanged: (value){
-                //  rowData.rangeController.text = value;
-                onRowUpdate(index,rowData);
-              }, decoration: const InputDecoration(focusedBorder: OutlineInputBorder()),),
+            Padding(
+              padding: const EdgeInsets.only(top: 16,bottom: 16),
+              child: DropdownMenu<String>( controller: rowData.rangeController,
+                initialSelection: '',
+                onSelected: (v){
+                  onRowUpdate(index,rowData);
+                },
+                dropdownMenuEntries: datepickertypes.map<DropdownMenuEntry<String>>((e) =>
+                    DropdownMenuEntry(value: e, label: e)).toList(),inputFormatters: [FilteringTextInputFormatter.deny(RegExp(r'.'))],),
+            ) :
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: TextField(controller: rowData.rangeController,enabled: rowData.rangeStatus,
+                onChanged: (value){
+                  //  rowData.rangeController.text = value;
+                  onRowUpdate(index,rowData);
+                }, decoration: const InputDecoration(focusedBorder: OutlineInputBorder(),
+                    labelText: 'Range',border: OutlineInputBorder()),
+              ),
+            ),
           )),
         ],
       ),

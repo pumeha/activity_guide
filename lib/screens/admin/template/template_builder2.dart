@@ -24,7 +24,6 @@ class _TemplateBuilder2State extends State<TemplateBuilder2> {
           child: Column(
 
             children: [
-
               Expanded(child: Consumer<TemplateProvider>(builder: (BuildContext context, TemplateProvider provider, Widget? child) {
                 return ReorderableListView( onReorder: (oldIndex,newIndex){
                   provider.reorderRows(oldIndex, newIndex);

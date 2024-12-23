@@ -1,9 +1,7 @@
-
 import 'package:activity_guide/views/widgets/flip_image.dart';
 import 'package:flutter/material.dart';
 import 'package:beamer/beamer.dart';
 import '../users/responsiveness.dart';
-import 'authentication.dart';
 
 class LandingPage extends StatefulWidget {
   const LandingPage({super.key});
@@ -21,12 +19,13 @@ class _LandingPageState extends State<LandingPage> {
   void initState() {
     super.initState();
     // TODO: implement initState
-      Future.delayed(Duration(seconds: 8),(){
+      Future.delayed(Duration(seconds: 5),(){
        Beamer.of(context).beamToNamed('/login',replaceRouteInformation: true);
       //   Navigator.pushReplacement(context,
       //       MaterialPageRoute(builder: (context)=> AuthenticationPage()));
       });
   }
+
   @override
   void dispose() {
     // TODO: implement dispose

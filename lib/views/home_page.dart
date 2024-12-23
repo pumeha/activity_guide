@@ -20,8 +20,8 @@ class _HomePageState extends State<HomePage> {
       key: scaffoldKey,
       drawer: Drawer(child: SideMenu()),
       appBar: topNavigationBar(context, scaffoldKey),
-      extendBodyBehindAppBar: true,
-      body: ResponsiveWidget(largeScreen: LargeScreen(), smallScreen: SmallScreen())
+     // extendBodyBehindAppBar: true,
+      body: ResponsiveWidget(largeScreen: LargeScreen(sideMenu: SideMenu(),), smallScreen: SmallScreen())
     );
   }
 }

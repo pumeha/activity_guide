@@ -1,6 +1,7 @@
 import 'package:activity_guide/screens/users/feedback_page.dart';
 import 'package:beamer/beamer.dart';
 import 'package:flutter/src/widgets/framework.dart';
+
 class FeedbackLocation extends BeamLocation{
   @override
   List<BeamPage> buildPages(BuildContext context, RouteInformationSerializable<dynamic> state) {
@@ -9,7 +10,5 @@ class FeedbackLocation extends BeamLocation{
   }
 
   @override
-  // TODO: implement pathPatterns
-  List<Pattern> get pathPatterns => ['/home/feedback'];
-
+  List<Pattern> get pathPatterns => ['/admin/feedback'];
 }

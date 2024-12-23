@@ -12,4 +12,5 @@ class MysharedPreference {
     final pref = await SharedPreferences.getInstance();
     pref.setString(key, value);
   }
+
 }

@@ -61,7 +61,7 @@ class _TemplateBuilderState extends State<TemplateBuilder> {
                   child: const Icon(Icons.add), heroTag: 'add',
                   backgroundColor: Colors.green[50],
                 ),
-                SizedBox(height: 12,),
+                const SizedBox(height: 12,),
                 // Remove Button
                 FloatingActionButton(
                   onPressed: () {
@@ -71,10 +71,10 @@ class _TemplateBuilderState extends State<TemplateBuilder> {
                   child: const Icon(Icons.remove,color: light,), heroTag: 'remove',
                   backgroundColor: Colors.red.shade400,
                 ),
-                SizedBox(height: 12,),
+                const SizedBox(height: 12,),
                 FloatingActionButton(onPressed: () async{
                   await  context.read<TemplateProvider>().editTemplate();
-                },child: Icon(Icons.edit),tooltip: 'edit',heroTag: 'edit',
+                },child: const Icon(Icons.edit),tooltip: 'edit',heroTag: 'edit',
                 backgroundColor: Colors.yellow[500],),
 
               ],
@@ -83,7 +83,7 @@ class _TemplateBuilderState extends State<TemplateBuilder> {
           Positioned(right: 50,top: MediaQuery.of(context).size.height/2 + 100,
             child: FloatingActionButton(onPressed: () async {
              await context.read<TemplateProvider>().previewTemplate(context);
-          },child: Icon(Icons.preview,color: Colors.white,),tooltip: 'Preview',
+          },child: const Icon(Icons.preview,color: Colors.white,),tooltip: 'Preview',
             backgroundColor: Colors.black,),),
           Positioned(
             right: 50, // Distance from the right edge

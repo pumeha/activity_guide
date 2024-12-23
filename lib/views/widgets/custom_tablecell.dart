@@ -28,13 +28,12 @@ class CustomTable extends StatelessWidget {
 
   CustomTable({super.key, required this.rowData,
     required this.index, required this.onRowUpdate});
-
   @override
   Widget build(BuildContext context) {
 
   const  List<String> datatypes = ['Dynamic','Dropdown','Date'];
   const List<String> datepickertypes = ['Single Date','Double Date'];
-    List<String> info = ['No default value required','Dropdown items are seperated by comma','Enter Start Date MM/DD/YYYY'];
+    List<String> info = ['No default value required','Dropdown items are seperated by comma','Select DatePicker Type'];
     return  Row( mainAxisAlignment: MainAxisAlignment.center,
       children: [
         CustomTableCell(size: 50, child: Text((index+1).toString(),style: AppTextStyles.tableColumns,)),

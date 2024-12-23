@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:activity_guide/models/myshared_preference.dart';
+import 'package:activity_guide/utils/constants.dart';
 import 'package:flutter/material.dart';
 import '../models/rowdata_model.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -9,6 +10,8 @@ import '../screens/admin/template/preview_template.dart';
 class TemplateProvider with ChangeNotifier {
   List<RowData> rows = [];
   List<String> jsonObject = [];
+  bool _isAdmin = false;
+  bool get isAdmin  => _isAdmin;
 
   // Method to print rows data
   Future<void> printRowsData() async {
@@ -67,13 +70,12 @@ class TemplateProvider with ChangeNotifier {
   }
 
   Future<void> previewTemplate(BuildContext context) async {
-    Navigator.push(context, MaterialPageRoute(builder: (context)=>  CustomTable()));
+    Navigator.push(context, MaterialPageRoute(builder: (context)=>  const CustomTable()));
   }
 
   Future<void> editTemplate() async{
     rows.clear();
     String? template = await MysharedPreference().getPreferences('template');
-    print(template);
     //Decode the JSON
     List<dynamic> jsonList = jsonDecode(template!);
     //converting JSON array to map
@@ -87,9 +89,14 @@ class TemplateProvider with ChangeNotifier {
               dataType: item['Type'], rangeStatus: item['Type'] != 'Dynamic' ? true : false,
               range: item['Range'], info: ''));
 
-      print(item['ID']);
       t+=1;
     }
+    notifyListeners();
+  }
+
+  Future<void> currentUser() async{
+    String? role = await MysharedPreference().getPreferences(admin);
+    _isAdmin =  role == 'true' ? false : true;
     notifyListeners();
   }
 

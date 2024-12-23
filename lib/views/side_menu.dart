@@ -25,7 +25,7 @@ class SideMenu extends StatelessWidget {
             },),
           ListTile( hoverColor: active,
             leading: const Icon(Icons.edit,color: active,),
-            title: const Text('Template Builder'),
+            title: const Text('Template'),
             onTap: () {
             if(ResponsiveWidget.isSmallScreen(context)){
               Navigator.pop(context);
@@ -44,29 +44,29 @@ class SideMenu extends StatelessWidget {
 
             },
           ),
-          ListTile(hoverColor: active,
-            leading: const Icon(Icons.notifications_active,color: active,),
-            title: const Text('Notification'),
-            onTap: () {
-            if(ResponsiveWidget.isSmallScreen(context)){
-              Navigator.pop(context);
-            }
-              Beamer.of(context).beamToNamed('/home/notification',replaceRouteInformation: true);
-            },
-          ),
-          ListTile(hoverColor: active,
-            leading: Icon(Icons.feedback,color: active,),
-            title: Text('Feedback'),
-            onTap: (){
-            if(ResponsiveWidget.isSmallScreen(context)){
-              Navigator.pop(context);
-              Beamer.of(context).beamToNamed('/home/feedback', replaceRouteInformation: true);
-            }else {
-                Beamer.of(context).beamToNamed('/home/feedback',
-                    replaceRouteInformation: true);
-              }
-            },
-          )
+          // ListTile(hoverColor: active,
+          //   leading: const Icon(Icons.notifications_active,color: active,),
+          //   title: const Text('Notification'),
+          //   onTap: () {
+          //   if(ResponsiveWidget.isSmallScreen(context)){
+          //     Navigator.pop(context);
+          //   }
+          //     Beamer.of(context).beamToNamed('/home/notification',replaceRouteInformation: true);
+          //   },
+          // ),
+          // ListTile(hoverColor: active,
+          //   leading: Icon(Icons.feedback,color: active,),
+          //   title: Text('Feedback'),
+          //   onTap: (){
+          //   if(ResponsiveWidget.isSmallScreen(context)){
+          //     Navigator.pop(context);
+          //     Beamer.of(context).beamToNamed('/home/feedback', replaceRouteInformation: true);
+          //   }else {
+          //       Beamer.of(context).beamToNamed('/home/feedback',
+          //           replaceRouteInformation: true);
+          //     }
+          //   },
+          // )
         ],
       ),
     );

@@ -1,15 +1,12 @@
-import 'package:activity_guide/screens/admin/template/template_builder.dart';
+import 'package:activity_guide/screens/admin/template/template.dart';
 import 'package:beamer/beamer.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
+import '../screens/admin/template/preview_template.dart';
 class TemplateLocation extends BeamLocation{
   @override
-  List<BeamPage> buildPages(BuildContext context, RouteInformationSerializable state) {
-    // TODO: implement buildPages
-    return [
-      BeamPage(child: TemplateBuilder(),
-      key: ValueKey('template'),title: 'Activity Guide')
-    ];
+  List<BeamPage> buildPages(BuildContext context, RouteInformationSerializable<dynamic> state) {
+    return [BeamPage(child: Template(),key: ValueKey('template'),title: 'Activity Guide')];
   }
 
   @override
