@@ -1,5 +1,4 @@
 import 'package:activity_guide/routing/dashboard_location.dart';
-import 'package:activity_guide/routing/feedback_location.dart';
 import 'package:activity_guide/routing/notification_location.dart';
 import 'package:activity_guide/routing/template_location.dart';
 import 'package:activity_guide/routing/welcome_location.dart';
@@ -23,7 +22,7 @@ class LargeScreen extends StatelessWidget {
         Expanded(flex: 5,
           child: Beamer(routerDelegate: BeamerDelegate(locationBuilder: BeamerLocationBuilder(beamLocations: [
             WelcomeLocation(),TemplateBuilderLocation(),TemplateLocation(),DashboardLocation(),NotificationLocation(),
-            FeedbackLocation(),DatatableLocation()
+            DatatableLocation()
           ])),key: _beamerKey,),)
       ],
     );

@@ -3,7 +3,6 @@ import 'package:activity_guide/utils/constants.dart';
 import 'package:flutter/material.dart';
 import '../../utils/colors.dart';
 import 'package:beamer/beamer.dart';
-import '../../views/widgets/custom_text.dart';
 import 'responsiveness.dart';
 
 AppBar topNavigationBar(BuildContext context,GlobalKey<ScaffoldState> key) =>

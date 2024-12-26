@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
-import '../../../models/myshared_preference.dart';
 
 class MyDataSource extends DataGridSource {
   List<DataGridRow> _rows = [];
@@ -19,9 +18,10 @@ class MyDataSource extends DataGridSource {
   }
 
   Future<void> loadJSONFromPrefs()  async{
-    String? template = await MysharedPreference().getPreferences('template');
+    String value = '[{"ID": 1,"name": "OUTPUT","Type": "Dropdown","Range": "Power Farm Solution for NBS Headquarters /SOLAR ENERGY, Establishing GIS Lab for  Geo-Spatial Modelling Unit, Building Big Data/Data Science Lab, Implementation of Data Privacy/Data Protection Policy in NBS, Re-construction of NBS HQ Data Warehousing and Network Infrastructure, Provision of Statistical Softwares and Packages for Analysis, Workshop on Further Analysis using various Statistical Packages HQ and Zonal Offices, Capacity Building ,Workshop on Field Data collection Tools  for Surveys Questionnaires design and data collection using various Computer Assisted Personal Interview (CAPI) solutions Survey Solutions CSPro  ODK Kobo SurveyCTO e.t.c, Provision of 2 additional Cloud Server and Exchange, Web Server Platform & Backups Maintenance of HQ network ports Acces Points for Sustainance and Expansion of Internet Connection in the Office. , Provision of Norton EndPoint Server Antivirus for the Year 2024.   ,Quarterly Maintenance of Systems at the Headquarters Zones and States."}, {"ID": 2,"name": "TYPE OF ACTIVITIES","Type": "Dropdown","Range": "SURVEY,SAS,WORKSHOP"}, {"ID": 3,"name": "FREQUENCY","Type": "Dropdown","Range": "DAILY,WEEKLY, MONTHLY"}, {"ID": 4,"name": "PLANNED  DATE","Type": "Date","Range": "Double Date"}, {"ID": 5,"name": "ACTUAL DATE","Type": "Date","Range": "Double Date"}, {"ID": 6,"name": "TARGET","Type": "Dynamic","Range": "No default value required"}, {"ID": 7,"name": "ACTIVITIES DESCRIPTION","Type": "Dynamic","Range": "No default value required"}, {"ID": 8,"name": "OUTCOME","Type": "Dynamic","Range": "No default value required"}, {"ID": 9,"name": "PERCENTAGE  COMPLETED","Type": "Dynamic","Range": "No default value required"}, {"ID": 10,"name": "MILESTONE","Type": "Dropdown","Range": "N/A,PROPOSAL,PLANNING,EXCUTING,COMPLETION,SUBMISSION"}, {"ID": 11,"name": "BASELINE METRICS","Type": "Dynamic","Range": "No default value required"}, {"ID": 12,"name": "KPI","Type": "Dynamic","Range": "No default value required"}, {"ID": 13,"name": "ACTUAL ACHIEVED METRICS","Type": "Dynamic","Range": "No default value required"}, {"ID": 14,"name": "TOTAL BUDGET","Type": "Dynamic","Range": "No default value required"}, {"ID": 15,"name": "APPROPRIATION","Type": "Dynamic","Range": "No default value required"}, {"ID": 16,"name": "DONOR","Type": "Dynamic","Range": "No default value required"}, {"ID": 17,"name": "RELEASED","Type": "Dynamic","Range": "No default value required"}, {"ID": 18,"name": "UTILIZED","Type": "Dynamic","Range": "No default value required"}, {"ID": 19,"name": "BALANCE","Type": "Dynamic","Range": "No default value required"}, {"ID": 20,"name": "MORE FUND","Type": "Dynamic","Range": "No default value required"}, {"ID": 21,"name": "CHALLENGES","Type": "Dropdown","Range": "NO CHALLENGES,FUNDS RELATED,RISKRELATED"}, {"ID": 22,"name": "REMARKS","Type": "Dynamic","Range": "No default value required"}]';
     _jsonColumns = List<Map<String,dynamic>>.from(jsonDecode('[{"ID": 0,"name": "S/N","Type": "Dynamic","Range": "No default value required"}]'));
-    _jsonColumns.addAll(List<Map<String,dynamic>>.from(jsonDecode(template!)));
+    _jsonColumns.addAll(List<Map<String,dynamic>>.from(jsonDecode(value)));
+
   }
 
   void _initializeRows(int rowCount) {
