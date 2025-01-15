@@ -16,10 +16,10 @@ class Template extends StatefulWidget {
 class _TemplateState extends State<Template> {
 
   GlobalKey<SfDataGridState> key = GlobalKey<SfDataGridState>();
- late int added_rows = 0;
+  late int added_rows = 0;
   late Map<String, double> columnWidths  = {};
   late MyDataSource _dataSource;
- List<Map<String, dynamic>> _jsonColumns =  [];
+  List<Map<String, dynamic>> _jsonColumns =  [];
   List<GridColumn> _columns = [];
 
 

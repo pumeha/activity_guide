@@ -16,9 +16,12 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   Widget build(BuildContext context) {
 
-    return Scaffold(body: Padding(padding: const EdgeInsets.only(top: 60),
-    child: InAppWebView(
-    initialUrlRequest:
-    URLRequest(url: WebUri(dashboardurl)),),),);
+    return PopScope(
+      child: Scaffold(body: Padding(padding: const EdgeInsets.only(top: 60),
+      child: InAppWebView(
+      initialUrlRequest:
+      URLRequest(url: WebUri(dashboardurl)),),),),
+    );
   }
 }
+//pop

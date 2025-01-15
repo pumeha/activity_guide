@@ -4,9 +4,7 @@ import 'package:activity_guide/utils/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
-import '../../../views/widgets/myapp_bar.dart';
 import 'data_grid_source.dart';
-
 
 class CustomTable extends StatefulWidget {
   const CustomTable({super.key});
@@ -39,7 +37,6 @@ class _CustomTableState extends State<CustomTable> {
   void _addColumnsFromJson() {
    // print(_jsonColumns.length);
     setState(() {
-
       for (var col in _jsonColumns) {
         _columns.add(_buildGridColumn(
           col['name'],
@@ -48,8 +45,6 @@ class _CustomTableState extends State<CustomTable> {
         ));
         _dataSource.addColumn(col['name']);
       }
-
-
     });
   }
 
@@ -66,7 +61,6 @@ class _CustomTableState extends State<CustomTable> {
 
   Future<void> loadJSONFromPrefs() async{
     String? template = await MysharedPreference().getPreferences('template');
-    print(template);
     _jsonColumns = List<Map<String,dynamic>>.from(jsonDecode('[{"ID": 0,"name": "S/N","Type": "Dynamic","Range": "No default value required"}]'));
     _jsonColumns.addAll(List<Map<String,dynamic>>.from(jsonDecode(template!)));
     _addColumnsFromJson();
@@ -75,7 +69,7 @@ class _CustomTableState extends State<CustomTable> {
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
-      appBar: AppBar(title: Text('Preview Template'),),
+      appBar: AppBar(title: const Text('Preview Template'),),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: SfDataGrid(
