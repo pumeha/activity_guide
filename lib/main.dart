@@ -2,9 +2,9 @@
 import 'package:activity_guide/routing/home_location.dart';
 import 'package:activity_guide/routing/home_location_admin.dart';
 import 'package:activity_guide/routing/login_location.dart';
-import 'package:activity_guide/routing/splash_location.dart';
-import 'package:activity_guide/routing/template_builder_location.dart';
+import 'package:activity_guide/screens/users/dashboard_page.dart';
 import 'package:activity_guide/utils/colors.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -12,19 +12,22 @@ import 'providers/template_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:beamer/beamer.dart';
 
-void main() {
+
+
+
+Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
 
   Beamer.setPathUrlStrategy();// it removes the # in the url
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_)=> TemplateProvider()),
   ],child:  MyApp(),));
-
 }
 
 class MyApp extends StatelessWidget {
    MyApp({super.key});
    final _routerDelegate = BeamerDelegate(locationBuilder: BeamerLocationBuilder(
-       beamLocations: [SplashLocation(),LoginLocation(),AdminHomeLocation(),
+       beamLocations: [LoginLocation(),AdminHomeLocation(),
          HomeLocation()]
    ),
    );

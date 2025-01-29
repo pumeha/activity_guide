@@ -10,20 +10,21 @@ import '../../routing/notification_location.dart';
 import '../../routing/template_builder_location2.dart';
 import '../../routing/welcome_location2.dart';
 
-class SmallScreen extends StatefulWidget {
-  const SmallScreen({super.key});
+class SmallScreenAdmin extends StatefulWidget {
+  const SmallScreenAdmin({super.key});
 
   @override
-  State<SmallScreen> createState() => _SmallScreenState();
+  State<SmallScreenAdmin> createState() => _SmallScreenAdminState();
 }
 
-class _SmallScreenState extends State<SmallScreen> {
+class _SmallScreenAdminState extends State<SmallScreenAdmin> {
   final _beamerKey = GlobalKey<BeamerState>();
   late int _selectedIndex = 0;
   final beamLocationMap = {
     WelcomeLocation2 : 0,
-    TemplateLocation : 1,
-    DashboardLocation : 2
+    TemplateBuilderLocation2 : 1,
+    DashboardLocation : 2,
+    DatatableLocation :3
   };
   late BeamerDelegate _beamerDelegate;
   //void _setStateListener() => setState(() {});
@@ -56,10 +57,11 @@ class _SmallScreenState extends State<SmallScreen> {
             label: 'Home',
           ),
           BottomNavigationBarItem(icon: Icon(Icons.edit_document),
-            label: 'Template',
+            label: 'Builder',
           ),
           BottomNavigationBarItem(icon: Icon(Icons.dashboard_outlined),
             label: 'Dashboard',),
+          BottomNavigationBarItem(icon: Icon(Icons.dataset),label: 'Database')
         ],
         currentIndex: _selectedIndex
         ,
@@ -72,21 +74,24 @@ class _SmallScreenState extends State<SmallScreen> {
           switch (index) {
             case 0:
               Beamer.of(context).beamToNamed(
-                  '/home/welcome');
+                  '/admin/welcome');
 
               break;
             case 1:
               Beamer.of(context).beamToNamed(
-                  '/home/template');
+                  '/admin/builder');
 
               break;
             case 2:
               Beamer.of(context).beamToNamed(
-                  '/home/dashboard');
+                  '/admin/dashboard');
+            case 3:
+              Beamer.of(context).beamToNamed('/admin/dataset');
+              break;
 
             default:
               Beamer.of(context).beamToNamed(
-                  '/home/welcome');
+                  '/admin/welcome');
 
               break;
           }

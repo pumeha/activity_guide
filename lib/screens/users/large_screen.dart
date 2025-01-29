@@ -18,14 +18,14 @@ class LargeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return  Row(
       children: [
-        Expanded(child: sideMenu),
+        sideMenu,
         Expanded(flex: 5,
           child: Beamer(routerDelegate: BeamerDelegate(locationBuilder: BeamerLocationBuilder(beamLocations: [
             WelcomeLocation(),TemplateBuilderLocation(),TemplateLocation(),DashboardLocation(),NotificationLocation(),
             DatatableLocation()
           ])),key: _beamerKey,),)
       ],
-    );
+     ) ;
   }
 }
 

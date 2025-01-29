@@ -7,9 +7,10 @@ import 'responsiveness.dart';
 
 AppBar topNavigationBar(BuildContext context,GlobalKey<ScaffoldState> key) =>
     AppBar(elevation: 0,
-    backgroundColor: Colors.green.withOpacity(0.2),
+    backgroundColor: Colors.white,
     title: Row(
         children: [
+            Text('  '),
             Text(' ACTIVITY ', style: TextStyle(
                 backgroundColor: Colors.green[900], fontSize: 24,
                 fontWeight: FontWeight.bold, color: Colors.white),),
@@ -53,10 +54,7 @@ AppBar topNavigationBar(BuildContext context,GlobalKey<ScaffoldState> key) =>
             //   ),
             // ),
         ],),
-    leading: !ResponsiveWidget.isSmallScreen(context) ?
-    Text('') : IconButton(onPressed: (){
-            key.currentState?.openDrawer();
-    }, icon: Icon(Icons.menu)),
+
         actions: [
             PopupMenuButton(itemBuilder: (BuildContext context) => [
     // First menu item: User details
@@ -83,24 +81,13 @@ AppBar topNavigationBar(BuildContext context,GlobalKey<ScaffoldState> key) =>
           ],
         )
     ],)),
-],child:  Container(
-              decoration: BoxDecoration(
-                  color: active.withOpacity(.5),
-                  borderRadius: BorderRadius.circular(30)),
-              child: Container(
-                decoration: BoxDecoration(
-                    color: Colors.white, borderRadius: BorderRadius.circular(30)),
-                padding: const EdgeInsets.all(2),
-                margin: const EdgeInsets.all(2),
-                child: const CircleAvatar(
-                  backgroundColor: light,
-                  child: Icon(
-                    Icons.person_outline,
-                    color: dark,
-                  ),
-                ),
+],child:  Padding(
+  padding: const EdgeInsets.only(left: 12,top: 8,right: 8,bottom: 8),
+  child: Icon(
+                Icons.person,
+                color: Colors.green[800],size: 40,
               ),
-            ),tooltip: 'User',)
+),tooltip: 'User',)
             ]);
 
 

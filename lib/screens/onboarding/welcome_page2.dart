@@ -12,9 +12,9 @@ class WelcomePage2 extends StatefulWidget {
   State<WelcomePage2> createState() => _WelcomePage2State();
 }
 
-
-
 class _WelcomePage2State extends State<WelcomePage2> {
+
+
 
   @override
   void initState() {

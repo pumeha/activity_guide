@@ -18,10 +18,10 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
-      drawer: Drawer(child: SideMenu()),
       appBar: topNavigationBar(context, scaffoldKey),
      // extendBodyBehindAppBar: true,
-      body: ResponsiveWidget(largeScreen: LargeScreen(sideMenu: SideMenu(),), smallScreen: SmallScreen())
+      body: ResponsiveWidget(largeScreen: LargeScreen(sideMenu: const SideMenu(),),
+          smallScreen: const SmallScreen())
     );
   }
 }

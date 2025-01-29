@@ -529,12 +529,12 @@ packages:
     dependency: transitive
     description:
       name: syncfusion_flutter_pdf
-      sha256: ad0116ee33e4e5095755a5e9c7b9984d2b42389a345e665af36d8d217ee4d483
+      sha256: da7fb9d156fafdce7099dc711c1a2dc522c48361188bd4be78520b22c99bbafd
       url: "https://pub.dev"
     source: hosted
-    version: "27.2.3"
+    version: "27.2.5"
   syncfusion_flutter_xlsio:
-    dependency: transitive
+    dependency: "direct dev"
     description:
       name: syncfusion_flutter_xlsio
       sha256: cd31646fac704978d4a042b0a9874e9724a33107cc02dcb0595440ebec4ed5f0

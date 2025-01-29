@@ -1,4 +1,3 @@
-
 import 'package:activity_guide/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -20,9 +19,8 @@ class _TemplateBuilderState extends State<TemplateBuilder> {
     return  Scaffold(
       backgroundColor: Colors.white,
       body:   Padding(
-        padding: const EdgeInsets.only(top: 60,right: 200),
+        padding: const EdgeInsets.only(top: 40,right: 200),
         child: Column(
-
           children: [
             const Row(mainAxisAlignment: MainAxisAlignment.center,
               children: [

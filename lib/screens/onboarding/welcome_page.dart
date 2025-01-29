@@ -14,6 +14,8 @@ class WelcomePage extends StatefulWidget {
 
 class _WelcomePageState extends State<WelcomePage> {
 
+
+
   String welcome_note = 'Welcome to Activity Guide. Our app provides essential tools for effective project management,'
       ' from comprehensive activity templates to real-time dashboards, ensuring your corporate planning runs smoothly.';
   String about = 'At Activity Guide, we focus on empowering corporate planning departments with a robust platform for tracking and analyzing work plans. '

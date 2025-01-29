@@ -41,7 +41,7 @@ class TemplateProvider with ChangeNotifier {
     }
 
     MysharedPreference().setPreferences('template',jsonObject.toList().toString());
-
+    print(jsonObject.toList().toString());
   }
 
   void updateRow(int index, RowData updatedRow) {

@@ -13,4 +13,15 @@ class MysharedPreference {
     pref.setString(key, value);
   }
 
+  Future<int?> getPreferencesI(String key) async{
+    final pref = await SharedPreferences.getInstance();
+    return pref.getInt(key);
+
+  }
+
+  Future<void> setPreferencesI(String key, int value) async{
+    final pref = await SharedPreferences.getInstance();
+    pref.setInt(key, value);
+  }
+
 }

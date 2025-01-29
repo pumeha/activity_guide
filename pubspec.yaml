@@ -38,10 +38,12 @@ dev_dependencies:
   flutter_easyloading: ^3.0.5
   shared_preferences: ^2.3.3
   syncfusion_flutter_datagrid: ^27.2.3
-  syncfusion_flutter_datagrid_export: ^27.2.4
+  syncfusion_flutter_datagrid_export: ^27.2.3
+  syncfusion_flutter_xlsio: ^27.2.3
   google_fonts: ^6.2.1
   beamer: ^1.7.0
   flutter_inappwebview: ^6.1.5
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

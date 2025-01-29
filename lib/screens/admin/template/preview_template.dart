@@ -30,22 +30,20 @@ class _CustomTableState extends State<CustomTable> {
   @override
   void initState() {
     super.initState();
-    _dataSource = MyDataSource(4,context);
-    loadJSONFromPrefs();
+
   }
 
   void _addColumnsFromJson() {
-   // print(_jsonColumns.length);
-    setState(() {
+
       for (var col in _jsonColumns) {
         _columns.add(_buildGridColumn(
           col['name'],
           col['Type'],
           width: col['name'] == 'S/N' ? 50 : 200
         ));
-        _dataSource.addColumn(col['name']);
+       // _dataSource.addColumn(col['name']);
       }
-    });
+   // });
   }
 
   GridColumn _buildGridColumn(String columnName, String type,{double width = 200}) {
@@ -70,62 +68,62 @@ class _CustomTableState extends State<CustomTable> {
   Widget build(BuildContext context) {
     return  Scaffold(
       appBar: AppBar(title: const Text('Preview Template'),),
-      body: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: SfDataGrid(
-          key: key,
-          source: _dataSource,
-          columns: _columns,
-          rowHeight: 80,
-          isScrollbarAlwaysShown: true,
-          frozenColumnsCount: 1,
-          allowColumnsResizing: true,
-          onColumnResizeStart: (ColumnResizeStartDetails details){
-            return true;
-          },
-          onColumnResizeUpdate:  (ColumnResizeUpdateDetails details){
-              setState(() {
-                columnWidths[details.column.columnName] = details.width;
-              });
-            return true;
-          },
-          gridLinesVisibility: GridLinesVisibility.both,
-          headerGridLinesVisibility: GridLinesVisibility.both,
-          columnWidthMode: ColumnWidthMode.fill,
-          columnWidthCalculationRange: ColumnWidthCalculationRange.allRows,
-          columnResizeMode: ColumnResizeMode.onResize,
-          sortingGestureType: SortingGestureType.tap,
+      body: Scaffold(
+        body: FutureBuilder(future: loadJSONFromPrefs(),
+            builder: (context,snapshot){
+          _dataSource = MyDataSource(4,context,_jsonColumns);
 
-          footer: Row( mainAxisSize: MainAxisSize.max,
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: MaterialButton(onPressed: (){
-                    setState(() {
-                      _dataSource.addRow();
-                    });
-                  },color: Colors.green[50],
-                    child: const Text('Add Row',style: TextStyle(color: Colors.black,
-                    fontWeight: FontWeight.bold),),),
+          switch(snapshot.connectionState){
+            case ConnectionState.done:
+           return   SfDataGrid(
+                key: key,
+                source: _dataSource,
+                columns: _columns,
+                rowHeight: 80,
+                isScrollbarAlwaysShown: true,
+                frozenColumnsCount: 1,
+                allowColumnsResizing: false,
+                gridLinesVisibility: GridLinesVisibility.both,
+                headerGridLinesVisibility: GridLinesVisibility.both,
+                columnWidthMode: ColumnWidthMode.auto,
+                columnWidthCalculationRange: ColumnWidthCalculationRange.allRows,
+
+                footer: Row( mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: MaterialButton(onPressed: (){
+                          _dataSource.addRow();
+                        },color: Colors.green[50],
+                          child: const Text('Add Row',style: TextStyle(color: Colors.black,
+                              fontWeight: FontWeight.bold),),),
+                      ),
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: MaterialButton(onPressed: (){
+                          _dataSource.rows.removeLast();
+                          _dataSource.notifyListeners();
+                        },color: Colors.red.shade400,
+                          child: const Text('Remove Row',style: TextStyle(color: light,
+                              fontWeight: FontWeight.bold),),),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: MaterialButton(onPressed: (){
-                    setState(() {
-                      _dataSource.rows.removeLast();
-                      _dataSource.notifyListeners();
-                    });
-                  },color: Colors.red.shade400,
-                    child: const Text('Remove Row',style: TextStyle(color: light,
-                    fontWeight: FontWeight.bold),),),
-                ),
-              ),
-            ],
-          ),
-        ),
+              );
+            case ConnectionState.waiting:
+              return CircularProgressIndicator();
+            case ConnectionState.none:
+              // TODO: Handle this case.
+            case ConnectionState.active:
+              // TODO: Handle this case.
+            default:
+              return const Text('Unhandled State');
+          }
+        }),
       ),
       floatingActionButton: FloatingActionButton(tooltip: 'Download Sample Data',onPressed: () {
           // final Workbook workbook = key.currentState!.exportToExcelWorkbook();
