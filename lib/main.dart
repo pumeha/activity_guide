@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
    final _routerDelegate = BeamerDelegate(locationBuilder: BeamerLocationBuilder(
        beamLocations: [LoginLocation(),AdminHomeLocation(),
          HomeLocation()]
-   ),
+   ),transitionDelegate: NoAnimationTransitionDelegate()
    );
 
   @override

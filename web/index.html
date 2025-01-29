@@ -144,5 +144,11 @@
     <div class="loader"></div>
 </div>
 <script src="flutter_bootstrap.js" async></script>
+<script>
+    // This ensures that if the URL doesn't match a real file, it loads the index.html file
+    if (window.location.pathname !== '/') {
+      window.history.replaceState({}, '', '/');
+    }
+</script>
 </body>
 </html>

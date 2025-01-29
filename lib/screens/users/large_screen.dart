@@ -23,7 +23,7 @@ class LargeScreen extends StatelessWidget {
           child: Beamer(routerDelegate: BeamerDelegate(locationBuilder: BeamerLocationBuilder(beamLocations: [
             WelcomeLocation(),TemplateBuilderLocation(),TemplateLocation(),DashboardLocation(),NotificationLocation(),
             DatatableLocation()
-          ])),key: _beamerKey,),)
+          ]),transitionDelegate: NoAnimationTransitionDelegate()),key: _beamerKey,),)
       ],
      ) ;
   }

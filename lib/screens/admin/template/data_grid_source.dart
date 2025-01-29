@@ -1,13 +1,6 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
-import 'dart:convert';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:syncfusion_flutter_datagrid/datagrid.dart';
-
-import '../../../models/myshared_preference.dart';
 
 class MyDataSource extends DataGridSource {
   List<DataGridRow> _rows = [];
@@ -22,7 +15,6 @@ class MyDataSource extends DataGridSource {
     for(var col in _jsonColumns){
       addColumn(col['name']);
     }
-    //addRow();
   }
 
 
@@ -69,7 +61,6 @@ class MyDataSource extends DataGridSource {
 
   @override
   DataGridRowAdapter? buildRow(DataGridRow row) {
-    print('buildRow');
     dynamic sn;
     return DataGridRowAdapter(
       cells: row.getCells().map((cell) {

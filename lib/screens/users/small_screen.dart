@@ -42,7 +42,8 @@ class _SmallScreenState extends State<SmallScreen> {
           DashboardLocation(),
           NotificationLocation(),
           DatatableLocation()
-        ]));
+        ]),
+    transitionDelegate: NoAnimationTransitionDelegate());
   }
 
   @override
@@ -71,18 +72,21 @@ class _SmallScreenState extends State<SmallScreen> {
 
           switch (index) {
             case 0:
-              Beamer.of(context).beamToNamed(
-                  '/home/welcome');
+             _beamerKey.currentState!.routerDelegate.beamToNamed('/home/welcome');
+              // Beamer.of(context).beamToNamed(
+              //     '/home/welcome');
 
               break;
             case 1:
-              Beamer.of(context).beamToNamed(
-                  '/home/template');
+              _beamerKey.currentState!.routerDelegate.beamToNamed('/home/template');
+              // Beamer.of(context).beamToNamed(
+              //     '/home/template');
 
               break;
             case 2:
-              Beamer.of(context).beamToNamed(
-                  '/home/dashboard');
+              _beamerKey.currentState!.routerDelegate.beamToNamed('/home/dashboard');
+            //  Beamer.of(context).beamToNamed(
+               //   '/home/dashboard');
 
             default:
               Beamer.of(context).beamToNamed(
@@ -95,7 +99,8 @@ class _SmallScreenState extends State<SmallScreen> {
         unselectedItemColor: Colors.black,
 
       ),
-      body: Beamer(routerDelegate: _beamerDelegate, key: _beamerKey,),
+      body: Beamer(routerDelegate: _beamerDelegate, key: _beamerKey,
+      ),
     );
   }
 }

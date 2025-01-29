@@ -115,11 +115,7 @@ class _CustomTableState extends State<CustomTable> {
                 ),
               );
             case ConnectionState.waiting:
-              return CircularProgressIndicator();
-            case ConnectionState.none:
-              // TODO: Handle this case.
-            case ConnectionState.active:
-              // TODO: Handle this case.
+              return const Center(child: CircularProgressIndicator());
             default:
               return const Text('Unhandled State');
           }

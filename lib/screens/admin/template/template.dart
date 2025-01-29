@@ -1,16 +1,17 @@
+import 'dart:async';
 import 'dart:convert';
-
 import 'package:activity_guide/models/myshared_preference.dart';
 import 'package:activity_guide/screens/admin/template/downloadExcelFile.dart';
+import 'package:activity_guide/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
-
-import '../../../utils/csv2json.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 
 class Template extends StatefulWidget {
   const Template({super.key});
+
 
   @override
   State<Template> createState() => _TemplateState();
@@ -18,27 +19,27 @@ class Template extends StatefulWidget {
 
 class _TemplateState extends State<Template> {
   GlobalKey<SfDataGridState> key = GlobalKey<SfDataGridState>();
-  late int added_rows = 0;
-  //late Map<String, double> columnWidths = {};
   late MyDataSource _dataSource;
   List<Map<String, dynamic>> _jsonColumns = [];
   List<GridColumn> _columns = [];
-  double initialWidth = 0;
   String mysaveddata = '';
   String jsonColumnvalue =
       '[{"ID": 1,"name": "OUTPUT","Type": "Dropdown","Range": "A,B,C"},{"ID": 2,"name": "TYPE OF ACTIVITIES","Type": "Dropdown","Range": "SURVEY,SAS,WORKSHOP"}, {"ID": 3,"name": "FREQUENCY","Type": "Dropdown","Range": "DAILY,WEEKLY, MONTHLY"}, {"ID": 4,"name": "PLANNED  DATE","Type": "Date","Range": "Double Date"}, {"ID": 5,"name": "ACTUAL DATE","Type": "Date","Range": "Double Date"}, {"ID": 6,"name": "TARGET","Type": "Dynamic","Range": "No default value required"}, {"ID": 7,"name": "ACTIVITIES DESCRIPTION","Type": "Dynamic","Range": "No default value required"}, {"ID": 8,"name": "OUTCOME","Type": "Dynamic","Range": "No default value required"}, {"ID": 9,"name": "PERCENTAGE  COMPLETED","Type": "Dynamic","Range": "No default value required"}, {"ID": 10,"name": "MILESTONE","Type": "Dropdown","Range": "N/A,PROPOSAL,PLANNING,EXCUTING,COMPLETION,SUBMISSION"}, {"ID": 11,"name": "BASELINE METRICS","Type": "Dynamic","Range": "No default value required"}, {"ID": 12,"name": "KPI","Type": "Dynamic","Range": "No default value required"}, {"ID": 13,"name": "ACTUAL ACHIEVED METRICS","Type": "Dynamic","Range": "No default value required"}, {"ID": 14,"name": "TOTAL BUDGET","Type": "Dynamic","Range": "No default value required"}, {"ID": 15,"name": "APPROPRIATION","Type": "Dynamic","Range": "No default value required"}, {"ID": 16,"name": "DONOR","Type": "Dynamic","Range": "No default value required"}, {"ID": 17,"name": "RELEASED","Type": "Dynamic","Range": "No default value required"}, {"ID": 18,"name": "UTILIZED","Type": "Dynamic","Range": "No default value required"}, {"ID": 19,"name": "BALANCE","Type": "Dynamic","Range": "No default value required"}, {"ID": 20,"name": "MORE FUND","Type": "Dynamic","Range": "No default value required"}, {"ID": 21,"name": "CHALLENGES","Type": "Dropdown","Range": "NO CHALLENGES,FUNDS RELATED,RISKRELATED"}, {"ID": 22,"name": "REMARKS","Type": "Dynamic","Range": "No default value required"}]';
   List<dynamic> previousData = [];
+  //Timer? _timer;
 
   @override
   void initState() {
     super.initState();
+    // EasyLoading.addStatusCallback((status){
+    //   if(status == EasyLoadingStatus.dismiss){
+    //     _timer?.cancel();
+    //   }
+    // });
   }
 
-  Future<void> loadRowCountFromPrefs() async {
-    // Get the number of rows from SharedPreferences
+  Future<void> loadPartiallySaveData() async {
     String? saveData = await MysharedPreference().getPreferences('savedata');
-    int? savedRowCount = await MysharedPreference().getPreferencesI('rowCount');
-    added_rows = savedRowCount ?? 1;  // Default to 0 added rows if no value is found
     mysaveddata = saveData!;
   }
 
@@ -67,10 +68,10 @@ class _TemplateState extends State<Template> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      body: FutureBuilder(future: loadRowCountFromPrefs(), builder: (context,snapshot){
+      body: FutureBuilder(future: loadPartiallySaveData(), builder: (context,snapshot){
         if(snapshot.connectionState == ConnectionState.done){
           _addColumnsFromJson(jsonColumnvalue);
-          _dataSource = MyDataSource(added_rows, context, key,mysaveddata,_jsonColumns);
+          _dataSource = MyDataSource(context, key,mysaveddata,_jsonColumns);
 
           return  SfDataGrid(
               key: key,
@@ -126,7 +127,13 @@ class _TemplateState extends State<Template> {
               ),
             );
         }else{
-          return const Center(child: CircularProgressIndicator(strokeWidth: 14,));
+
+          return Center(child: CircularProgressIndicator(
+            strokeWidth: 8,
+            value: 0.24,  // Percentage value between 0.0 and 1.0
+            backgroundColor: Colors.black.withOpacity(0.1),  // Lighter background color
+            valueColor: const AlwaysStoppedAnimation<Color>(active), // Progress color
+          ));
         }
       }),
       floatingActionButton: FloatingActionButton(
@@ -151,11 +158,9 @@ class MyDataSource extends DataGridSource {
   final List<Map<String, dynamic>> _jsonColumns;
   GlobalKey<SfDataGridState> key;
 
-  MyDataSource(count, this.context, this.key, String previousData, this._jsonColumns) {
+  MyDataSource(this.context, this.key, String previousData, this._jsonColumns) {
     if(previousData != '') {
       List<dynamic> previousRecords = jsonDecode(previousData);
-        //print(previousRecords.toList());
-
       _rows = List.generate(
         previousRecords.length,
             (index){
@@ -167,19 +172,16 @@ class MyDataSource extends DataGridSource {
           return DataGridRow(cells: cells);
             },
       );
-
       for (var col in _jsonColumns) {
         _columnNames.add(col['name']);
       }
 
-
     }else{
-      _initializeRows(count);
+      _initializeRows(4);
       for (var col in _jsonColumns) {
         addColumn(col['name'],'');
       }
     }
-
   }
 
 

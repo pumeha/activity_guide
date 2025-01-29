@@ -43,7 +43,7 @@ class _SmallScreenAdminState extends State<SmallScreenAdmin> {
           DashboardLocation(),
           NotificationLocation(),
           DatatableLocation()
-        ]));
+        ]),transitionDelegate: NoAnimationTransitionDelegate());
   }
 
   @override
