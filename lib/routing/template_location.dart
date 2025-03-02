@@ -4,6 +4,7 @@ import 'package:flutter/src/widgets/framework.dart';
 
 
 class TemplateLocation extends BeamLocation{
+
   @override
   List<BeamPage> buildPages(BuildContext context, RouteInformationSerializable<dynamic> state) {
     return [BeamPage(child: Template(),key: ValueKey('template'),title: 'Activity Guide')];

@@ -7,10 +7,10 @@ class DatatableLocation extends BeamLocation {
   @override
   List<BeamPage> buildPages(BuildContext context, RouteInformationSerializable<dynamic> state) {
     return [BeamPage(child: MyTable(),title: appName,
-        key: ValueKey('dataset'))];
+        key: ValueKey('database'))];
   }
 
   @override
-  List<Pattern> get pathPatterns => ['/admin/dataset'];
+  List<Pattern> get pathPatterns => ['/admin/database','/home/database'];
 
 }

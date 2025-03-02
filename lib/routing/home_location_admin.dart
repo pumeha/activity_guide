@@ -1,4 +1,4 @@
-import 'package:activity_guide/views/home_page_admin.dart';
+import 'package:activity_guide/screens/admin/home_page_admin.dart';
 import 'package:beamer/beamer.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
@@ -13,7 +13,7 @@ class AdminHomeLocation extends BeamLocation{
 
   @override
   // TODO: implement pathPatterns
-  List<Pattern> get pathPatterns => ['/admin','/admin/home','/admin/builder','/admin/welcome',
-    '/admin/dashboard','/admin/notification','/admin/feedback','/admin/dataset'];
+  List<Pattern> get pathPatterns => ['/admin','/admin/builder',
+    '/admin/dashboard','/admin/database','admin/users'];
 
 }

@@ -2,6 +2,7 @@ import 'package:activity_guide/screens/onboarding/authentication.dart';
 import 'package:activity_guide/utils/constants.dart';
 import 'package:beamer/beamer.dart';
 import 'package:flutter/src/widgets/framework.dart';
+
 class LoginLocation extends BeamLocation{
   @override
   List<BeamPage> buildPages(BuildContext context, RouteInformationSerializable<dynamic> state) {

@@ -97,7 +97,7 @@ class _TemplateState extends State<Template> {
                           _dataSource.addRow();
 
                         },
-                        color: Colors.green[50],
+                        color: Colors.yellow,
                         child: const Text(
                           'Add Row',
                           style: TextStyle(

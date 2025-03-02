@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:beamer/beamer.dart';
-import '../utils/navigation_items_users.dart';
-import '../theme/styles.dart';
+import 'navigation_items_users.dart';
+import '../../theme/styles.dart';
 
 class SideMenuUsers extends StatefulWidget {
 
@@ -14,6 +14,7 @@ class SideMenuUsers extends StatefulWidget {
 
 class _SideMenuUsersState extends State<SideMenuUsers> {
   int activeTab = 0;
+  List<String> iconNames = ['Template','Dashboard','Database'];
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -21,9 +22,6 @@ class _SideMenuUsersState extends State<SideMenuUsers> {
       decoration: const BoxDecoration(
         color: Colors.white,
       ),
-      // margin: ResponsiveWidget.isLargeScreen(context)
-      //     ? const EdgeInsets.symmetric(horizontal: 30, vertical: 20)
-      //     : const EdgeInsets.all(10),
       child:   Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: NavigationItemsUsers.values
@@ -52,6 +50,7 @@ class _SideMenuUsersState extends State<SideMenuUsers> {
                 },
                 icon: e.icon,
                 isActive: e.index == activeTab,
+                    tooltip: iconNames[e.index],
               ),
             )
                 .toList(),
@@ -68,12 +67,13 @@ class NavigationButton extends StatelessWidget {
     Key? key,
     required this.onPressed,
     required this.icon,
-    this.isActive = false,
+    this.isActive = false, required this.tooltip,
   }) : super(key: key);
 
   final VoidCallback onPressed;
   final IconData icon;
   final bool isActive;
+  final String tooltip;
 
   @override
   Widget build(BuildContext context) {
@@ -86,6 +86,7 @@ class NavigationButton extends StatelessWidget {
         shape: BoxShape.circle,
       ),
       child: IconButton(
+        tooltip: tooltip,
         onPressed: onPressed,
         icon: Icon(
           icon,

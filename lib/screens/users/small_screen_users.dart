@@ -3,17 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:beamer/beamer.dart';
 import '../../routing/dashboard_location.dart';
 import '../../routing/mytable_location.dart';
-import '../../routing/notification_location.dart';
 import '../../routing/template_builder_location2.dart';
 
-class SmallScreen extends StatefulWidget {
-  const SmallScreen({super.key});
+class SmallScreenUsers extends StatefulWidget {
+  const SmallScreenUsers({super.key});
 
   @override
-  State<SmallScreen> createState() => _SmallScreenState();
+  State<SmallScreenUsers> createState() => _SmallScreenUsersState();
 }
 
-class _SmallScreenState extends State<SmallScreen> {
+class _SmallScreenUsersState extends State<SmallScreenUsers> {
   final _beamerKey = GlobalKey<BeamerState>();
   late int _selectedIndex = 0;
 
@@ -29,9 +28,7 @@ class _SmallScreenState extends State<SmallScreen> {
     _beamerDelegate = BeamerDelegate(
         locationBuilder: BeamerLocationBuilder(beamLocations: [
           TemplateLocation(),
-          TemplateBuilderLocation2(),
           DashboardLocation(),
-          NotificationLocation(),
           DatatableLocation()
         ]),
     transitionDelegate: NoAnimationTransitionDelegate());

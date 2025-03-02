@@ -1,10 +1,8 @@
-import 'package:activity_guide/screens/users/responsiveness.dart';
-import 'package:activity_guide/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:beamer/beamer.dart';
-import '../utils/navigation_items_admin.dart';
-import '../theme/styles.dart';
+import '../../theme/styles.dart';
+import 'navigation_items_admin.dart';
 
 class SideMenuAdmin extends StatefulWidget {
   const SideMenuAdmin({super.key});
@@ -15,6 +13,8 @@ class SideMenuAdmin extends StatefulWidget {
 
 class _SideMenuAdminState extends State<SideMenuAdmin> {
   int activeTab = 0;
+  List<String> iconNames = ['Template Builder','Dashboard',
+                              'Database','Users'];
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -57,6 +57,7 @@ class _SideMenuAdminState extends State<SideMenuAdmin> {
               },
               icon: e.icon,
               isActive: e.index == activeTab,
+                  tooltip: iconNames[e.index],
             ),
           )
               .toList(),
@@ -73,12 +74,13 @@ class NavigationButton extends StatelessWidget {
     Key? key,
     required this.onPressed,
     required this.icon,
-    this.isActive = false,
+    this.isActive = false, required this.tooltip,
   }) : super(key: key);
 
   final VoidCallback onPressed;
   final IconData icon;
   final bool isActive;
+  final String tooltip;
 
   @override
   Widget build(BuildContext context) {
@@ -97,6 +99,7 @@ class NavigationButton extends StatelessWidget {
           size: 20,
           color: isActive ? Colors.green[800] : Colors.grey,
         ),
+        tooltip: tooltip,
       ),
     );
   }

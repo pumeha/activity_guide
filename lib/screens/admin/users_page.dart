@@ -200,7 +200,7 @@ class _UsersPageState extends State<UsersPage> {
              // context.read<UsersProvider>().getUsers();
             },child: Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Image.asset('images/refreshdata.png'),
+              child: Image.asset('/images/refreshdata.png'),
             ),heroTag: 'refresh',),
           ),
           Positioned(
@@ -212,7 +212,7 @@ class _UsersPageState extends State<UsersPage> {
                 _addUserDialog();
               },backgroundColor: Colors.green[900],child:  const Padding(
                 padding: EdgeInsets.all(8.0),
-                child: Icon(Icons.add),
+                child: Icon(Icons.add,color: Colors.white,),
               ),heroTag: 'add',),
             ),)
         ],

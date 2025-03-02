@@ -1,20 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <!--
-      If you are serving your web app in a path other than the root, change the
-      href value below to reflect the base path you are serving from.
-
-      The path provided below has to start and end with a slash "/" in order for
-      it to work correctly.
-
-      For more details:
-      * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
-
-      This is a placeholder for base href that will be replaced by the value of
-      the `--base-href` argument provided to `flutter build`.
-    -->
-    <base href="$FLUTTER_BASE_HREF">
+    <base href="/">
 
     <meta charset="UTF-8">
     <meta content="IE=Edge" http-equiv="X-UA-Compatible">
@@ -29,126 +16,252 @@
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="favicon.png"/>
 
-    <title>Activity Guide</title>
     <link rel="manifest" href="manifest.json">
+    <script type="application/javascript" src="/assets/packages/flutter_inappwebview_web/assets/web/web_support.js" defer></script>
 
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activity Guide</title>
+    <link href="https://fonts.googleapis.com/css2?family=Actor&family=Adamina&family=Roboto&display=swap" rel="stylesheet">
     <style>
+        /* General reset and body styling */
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
 
-        html, body {
-        height: 100%; /* Ensure the body and html are full height */
-        margin: 0;    /* Remove default margin */
+        body {
+          font-family: 'Roboto', sans-serif;
+          background-color: #ffffff;
+          color: #333;
+          padding: 20px 36px; /* Reduced padding above */
+        }
+
+        .container {
+          max-width: 1200px;
+          margin: 0 auto;
+        }
+
+        /* AppBar */
+        .appbar {
+          background-color: #ffffff;
+          padding: 16px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          position: sticky;
+          top: 0;
+         // z-index: 1000;
+          //box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          margin-bottom: 16px; /* Added space under the AppBar */
+        }
+
+        .appbar .title {
+          font-size: 24px;
+          font-weight: bold;
+          color: #067329;
+        }
+
+        .appbar .title span {
+          background-color: #067329;
+          color: white;
+          padding: 4px 8px;
+        }
+
+        .appbar .user-icon {
+          cursor: pointer;
+          color: #067329;
+          font-size: 24px;
+        }
+
+        /* Welcome Note */
+        .welcome-note p {
+          font-size: 24px;
+          font-weight: 600;
+          text-align: justify;
+          margin-bottom: 24px;
+        }
+
+        /* Features Section */
+        .features h2 {
+          font-size: 24px;
+          color: #067329; /* The updated color */
+          font-weight: bold;
+          text-align: center;
+          margin-bottom: 24px;
+        }
+
+        .feature-cards {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+          gap: 24px;
+        }
+
+        /* Feature Cards (adjust for large screen) */
+        @media (min-width: 768px) {
+          .feature-cards {
+            grid-template-columns: repeat(2, 1fr);
+          }
+        }
+
+        .feature-card {
+          padding: 16px;
+          background-color: #f9f9f9;
+          border: 1px solid #ddd;
+          border-radius: 8px;
+        }
+
+        .feature-card h3 {
+          font-size: 18px;
+          font-weight: bold;
+          color: #067329;
+        }
+
+        .feature-card p {
+          font-size: 16px;
+          color: #555;
+          text-align: justify;
+          margin-top: 8px;
+        }
+
+        /* Footer */
+        .footer {
+          margin-top: 50px;
+          text-align: center;
+        }
+
+        .footer p {
+          font-size: 18px;
+        }
+
+        .company-name {
+          font-size: 24px;
+          font-weight: bold;
+        }
+
+        /* Floating "Get Started" Button */
+        .get-started-btn {
+          position: fixed;
+          right: 20px;
+          bottom: 20px;
+          background-color: #067329; /* Updated color */
+          color: white;
+          font-size: 18px;
+          border: none;
+          border-radius: 25px;
+          padding: 12px;
+          cursor: pointer;
+          box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+          transition: background-color 0.3s;
+        }
+
+        .get-started-btn:hover {
+          background-color: #055d26; /* Slightly darker green for hover */
+        }
+    /* Loader */
+        .loader {
+      box-sizing: border-box;
+      position: absolute; /* Change to absolute */
+      top: 50%; /* Center vertically */
+      left: 50%; /* Center horizontally */
+      transform: translate(-50%, -50%); /* Adjust to truly center the loader */
+      width: 48px;
+      height: 48px;
+      animation: spin 1s linear infinite;
+      margin-top: 20px; /* Add some margin above the loader */
+      display: none; /* Initially hide the loader */
     }
 
-    .landing-page {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;  /* Vertically centers the content */
-        align-items: center;      /* Horizontally centers the content */
-        height: 100%;             /* Take full height of the viewport */
-        text-align: center;       /* Center text inside the container */
-        font-family: sans-serif;  /* Set font family */
-    }
 
+        .loader:after, .loader:before {
+          content: "";
+          width: 24px;
+          height: 24px;
+          position: absolute;
+          border-radius: 50%;
+          background: #FF3D00;
+          animation: spin 1s linear infinite;
+          transform-origin: 0px 100%;
+        }
 
-          .activity {
-              background-color: #006400;
-              color: white;
-              padding: 10px;
-              text-align: right;
+        .loader:before {
+          transform-origin: 0 50%;
+          background: #008000;
+        }
+
+        @keyframes spin {
+          to {
+            transform: rotate(360deg);
           }
-
-          .guide {
-              color: #006400;
-              padding: 10px;
-          }
-
-          .title {
-              font-size: 48px;
-              font-weight: bold;
-              display: inline-block;
-          }
-
-          .description {
-              font-size: 16px;
-              font-weight: bold;
-              margin-bottom: 50px;
-          }
-
-          @media (max-width: 600px) {
-              .title {
-                  font-size: 36px;
-              }
-          }
-
-          .company {
-              font-size: 24px;
-              font-weight: bold;
-              margin: 4px;
-          }
-
-          .loader {
-              box-sizing: border-box;
-              position: relative;
-              width: 48px;
-              height: 48px;
-              animation: spin 1s linear infinite;
-              margin-top: 20px; /* Add some margin above the loader */
-          }
-
-          .loader:after, .loader:before {
-              content: "";
-              width: 24px;
-              height: 24px;
-              position: absolute;
-              border-radius: 50%;
-              background: #FF3D00;
-              animation: spin 1s linear infinite;
-              transform-origin: 0px 100%;
-          }
-
-          .loader:before {
-              transform-origin: 0 50%;
-              background: #008000;
-          }
-
-          @keyframes spin {
-              to {
-                  transform: rotate(360deg);
-              }
-          }
+        }
 
     </style>
-
-
 </head>
 <body>
-<div class="landing-page">
-    <!-- Logo -->
-    <img src="favicon.png" alt="nbs logo" style="width:100px;height:100px;margin-bottom: 20px;">
-    <!-- Title and Description -->
-    <div class="text-container">
-        <h1 class="title">
-            <span class="activity">ACTIVITY</span>
-            <span class="guide">GUIDE</span>
-        </h1>
-        <p class="description">MONITORING AND EVALUATING WORKPLANS OF 16 DEPTS/UNITS</p>
+
+<!-- AppBar -->
+<div>
+    <div class="appbar">
+        <div class="title">
+            <span>ACTIVITY</span> GUIDE
+        </div>
     </div>
 
-    <!-- Footer with Branding -->
-    <div class="footer">
-        <p>Powered by</p>
-        <p class="company">SmarterWay Solutions Ltd</p>
-    </div>
+    <div class="container">
+        <section class="welcome-note">
+            <p>Welcome to Activity Guide. Our app provides essential tools for effective project management, from comprehensive activity templates to real-time dashboards, ensuring your corporate planning runs smoothly.</p>
+        </section>
 
-    <!-- Loader (Centered) -->
-    <div class="loader"></div>
+        <section class="features">
+            <h2>Features of Activity Guide</h2>
+            <div class="feature-cards">
+                <div class="feature-card">
+                    <h3>Activity Guide Template</h3>
+                    <p>Leverage our customizable activity templates designed to meet your specific project needs, ensuring you have the right structure for effective planning.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Real-time Dashboard</h3>
+                    <p>Our user-friendly dashboard provides real-time updates and insights into your project’s progress, allowing for quick adjustments and informed decision-making.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Feedback Collection</h3>
+                    <p>We facilitate easy feedback collection from stakeholders, ensuring you gather valuable insights that drive project improvements and success.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>Notification Alerts</h3>
+                    <p>Stay informed with our notification system that alerts you to important updates and deadlines, helping you manage your projects proactively.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="footer">
+            <p>Powered by</p>
+            <p class="company-name">SmarterWay Solutions Ltd</p>
+        </section>
+        <!-- Loader -->
+        <div class="loader" id="loader"></div>
+        <!-- Floating "Get Started" Button -->
+        <button class="get-started-btn" onclick="openGetStarted()" id="loadScriptBtn">Get Started</button>
+    </div>
 </div>
-<script src="flutter_bootstrap.js" async></script>
+
 <script>
-    // This ensures that if the URL doesn't match a real file, it loads the index.html file
-    if (window.location.pathname !== '/') {
-      window.history.replaceState({}, '', '/');
+    function openGetStarted() {
+     document.getElementById('loader').style.display = 'block'; // Show loader
+     document.querySelector('.get-started-btn').style.display = 'none';
     }
 </script>
+<script>
+    document.getElementById("loadScriptBtn").addEventListener("click", function() {
+      // Create a script element
+      var script = document.createElement("script");
+      script.src = "flutter_bootstrap.js?v=2"; // Specify the script's source
+      script.async = true; // Set async attribute to true
+      document.body.appendChild(script); // Append the script to the body
+    });
+</script>
+
+<!-- Font Awesome for user icon -->
+<script src="https://kit.fontawesome.com/a076d05399.js"></script>
 </body>
 </html>

@@ -1,6 +1,5 @@
 import 'package:activity_guide/models/myshared_preference.dart';
 import 'package:activity_guide/utils/constants.dart';
-import 'package:activity_guide/views/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:beamer/beamer.dart';
 import '../../utils/colors.dart';
@@ -22,7 +21,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
-          image: DecorationImage(image: AssetImage('images/background.jpg'),fit: BoxFit.cover,
+          image: DecorationImage(image: AssetImage('/images/background.jpg'),fit: BoxFit.cover,
               opacity: 0.7),
         ),
         child: Center(
