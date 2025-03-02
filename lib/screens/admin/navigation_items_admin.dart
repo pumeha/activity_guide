@@ -1,26 +1,26 @@
 import 'package:flutter/material.dart';
 
 enum NavigationItemsAdmin {
-  home,
   template_builder,
   dashboard,
-  dataset
+  database,
+  users
 }
 
 extension NavigationItemsExtensions on NavigationItemsAdmin {
   IconData get icon {
     switch (this) {
-      case NavigationItemsAdmin.home:
-        return Icons.home;
       case NavigationItemsAdmin.template_builder:
         return Icons.edit_document;
       case NavigationItemsAdmin.dashboard:
         return Icons.dashboard;
-      case NavigationItemsAdmin.dataset:
+      case NavigationItemsAdmin.database:
         return Icons.dataset;
+      case NavigationItemsAdmin.users:
+        return Icons.supervised_user_circle_outlined;
 
       default:
-        return Icons.home;
+        return Icons.edit_document;
     }
   }
 }

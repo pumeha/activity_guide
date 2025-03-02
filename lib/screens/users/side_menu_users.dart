@@ -1,21 +1,18 @@
-import 'package:activity_guide/screens/users/responsiveness.dart';
-import 'package:activity_guide/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:beamer/beamer.dart';
-
-import '../enums/navigation_items.dart';
+import '../utils/navigation_items_users.dart';
 import '../theme/styles.dart';
 
-class SideMenu extends StatefulWidget {
+class SideMenuUsers extends StatefulWidget {
 
-  const SideMenu({super.key});
+  const SideMenuUsers({super.key});
 
   @override
-  State<SideMenu> createState() => _SideMenuState();
+  State<SideMenuUsers> createState() => _SideMenuUsersState();
 }
 
-class _SideMenuState extends State<SideMenu> {
+class _SideMenuUsersState extends State<SideMenuUsers> {
   int activeTab = 0;
   @override
   Widget build(BuildContext context) {
@@ -29,7 +26,7 @@ class _SideMenuState extends State<SideMenu> {
       //     : const EdgeInsets.all(10),
       child:   Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: NavigationItems.values
+            children: NavigationItemsUsers.values
                 .map(
                   (e) => NavigationButton(
                 onPressed: () {
@@ -38,17 +35,16 @@ class _SideMenuState extends State<SideMenu> {
 
                   switch(e.index){
                     case 0:
-                      Beamer.of(context).beamToNamed('/home/welcome');
-
-                      break;
-                    case 1:
                       Beamer.of(context).beamToNamed('/home/template');
                       break;
-                    case 2:
+                    case 1:
                       Beamer.of(context).beamToNamed('/home/dashboard');
-
+                      break;
+                    case 2:
+                      Beamer.of(context).beamToNamed('/home/database');
+                      break;
                     default:
-                      Beamer.of(context).beamToNamed('/home/welcome');
+                      Beamer.of(context).beamToNamed('/home/template');
                       break;
 
                   }

@@ -1,4 +1,4 @@
-import 'package:activity_guide/screens/users/large_screen.dart';
+import 'package:activity_guide/screens/users/large_screen_admin.dart';
 import 'package:activity_guide/screens/users/responsiveness.dart';
 import 'package:activity_guide/screens/users/small_screen_admin.dart';
 import 'package:activity_guide/screens/users/top_nav.dart';
@@ -22,7 +22,7 @@ class _HomePageState extends State<HomePageAdmin> {
         extendBodyBehindAppBar: false,
         appBar: topNavigationBar(context, scaffoldKey),
         // extendBodyBehindAppBar: true,
-        body: ResponsiveWidget(largeScreen: LargeScreen(sideMenu: SideMenuAdmin(),),
+        body: ResponsiveWidget(largeScreen: LargeScreenAdmin(sideMenu: SideMenuAdmin(),),
             smallScreen: SmallScreenAdmin())
     );
   }

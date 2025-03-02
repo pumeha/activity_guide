@@ -3,7 +3,7 @@ import 'package:activity_guide/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:beamer/beamer.dart';
-import '../enums/navigation_items_admin.dart';
+import '../utils/navigation_items_admin.dart';
 import '../theme/styles.dart';
 
 class SideMenuAdmin extends StatefulWidget {
@@ -30,23 +30,26 @@ class _SideMenuAdminState extends State<SideMenuAdmin> {
               onPressed: () {
                 setState(() {
                   activeTab = e.index;
-
                   switch(e.index){
                     case 0:
-                      Beamer.of(context).beamToNamed('/admin/welcome');
-
+                      Beamer.of(context).beamToNamed(
+                          '/admin/builder');
                       break;
                     case 1:
-                      Beamer.of(context).beamToNamed('/admin/builder');
+                      Beamer.of(context).beamToNamed(
+                          '/admin/dashboard');
                       break;
                     case 2:
-                      Beamer.of(context).beamToNamed('/admin/dashboard');
+                      Beamer.of(context).beamToNamed('/admin/database');
+                      break;
                     case 3:
-                      Beamer.of(context).beamToNamed('/admin/dataset');
+                      Beamer.of(context).beamToNamed('/admin/users');
                       break;
 
                     default:
-                      Beamer.of(context).beamToNamed('/admin/welcome');
+                      Beamer.of(context).beamToNamed(
+                          '/admin/builder');
+
                       break;
 
                   }
