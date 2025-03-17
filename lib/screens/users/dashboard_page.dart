@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:activity_guide/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -50,9 +51,20 @@ class _DashboardPageState extends State<DashboardPage> with AutomaticKeepAliveCl
         );
       },
       onLoadStart: (controller,url) {
-      _timer?.cancel();
-      EasyLoading.dismiss();
-      },),);
+        _timer?.cancel();
+        EasyLoading.dismiss();
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content:
+      const Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,children: [
+        Expanded(child: Text('Initializing Dashboard...',
+          style: TextStyle(color: Colors.white,fontSize: 16,fontWeight: FontWeight.bold),)),
+        CircularProgressIndicator(color: Colors.white,),
+      ],),
+      backgroundColor: Colors.green[600],),
+      );
+      },
+    onLoadStop: (controller,url){
+
+    },),);
   }
 
   @override
@@ -65,5 +77,35 @@ class _DashboardPageState extends State<DashboardPage> with AutomaticKeepAliveCl
     super.dispose();
     EasyLoading.dismiss();
   }
+
+    void showCustomSnackBar(BuildContext context) {
+      final snackBar = SnackBar(
+        content: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Colors.blue, Colors.green], // Your two colors here
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+          child: Row(
+            children: [
+              Expanded(child: Text('Initializing Dashboard...', style: TextStyle(color: Colors.white))),
+              CircularProgressIndicator(),
+            ],
+          ),
+        ),
+        duration: Duration(seconds: 5),
+        action: SnackBarAction(
+          label: 'Close',
+          textColor: Colors.white, // Change text color for the action button
+          onPressed: () {
+            // Dismiss the SnackBar
+            ScaffoldMessenger.of(context).hideCurrentSnackBar();
+          },
+        ),
+      );
+
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    }
 }
-//pop
