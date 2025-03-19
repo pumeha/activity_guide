@@ -12,7 +12,7 @@ class UsersPage extends StatefulWidget {
 
 class _UsersPageState extends State<UsersPage> {
 
-  List<String> _sectionitems = ['admin','receptionist'];
+  List<String> _sectionitems = ['admin','user'];
   var selectedfloor = '';
   var selectedSection  = '';
   late bool firstname = false,lastname = false,phonenumber = false,passcode = false,role = false;

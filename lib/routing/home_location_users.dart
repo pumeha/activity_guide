@@ -14,6 +14,6 @@ class HomeLocationUsers extends BeamLocation{
   @override
   // TODO: implement pathPatterns
   List<Pattern> get pathPatterns => ['/home','/home/template','/home/database',
-    '/home/dashboard'];
+    '/home/dashboard','/home/edit'];
 
 }

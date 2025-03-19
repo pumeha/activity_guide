@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 enum NavigationItemsUsers {
-
   template,
   dashboard,
   database
@@ -18,7 +17,7 @@ extension NavigationItemsExtensions on NavigationItemsUsers {
         return Icons.dataset;
 
       default:
-        return Icons.home;
+        return Icons.edit_document;
     }
   }
 }

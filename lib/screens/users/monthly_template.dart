@@ -1,20 +1,30 @@
 import 'dart:convert';
+import 'package:activity_guide/routing/editing_template_location.dart';
+import 'package:activity_guide/screens/users/editing_monthly_template.dart';
+import 'package:beamer/beamer.dart';
+import 'package:activity_guide/utils/colors.dart';
 import 'package:activity_guide/utils/templateJson.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 class MonthlyTemplate extends StatefulWidget {
   const MonthlyTemplate({super.key});
 
   @override
   State<MonthlyTemplate> createState() => _MonthlyTemplateState();
+
 }
 
 class _MonthlyTemplateState extends State<MonthlyTemplate> {
 
   //values holder
   Map<String,dynamic> partialSave = {};
+  // for(var item in data){
+  //   partialSave[item.name] = '';
+  // }
   late List<TextEditingController> _controllers;
-  String? _selectedValue;
+  final List<bool> _selections = [true,false];
 
   @override
   Widget build(BuildContext context) {
@@ -25,33 +35,80 @@ class _MonthlyTemplateState extends State<MonthlyTemplate> {
     List<dynamic> rawdata = jsonDecode(json);
     List<TemplateJson> data = rawdata.map((data)=> TemplateJson.fromJson(data)).toList();
     //registering the keys to the partialSave to be able to check if they are empty or not
-    for(var item in data){
-      partialSave[item.name] = '';
-    }
+
    _controllers = List.generate(data.length, (index) => TextEditingController());
 
+    return Scaffold( backgroundColor: Color(0xF4FAEF),
+      body: Column(
+        children: [
+          ToggleButtons(
+            isSelected: _selections,
+            onPressed: (index) {
+              setState(() {
+                switch(index){
+                  case 0:
+                    _selections[index] = true;
+                    _selections[1] = false;
+                    break;
+                  case 1:
+                    _selections[index] = true;
+                    _selections[0] = false;
+                    break;
 
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Form( key: _formKey,
-          child: Column(
-            children: List.generate(data.length, (index){
-              return CustomCard(index,data[index].name,data[index].type,data[index].range,_formKey);
-            }),
+                  default:
+                    _selections[0] = true;
+                    _selections[1] = false;
+                }
+              });
+            },
+            selectedBorderColor: active,
+            selectedColor: Colors.white,
+            fillColor: active,
+            color: Colors.black,
+            borderColor: active,
+            borderWidth: 2,
+            children: const [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                child: Text('Workplan', style: TextStyle(fontSize: 14)),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.0),
+                child: Text('Monthly Activities', style: TextStyle(fontSize: 14)),
+              ),
+            ], // Set minimum size for buttons
           ),
-        ),
+          SizedBox(height: 12,),
+          Expanded(
+            child: SingleChildScrollView(
+              //physics: BouncingScrollPhysics(),
+              child: Form( key: _formKey,
+                child: Column(
+                  children: List.generate(data.length, (index){
+                    return CustomCard(index,data[index].name,data[index].type,data[index].range,_formKey);
+                  }),),),),
+          ),
+        ],
       ),
 
-      floatingActionButton: FloatingActionButton(onPressed: (){
-        if(_formKey.currentState!.validate()){
-          partialSave.forEach((key,v){
-            partialSave[key] == '' ? print('${key} is required') : '';
-          });
-        }
-      },child: Icon(Icons.save),),
-    );
+      floatingActionButton: Stack(
+        children: [
+          Positioned(
+            top: MediaQuery.of(context).size.height/2 -100,right: 0,
+            child: Column(
+              children: [
+                FloatingActionButton(onPressed: (){
 
-
+                },child: Icon(Icons.save,color: Colors.white,),
+                  tooltip: 'Save',heroTag: 'save',backgroundColor: active,),
+                SizedBox(height: 12,),
+                FloatingActionButton(onPressed: (){
+                  context.beamTo(EditingMonthlyTemplateLocation());
+                //  Navigator.push(context, MaterialPageRoute(builder: (context)=>  const EditingMonthlyTemplate()));
+                },child: Icon(Icons.description_outlined,),
+                  backgroundColor: Color(0xFFFFFFFF),
+                tooltip: 'View',heroTag: 'view',),
+              ],),)],),);
   }
 
   String? validatorFunction(String? v){
@@ -78,8 +135,8 @@ class _MonthlyTemplateState extends State<MonthlyTemplate> {
       setState(() {});// to refresh the state in order to update the date
     }
   }
-
-  doubleDateDialog(String title) {
+  void doubleDateDialog(String title) {
+    String  multipleDateString = '';
     showDateRangePicker(
         context: context,
         firstDate: DateTime(DateTime.now().year),
@@ -93,15 +150,15 @@ class _MonthlyTemplateState extends State<MonthlyTemplate> {
             '${onValue.start.month}/${onValue.start.day}/${onValue.start.year}';
         String endDate =
             '${onValue.end.month}/${onValue.end.day}/${onValue.end.year}';
-      String  multipleDateString = startDate + '-' + endDate;
-            partialSave[title] = multipleDateString;
-            setState(() {
+      multipleDateString = startDate + '-' + endDate;
+       partialSave[title] = multipleDateString;
+        setState(() {
 
-            });
-       // setCellValue(sn, columnName, multipleDateString);
+        });
       }
 
     });
+
   }
 
   Widget CustomCard(int index,String title,String type,String range,Key _key){
@@ -111,25 +168,24 @@ class _MonthlyTemplateState extends State<MonthlyTemplate> {
     double horizontalPadding = width >1000 ? width/4 : width/6;
 
     switch(type){
+
       case 'Dropdown':
-        subtitleWidget = DropdownMenu<String>(
-          initialSelection: partialSave[title] ?? '',
-          dropdownMenuEntries: range
+
+        subtitleWidget = DropdownButtonFormField<String>(
+          value: partialSave[title],
+          items: range
               .toString()
               .split(',')
-              .map<DropdownMenuEntry<String>>(
-                  (e) => DropdownMenuEntry(value: e, label: e))
+              .map<DropdownMenuItem<String>>(
+                  (e) => DropdownMenuItem(value: e,  child: Tooltip(message: e,child: Text(e,),),))
               .toList(),
-          inputFormatters: [
-          //  FilteringTextInputFormatter.deny(RegExp(r'.'))
-          ],
-          onSelected: (v) {
-          partialSave[title] = v;
-          },
+         onChanged: (String? value) { partialSave[title] = value; },
+          isExpanded: true,validator: validatorFunction,
+          decoration: InputDecoration(border: OutlineInputBorder()),
         );
         break;
       case 'Date':
-        _controllers[index].text = partialSave[title] ?? '';
+      _controllers[index].text = partialSave[title] ?? '';
        range == 'Single Date'
             ?
         // Render Date Picker
@@ -139,8 +195,7 @@ class _MonthlyTemplateState extends State<MonthlyTemplate> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
 
-              Expanded(child: TextFormField(controller: _controllers[index],
-                validator: validatorFunction,)),
+              Expanded(child: Text(partialSave[title] ?? '')),
               TextButton(
                 child: Icon(Icons.arrow_drop_down_circle),
                 onPressed: () {
@@ -156,13 +211,12 @@ class _MonthlyTemplateState extends State<MonthlyTemplate> {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
 
-              Expanded(child: TextFormField(controller: _controllers[index],
-              validator: validatorFunction)),
+              Expanded(child: TextFormField(controller: _controllers[index],validator: validatorFunction,
+                enabled: false,style: TextStyle(color: Colors.black),)),
               TextButton(
                 child: Icon(Icons.arrow_drop_down_circle),
                 onPressed: () {
                   doubleDateDialog(title);
-                  print(partialSave[title]);
                 },
               ),
             ],

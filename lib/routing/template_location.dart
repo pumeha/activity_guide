@@ -8,10 +8,11 @@ class TemplateLocation extends BeamLocation{
 
   @override
   List<BeamPage> buildPages(BuildContext context, RouteInformationSerializable<dynamic> state) {
-    return [BeamPage(child: MonthlyTemplate(),key: ValueKey('template'),title: 'Activity Guide')];
+    return [BeamPage(child: MonthlyTemplate(),key: ValueKey('template'),title: 'Activity Guide'),
+    ];
   }
 
   @override
   // TODO: implement pathPatterns
-  List<Pattern> get pathPatterns => ['/home/template'];
+  List<Pattern> get pathPatterns => ['/home/template','/home/edit'];
 }

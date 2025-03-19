@@ -33,13 +33,16 @@ class _SideMenuUsersState extends State<SideMenuUsers> {
 
                   switch(e.index){
                     case 0:
-                      Beamer.of(context).beamToNamed('/home/template');
+                     Beamer.of(context).beamToNamed('/home/template');
+                     // context.beamTo(TemplateLocation());
                       break;
                     case 1:
-                      Beamer.of(context).beamToNamed('/home/dashboard');
+                     // context.beamTo(DashboardLocation());
+                     Beamer.of(context).beamToNamed('/home/dashboard');
                       break;
                     case 2:
-                      Beamer.of(context).beamToNamed('/home/database');
+                    //  context.beamTo(DatatableLocation());
+                     Beamer.of(context).beamToNamed('/home/database');
                       break;
                     default:
                       Beamer.of(context).beamToNamed('/home/template');

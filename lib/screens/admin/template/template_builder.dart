@@ -38,7 +38,7 @@ class _TemplateBuilderState extends State<TemplateBuilder> {
                    )),);
               }),),
           ],
-        ),
+        ), 
       ),
       floatingActionButton: Stack(
         children: [

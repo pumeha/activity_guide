@@ -1,7 +1,8 @@
 import 'dart:convert';
+import 'package:activity_guide/utils/colors.dart';
 import 'package:activity_guide/utils/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
 
@@ -19,13 +20,22 @@ class MyTable extends StatefulWidget {
 
 
   Future populateData() async{
-    var response = await rootBundle.loadString("/images/rawjson.json");
-    data = json.decode(response) as List<dynamic>;
-    if(data.isNotEmpty){
-     columns = generateColumns(data[0]);
-      _jsonDataGridSource = JSONDataGridSource(data,columns);
+    final response = await http.get(Uri.parse('/rawjson.json'));
+
+    if (response.statusCode == 200) {
+    //  print(response.body);
+
+        data = json.decode(response.body) as List<dynamic>;
+      if(data.isNotEmpty){
+        columns = generateColumns(data[0]);
+        _jsonDataGridSource = JSONDataGridSource(data,columns);
+      }
+      return data;
+    } else {
+      throw Exception('Failed to load JSON data');
     }
-    return data;
+
+
   }
 
   List<GridColumn> generateColumns(Map<String,dynamic> data){
@@ -48,34 +58,78 @@ class MyTable extends StatefulWidget {
     super.initState();
 
   }
-
+final DataGridController controller = DataGridController();
+  final List<bool> _selections = [true,false];
   @override
   Widget build(BuildContext context) {
 
-    return Scaffold(
-      body: FutureBuilder(
-        future: populateData(),builder: (context,snapshot){
+    return Scaffold( backgroundColor: Colors.white70,
+      body: Column(children: [
+        ToggleButtons(
+          isSelected: _selections,
+          onPressed: (index) {
+            setState(() {
+             switch(index){
+               case 0:
+                 _selections[index] = true;
+                 _selections[1] = false;
+                 break;
+               case 1:
+                 _selections[index] = true;
+                 _selections[0] = false;
+                 break;
+
+               default:
+                 _selections[0] = true;
+                 _selections[1] = false;
+             }
+            });
+          },
+          selectedBorderColor: active,
+          selectedColor: Colors.white,
+          fillColor: active,
+          color: Colors.black,
+          borderColor: active,
+          borderWidth: 2,
+          children: const [
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              child: Text('Workplan', style: TextStyle(fontSize: 14)),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              child: Text('Monthly Activities', style: TextStyle(fontSize: 14)),
+            ),
+          ], // Set minimum size for buttons
+        ),
+        Expanded(child: FutureBuilder(
+          future: populateData(),builder: (context,snapshot){
           if(snapshot.connectionState == ConnectionState.done){
 
-          return  SfDataGrid(source: _jsonDataGridSource,
-                columns: columns,
-          gridLinesVisibility: GridLinesVisibility.both,
-          headerGridLinesVisibility: GridLinesVisibility.both,
-          columnWidthMode: ColumnWidthMode.auto,
-            allowFiltering: true,
-          allowSorting: true,
-            allowMultiColumnSorting: true,
-            allowTriStateSorting: true,
-            showVerticalScrollbar: true,
-            showHorizontalScrollbar: true,
-          );
+            return  SfDataGrid(
+              controller: controller,
+              source: _jsonDataGridSource,
+              columns: columns,
+              gridLinesVisibility: GridLinesVisibility.both,
+              headerGridLinesVisibility: GridLinesVisibility.both,
+              columnWidthMode: ColumnWidthMode.auto,
+              allowFiltering: true,
+              allowSorting: true,
+              allowMultiColumnSorting: true,
+              allowTriStateSorting: true,
+              showVerticalScrollbar: true,
+              showHorizontalScrollbar: true,
+              navigationMode: GridNavigationMode.row,
+              selectionMode: SelectionMode.multiple,
+            );
           }
           return CustomCircleIndicator();
-      },
-      ),
+        },
+        ),)
+      ],),
       floatingActionButton: FloatingActionButton(onPressed: (){
-        
-      },child: Icon(Icons.save_alt),),
+
+      },child: const Icon(Icons.save_alt),),
     );
   }
 }
@@ -101,7 +155,7 @@ class JSONDataGridSource extends DataGridSource{
    return DataGridRowAdapter(cells:
    row.getCells().map((cell)=>
    Container(child: Text(cell.value.toString(),
-     style: TextStyle(backgroundColor: Colors.white),
+     style: const TextStyle(backgroundColor: Colors.white),
    ),
    color: Colors.white,)).toList());
   }

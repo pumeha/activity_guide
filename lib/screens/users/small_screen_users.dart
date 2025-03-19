@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:beamer/beamer.dart';
 import '../../routing/dashboard_location.dart';
 import '../../routing/mytable_location.dart';
-import '../../routing/template_builder_location2.dart';
 
 class SmallScreenUsers extends StatefulWidget {
   const SmallScreenUsers({super.key});
@@ -29,7 +28,7 @@ class _SmallScreenUsersState extends State<SmallScreenUsers> {
         locationBuilder: BeamerLocationBuilder(beamLocations: [
           TemplateLocation(),
           DashboardLocation(),
-          DatatableLocation()
+          DatatableLocation(),
         ]),
     transitionDelegate: NoAnimationTransitionDelegate());
   }
@@ -40,7 +39,10 @@ class _SmallScreenUsersState extends State<SmallScreenUsers> {
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
-
+          // BottomNavigationBarItem(icon: Text('W',style: TextStyle(fontSize: 16,color: Colors.black,
+          // fontWeight: FontWeight.bold),),
+          //   label: 'Workplan',
+          // ),
           BottomNavigationBarItem(icon: Icon(Icons.edit_document),
             label: 'Template',
           ),
@@ -59,6 +61,7 @@ class _SmallScreenUsersState extends State<SmallScreenUsers> {
 
           switch (index) {
             case 0:
+
               _beamerKey.currentState!.routerDelegate.beamToNamed('/home/template');
               // Beamer.of(context).beamToNamed(
               //     '/home/template');

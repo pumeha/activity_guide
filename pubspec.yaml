@@ -43,6 +43,7 @@ dev_dependencies:
   google_fonts: ^6.2.1
   beamer: ^1.7.0
   flutter_inappwebview: ^6.1.5
+  flutter_speed_dial: ^7.0.0
 
 
 # For information on the generic Dart part of this file, see the

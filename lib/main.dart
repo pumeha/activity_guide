@@ -16,7 +16,6 @@ Future main() async {
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider(create: (_)=> TemplateProvider()),
   ],child:  MyApp(),));
-
 }
 
 class MyApp extends StatelessWidget {
