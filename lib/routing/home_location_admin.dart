@@ -14,6 +14,6 @@ class AdminHomeLocation extends BeamLocation{
   @override
   // TODO: implement pathPatterns
   List<Pattern> get pathPatterns => ['/admin','/admin/builder',
-    '/admin/dashboard','/admin/database','admin/users'];
+    '/admin/dashboard','/admin/database','admin/users','/admin/templates','/admin/preview_template'];
 
 }

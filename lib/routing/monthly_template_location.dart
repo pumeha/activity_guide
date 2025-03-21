@@ -4,7 +4,7 @@ import 'package:beamer/beamer.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
 
-class TemplateLocation extends BeamLocation{
+class MonthlyTemplateLocation extends BeamLocation{
 
   @override
   List<BeamPage> buildPages(BuildContext context, RouteInformationSerializable<dynamic> state) {

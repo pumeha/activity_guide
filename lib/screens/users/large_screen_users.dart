@@ -1,5 +1,6 @@
 import 'package:activity_guide/routing/dashboard_location.dart';
-import 'package:activity_guide/routing/template_location.dart';
+import 'package:activity_guide/routing/editing_template_location.dart';
+import 'package:activity_guide/routing/monthly_template_location.dart';
 import 'package:activity_guide/routing/users_location.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -21,9 +22,9 @@ class LargeScreenUsers extends StatelessWidget {
         Expanded(flex: 5,
           child: Beamer(routerDelegate: BeamerDelegate(locationBuilder:
           BeamerLocationBuilder(beamLocations: [
-           TemplateLocation(),
+           MonthlyTemplateLocation(),
             DashboardLocation(),
-            DatatableLocation()
+            DatatableLocation(),EditingMonthlyTemplateLocation()
           ]),transitionDelegate: NoAnimationTransitionDelegate()),key: _beamerKey,),)
       ],
     ) ;

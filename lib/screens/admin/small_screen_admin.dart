@@ -1,10 +1,12 @@
-import 'package:activity_guide/routing/template_location.dart';
+import 'package:activity_guide/routing/monthly_template_location.dart';
 import 'package:activity_guide/routing/users_location.dart';
 import 'package:flutter/material.dart';
 import 'package:beamer/beamer.dart';
 import '../../routing/dashboard_location.dart';
 import '../../routing/mytable_location.dart';
-import '../../routing/template_builder_location2.dart';
+import '../../routing/preview_template_location.dart';
+import '../../routing/template_builder_location.dart';
+import 'template/templates.dart';
 
 class SmallScreenAdmin extends StatefulWidget {
   const SmallScreenAdmin({super.key});
@@ -22,16 +24,13 @@ class _SmallScreenAdminState extends State<SmallScreenAdmin> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    //_beamerDelegate = _beamerKey.currentState!.routerDelegate;
-    //_beamerDelegate.addListener(_setStateListener);
     _beamerDelegate = BeamerDelegate(
         locationBuilder: BeamerLocationBuilder(beamLocations: [
-          TemplateBuilderLocation2(),
+          TemplatesListLocation(),
           DashboardLocation(),
           DatatableLocation(),
-          UsersLocation()
+          UsersLocation(),TemplateBuilderLocation(),PreviewTemplateLocation()
         ]),transitionDelegate: NoAnimationTransitionDelegate());
   }
 
@@ -42,7 +41,7 @@ class _SmallScreenAdminState extends State<SmallScreenAdmin> {
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(icon: Icon(Icons.edit_document),
-            label: 'Builder',),
+            label: 'Templates',),
           BottomNavigationBarItem(icon: Icon(Icons.dashboard_outlined),
             label: 'Dashboard',),
           BottomNavigationBarItem(icon: Icon(Icons.dataset),label: 'Database'),
@@ -60,7 +59,7 @@ class _SmallScreenAdminState extends State<SmallScreenAdmin> {
 
             case 0:
               Beamer.of(context).beamToNamed(
-                  '/admin/builder');
+                  '/admin/templates');
 
               break;
             case 1:
@@ -76,7 +75,7 @@ class _SmallScreenAdminState extends State<SmallScreenAdmin> {
 
             default:
               Beamer.of(context).beamToNamed(
-                  '/admin/builder');
+                  '/admin/templates');
               break;
           }
         },

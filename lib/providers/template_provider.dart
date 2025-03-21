@@ -1,10 +1,12 @@
 import 'dart:convert';
+import 'package:activity_guide/main.dart';
 import 'package:activity_guide/models/myshared_preference.dart';
 import 'package:activity_guide/utils/constants.dart';
 import 'package:flutter/material.dart';
 import '../models/rowdata_model.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import '../screens/admin/template/preview_template.dart';
+import 'package:beamer/beamer.dart';
 
 
 class TemplateProvider with ChangeNotifier {
@@ -70,7 +72,7 @@ class TemplateProvider with ChangeNotifier {
   }
 
   Future<void> previewTemplate(BuildContext context) async {
-    Navigator.push(context, MaterialPageRoute(builder: (context)=>  const CustomTable()));
+    context.beamToNamed('/admin/preview_template');
   }
 
   Future<void> editTemplate() async{
@@ -99,7 +101,5 @@ class TemplateProvider with ChangeNotifier {
     _isAdmin =  role == 'true' ? false : true;
     notifyListeners();
   }
-
-
 
 }

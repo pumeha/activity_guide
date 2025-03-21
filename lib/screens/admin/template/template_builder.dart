@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../theme/text_styles.dart';
 import '../../../providers/template_provider.dart';
 import '../../../views/widgets/custom_tablecell.dart';
+import 'package:beamer/beamer.dart';
 
 class TemplateBuilder extends StatefulWidget {
   const TemplateBuilder({super.key});
@@ -16,12 +17,40 @@ class _TemplateBuilderState extends State<TemplateBuilder> {
 
   @override
   Widget build(BuildContext context) {
+   late String selectedValue = 'Workplan';
+    String range = 'Monthly Template,Workplan';
     return  Scaffold(
       backgroundColor: Colors.white,
       body:   Padding(
-        padding: const EdgeInsets.only(top: 40,right: 200),
+        padding: const EdgeInsets.only(right: 200),
         child: Column(
           children: [
+            BackButton(onPressed: (){
+              context.beamToNamed('/admin/templates');
+            },),
+           /** Form(child: Padding(
+               padding: const EdgeInsets.symmetric(horizontal: 400),
+               child: Column(
+               mainAxisAlignment: MainAxisAlignment.spaceAround,
+               children: [
+               TextFormField(decoration: InputDecoration(label: Text('Template Name'),
+               border: OutlineInputBorder()),),
+               SizedBox(width: 24),
+               DropdownButtonFormField<String>(hint: Text('Type'),
+               value: selectedValue ?? '',
+               items: range
+               .toString()
+               .split(',')
+               .map<DropdownMenuItem<String>>(
+               (e) => DropdownMenuItem(value: e,  child: Tooltip(message: e,child: Text(e,),),))
+               .toList(),
+               onChanged: (String? value) { selectedValue = value!; },
+               isExpanded: true,
+               decoration: InputDecoration(border: OutlineInputBorder()),
+               )
+               ],
+               ),
+               )),**/
             const Row(mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 CustomTableCell(size: 50, child: Text('S/N',style: AppTextStyles.tableColumns,)),
@@ -69,20 +98,15 @@ class _TemplateBuilderState extends State<TemplateBuilder> {
                   child: const Icon(Icons.remove,color: light,), heroTag: 'remove',
                   backgroundColor: Colors.red.shade400,
                 ),
-                const SizedBox(height: 12,),
-                FloatingActionButton(onPressed: () async{
-                  await  context.read<TemplateProvider>().editTemplate();
-                },child: const Icon(Icons.edit),tooltip: 'edit',heroTag: 'edit',
-                backgroundColor: Colors.yellow[500],),
+                // const SizedBox(height: 12,),
+                // FloatingActionButton(onPressed: () async{
+                //   await  context.read<TemplateProvider>().editTemplate();
+                // },child: const Icon(Icons.edit),tooltip: 'edit',heroTag: 'edit',
+                // backgroundColor: Colors.yellow[500],),
 
               ],
             ),
           ),
-          Positioned(right: 50,top: MediaQuery.of(context).size.height/2 + 100,
-            child: FloatingActionButton(onPressed: () async {
-             await context.read<TemplateProvider>().previewTemplate(context);
-          },child: const Icon(Icons.preview,color: Colors.white,),tooltip: 'Preview',
-            backgroundColor: Colors.black,),),
           Positioned(
             right: 50, // Distance from the right edge
             top: MediaQuery.of(context).size.height /4, // Below the center

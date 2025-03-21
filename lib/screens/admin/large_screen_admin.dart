@@ -1,6 +1,7 @@
 import 'package:activity_guide/routing/dashboard_location.dart';
-import 'package:activity_guide/routing/template_location.dart';
+import 'package:activity_guide/routing/preview_template_location.dart';
 import 'package:activity_guide/routing/users_location.dart';
+import 'package:activity_guide/screens/admin/template/templates.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:beamer/beamer.dart';
@@ -21,9 +22,9 @@ class LargeScreenAdmin extends StatelessWidget {
         Expanded(flex: 5,
           child: Beamer(routerDelegate: BeamerDelegate(locationBuilder:
           BeamerLocationBuilder(beamLocations: [
-           TemplateBuilderLocation(),
+            TemplatesListLocation(),
             DashboardLocation() ,
-            DatatableLocation(),UsersLocation()
+            DatatableLocation(),UsersLocation(),TemplateBuilderLocation(),PreviewTemplateLocation()
           ]),transitionDelegate: NoAnimationTransitionDelegate()),key: _beamerKey,),)
       ],
      ) ;

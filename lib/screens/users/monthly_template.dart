@@ -20,11 +20,8 @@ class _MonthlyTemplateState extends State<MonthlyTemplate> {
 
   //values holder
   Map<String,dynamic> partialSave = {};
-  // for(var item in data){
-  //   partialSave[item.name] = '';
-  // }
   late List<TextEditingController> _controllers;
-  final List<bool> _selections = [true,false];
+  final List<bool> _selections = [false,true];
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +100,7 @@ class _MonthlyTemplateState extends State<MonthlyTemplate> {
                   tooltip: 'Save',heroTag: 'save',backgroundColor: active,),
                 SizedBox(height: 12,),
                 FloatingActionButton(onPressed: (){
-                  context.beamTo(EditingMonthlyTemplateLocation());
+                  Beamer.of(context).beamToNamed('/home/data_entry');
                 //  Navigator.push(context, MaterialPageRoute(builder: (context)=>  const EditingMonthlyTemplate()));
                 },child: Icon(Icons.description_outlined,),
                   backgroundColor: Color(0xFFFFFFFF),
@@ -236,7 +233,7 @@ class _MonthlyTemplateState extends State<MonthlyTemplate> {
 
     return  Padding(
       padding: EdgeInsets.symmetric(horizontal: horizontalPadding,vertical: 8),
-      child: Card(color: Colors.white,
+      child: Card(color: Colors.white,elevation: 2,
         child: ListTile(
           title:  Padding(
             padding: const EdgeInsets.all(8.0),

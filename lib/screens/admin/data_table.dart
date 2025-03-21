@@ -59,7 +59,7 @@ class MyTable extends StatefulWidget {
 
   }
 final DataGridController controller = DataGridController();
-  final List<bool> _selections = [true,false];
+  final List<bool> _selections = [false,true];
   @override
   Widget build(BuildContext context) {
 

@@ -1,7 +1,8 @@
-import 'package:activity_guide/routing/template_location.dart';
+import 'package:activity_guide/routing/monthly_template_location.dart';
 import 'package:flutter/material.dart';
 import 'package:beamer/beamer.dart';
 import '../../routing/dashboard_location.dart';
+import '../../routing/editing_template_location.dart';
 import '../../routing/mytable_location.dart';
 
 class SmallScreenUsers extends StatefulWidget {
@@ -26,9 +27,9 @@ class _SmallScreenUsersState extends State<SmallScreenUsers> {
     //_beamerDelegate.addListener(_setStateListener);
     _beamerDelegate = BeamerDelegate(
         locationBuilder: BeamerLocationBuilder(beamLocations: [
-          TemplateLocation(),
+          MonthlyTemplateLocation(),
           DashboardLocation(),
-          DatatableLocation(),
+          DatatableLocation(),EditingMonthlyTemplateLocation()
         ]),
     transitionDelegate: NoAnimationTransitionDelegate());
   }

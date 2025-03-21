@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 enum NavigationItemsAdmin {
-  template_builder,
+  templates,
   dashboard,
   database,
   users
@@ -10,7 +10,7 @@ enum NavigationItemsAdmin {
 extension NavigationItemsExtensions on NavigationItemsAdmin {
   IconData get icon {
     switch (this) {
-      case NavigationItemsAdmin.template_builder:
+      case NavigationItemsAdmin.templates:
         return Icons.edit_document;
       case NavigationItemsAdmin.dashboard:
         return Icons.dashboard;

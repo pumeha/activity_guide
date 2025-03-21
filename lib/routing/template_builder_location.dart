@@ -1,4 +1,6 @@
 import 'package:activity_guide/screens/admin/template/template_builder.dart';
+import 'package:activity_guide/screens/admin/template/template_builder2.dart';
+import 'package:activity_guide/screens/onboarding/responsiveness.dart';
 import 'package:beamer/beamer.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
@@ -7,7 +9,8 @@ class TemplateBuilderLocation extends BeamLocation{
   List<BeamPage> buildPages(BuildContext context, RouteInformationSerializable state) {
     // TODO: implement buildPages
     return [
-      BeamPage(child: TemplateBuilder(),
+      BeamPage(child: ResponsiveWidget.isLargeScreen(context) ?
+      TemplateBuilder() : TemplateBuilder2(),
       key: ValueKey('builder'),title: 'Activity Guide')
     ];
   }

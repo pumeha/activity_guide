@@ -1,10 +1,12 @@
 
+import 'package:activity_guide/main.dart';
 import 'package:activity_guide/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../theme/text_styles.dart';
 import '../../../providers/template_provider.dart';
 import '../../../views/widgets/custom_tablecell2.dart';
+import 'package:beamer/beamer.dart';
 
 class TemplateBuilder2 extends StatefulWidget {
   const TemplateBuilder2({super.key});
@@ -20,10 +22,13 @@ class _TemplateBuilder2State extends State<TemplateBuilder2> {
     return  Scaffold(
         backgroundColor: Colors.white,
         body:   Padding(
-          padding: const EdgeInsets.only(top: 60,right: 100),
+          padding: const EdgeInsets.only(right: 100),
           child: Column(
 
             children: [
+              BackButton(onPressed: (){
+                context.beamToNamed('/admin/templates');
+              },),
               Expanded(child: Consumer<TemplateProvider>(builder: (BuildContext context, TemplateProvider provider, Widget? child) {
                 return ReorderableListView( onReorder: (oldIndex,newIndex){
                   provider.reorderRows(oldIndex, newIndex);
@@ -64,20 +69,15 @@ class _TemplateBuilder2State extends State<TemplateBuilder2> {
                     child: const Icon(Icons.remove,color: light,), heroTag: 'remove',
                     backgroundColor: Colors.red.shade400,
                   ),
-                  SizedBox(height: 12,),
-                  FloatingActionButton(onPressed: () async{
-                    await  context.read<TemplateProvider>().editTemplate();
-                  },child: Icon(Icons.edit),tooltip: 'edit',heroTag: 'edit',
-                    backgroundColor: Colors.yellow[500],),
+                //  SizedBox(height: 12,),
+                  // FloatingActionButton(onPressed: () async{
+                  //   await  context.read<TemplateProvider>().editTemplate();
+                  // },child: Icon(Icons.edit),tooltip: 'edit',heroTag: 'edit',
+                  //   backgroundColor: Colors.yellow[500],),
 
                 ],
               ),
             ),
-            Positioned(right: 20,top: MediaQuery.of(context).size.height/2 + 100,
-              child: FloatingActionButton(onPressed: () async {
-                await context.read<TemplateProvider>().previewTemplate(context);
-              },child: Icon(Icons.preview,color: Colors.white,),tooltip: 'Preview',
-                backgroundColor: Colors.black,),),
             Positioned(
               right: 20, // Distance from the right edge
               top: MediaQuery.of(context).size.height /4, // Below the center

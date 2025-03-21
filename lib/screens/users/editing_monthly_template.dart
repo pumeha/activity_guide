@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:activity_guide/routing/template_location.dart';
+import 'package:http/http.dart' as http;
 import 'package:activity_guide/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -23,13 +23,15 @@ class _EditingMonthlyTemplateState extends State<EditingMonthlyTemplate> {
 
 
   Future populateData() async{
-    var response = await rootBundle.loadString("/images/rawjson.json");
-    data = json.decode(response) as List<dynamic>;
-    if(data.isNotEmpty){
-      columns = generateColumns(data[0]);
-      _jsonDataGridSource = JSONDataGridSource(data,columns);
+    var response = await http.get(Uri.parse('/rawjson.json'));
+    if(response.statusCode == 200) {
+      data = json.decode(response.body) as List<dynamic>;
+      if (data.isNotEmpty) {
+        columns = generateColumns(data[0]);
+        _jsonDataGridSource = JSONDataGridSource(data, columns);
+      }
+      return data;
     }
-    return data;
   }
 
   List<GridColumn> generateColumns(Map<String,dynamic> data){
@@ -88,6 +90,8 @@ class _EditingMonthlyTemplateState extends State<EditingMonthlyTemplate> {
               children: [
                 FloatingActionButton(onPressed: (){
 
+                  EasyLoading.showSuccess('Data Uploaded Successfully!');
+                  context.beamBack();
                 },child: Icon(Icons.upload_file_outlined,color: Colors.white,),
                   tooltip: 'Upload',heroTag: 'upload',backgroundColor: active,),
                 SizedBox(height: 12,),
