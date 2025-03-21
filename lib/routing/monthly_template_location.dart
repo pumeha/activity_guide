@@ -1,4 +1,4 @@
-import 'package:activity_guide/screens/admin/template/template.dart';
+import 'package:activity_guide/old%20stuffs/template.dart';
 import 'package:activity_guide/screens/users/monthly_template.dart';
 import 'package:beamer/beamer.dart';
 import 'package:flutter/src/widgets/framework.dart';
