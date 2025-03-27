@@ -1,22 +1,20 @@
-import 'package:activity_guide/routing/editing_template_location.dart';
-import 'package:activity_guide/routing/preview_template_location.dart';
-import 'package:activity_guide/routing/template_builder_location.dart';
-import 'package:activity_guide/screens/onboarding/responsiveness.dart';
+
 import 'package:activity_guide/utils/colors.dart';
 import 'package:activity_guide/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:beamer/beamer.dart';
 
+import '../../../authentication/responsiveness.dart';
 import '../../../routing/monthly_template_location.dart';
 
-class Templates extends StatefulWidget {
-  const Templates({super.key});
+class TemplatesListPage extends StatefulWidget {
+  const TemplatesListPage({super.key});
 
   @override
-  State<Templates> createState() => _TemplatesState();
+  State<TemplatesListPage> createState() => _TemplatesListPageState();
 }
 
-class _TemplatesState extends State<Templates> {
+class _TemplatesListPageState extends State<TemplatesListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold( backgroundColor: Colors.white70,
@@ -71,7 +69,7 @@ class _TemplatesState extends State<Templates> {
 class TemplatesListLocation extends BeamLocation{
   @override
   List<BeamPage> buildPages(BuildContext context, RouteInformationSerializable<dynamic> state) {
-    return [BeamPage(child: Templates(),title: appName,key: ValueKey('templates'))];
+    return [BeamPage(child: TemplatesListPage(),title: appName,key: ValueKey('templates'))];
   }
 
   @override

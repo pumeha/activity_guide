@@ -1,9 +1,8 @@
-import 'package:activity_guide/routing/monthly_template_location.dart';
+
 import 'package:flutter/material.dart';
 import 'package:beamer/beamer.dart';
-import '../../routing/dashboard_location.dart';
-import '../../routing/editing_template_location.dart';
-import '../../routing/mytable_location.dart';
+
+import '../routing/users_routing.dart';
 
 class SmallScreenUsers extends StatefulWidget {
   const SmallScreenUsers({super.key});
