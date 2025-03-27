@@ -1,7 +1,8 @@
-import 'package:activity_guide/models/myshared_preference.dart';
-import 'package:activity_guide/utils/constants.dart';
+import 'package:activity_guide/shared/utils/myshared_preference.dart';
 import 'package:flutter/material.dart';
 import 'package:beamer/beamer.dart';
+
+import 'utils/constants.dart';
 
 AppBar topNavigationBar(BuildContext context,GlobalKey<ScaffoldState> key) =>
     AppBar(elevation: 0,

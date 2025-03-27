@@ -1,12 +1,13 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:activity_guide/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import '../../utils/colors.dart';
 import 'package:beamer/beamer.dart';
+
+import '../../shared/utils/colors.dart';
+import '../../shared/utils/constants.dart';
 
 
 class EditingMonthlyTemplate extends StatefulWidget {

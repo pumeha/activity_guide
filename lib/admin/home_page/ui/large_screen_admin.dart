@@ -1,12 +1,11 @@
-import 'package:activity_guide/routing/dashboard_location.dart';
-import 'package:activity_guide/routing/preview_template_location.dart';
-import 'package:activity_guide/routing/users_location.dart';
-import 'package:activity_guide/screens/admin/template/templates.dart';
+
+import 'package:activity_guide/admin/template_list_page/template_list_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:beamer/beamer.dart';
-import '../../routing/mytable_location.dart';
-import '../../routing/template_builder_location.dart';
+
+import '../../../users/routing/users_routing.dart';
+import '../../routing/admin_routing.dart';
 
 class LargeScreenAdmin extends StatelessWidget {
   final _beamerKey = GlobalKey<BeamerState>();

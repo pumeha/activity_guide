@@ -1,12 +1,10 @@
 import 'dart:convert';
-import 'package:activity_guide/main.dart';
-import 'package:activity_guide/models/myshared_preference.dart';
-import 'package:activity_guide/utils/constants.dart';
+import 'package:activity_guide/shared/utils/myshared_preference.dart';
 import 'package:flutter/material.dart';
-import '../models/rowdata_model.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
-import '../screens/admin/template/preview_template.dart';
 import 'package:beamer/beamer.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import '../shared/utils/constants.dart';
+import '../shared/utils/rowdata_model.dart';
 
 
 class TemplateProvider with ChangeNotifier {

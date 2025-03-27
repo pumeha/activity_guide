@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'package:beamer/beamer.dart';
-import 'package:activity_guide/models/myshared_preference.dart';
+import 'package:activity_guide/shared/utils/myshared_preference.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../../utils/constants.dart';
-import '../../../utils/templateJson.dart';
+import '../../shared/utils/constants.dart';
+import '../../shared/utils/templateJson.dart';
 
 class PreviewTemplate extends StatefulWidget {
   const PreviewTemplate({super.key});

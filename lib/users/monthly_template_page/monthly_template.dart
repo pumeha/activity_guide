@@ -1,12 +1,9 @@
 import 'dart:convert';
-import 'package:activity_guide/routing/editing_template_location.dart';
-import 'package:activity_guide/screens/users/editing_monthly_template.dart';
-import 'package:beamer/beamer.dart';
-import 'package:activity_guide/utils/colors.dart';
-import 'package:activity_guide/utils/templateJson.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:beamer/beamer.dart';
+import '../../shared/utils/colors.dart';
+import '../../shared/utils/templateJson.dart';
 
 class MonthlyTemplate extends StatefulWidget {
   const MonthlyTemplate({super.key});

@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:beamer/beamer.dart';
 
-import '../routing/users_routing.dart';
+import '../../routing/users_routing.dart';
 
 class LargeScreenUsers extends StatelessWidget {
   final _beamerKey = GlobalKey<BeamerState>();

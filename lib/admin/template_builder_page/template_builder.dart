@@ -1,10 +1,12 @@
-import 'package:activity_guide/utils/colors.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../../theme/text_styles.dart';
 import '../../../providers/template_provider.dart';
-import '../../../views/widgets/custom_tablecell.dart';
 import 'package:beamer/beamer.dart';
+
+import '../../custom_widgets/custom_tablecell.dart';
+import '../../shared/theme/text_styles.dart';
+import '../../shared/utils/colors.dart';
 
 class TemplateBuilder extends StatefulWidget {
   const TemplateBuilder({super.key});

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import '../../models/rowdata_model.dart';
-import '../../theme/text_styles.dart';
+
+import '../shared/theme/text_styles.dart';
+import '../shared/utils/rowdata_model.dart';
 
 class CustomTableCell extends StatelessWidget {
  final double size;

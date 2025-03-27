@@ -1,13 +1,13 @@
 import 'dart:html';
 import 'dart:convert';
 import 'dart:math';
-import 'package:activity_guide/models/myshared_preference.dart';
+import 'package:activity_guide/shared/utils/myshared_preference.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:syncfusion_flutter_datagrid/src/datagrid_widget/sfdatagrid.dart';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart';
 import 'package:syncfusion_flutter_datagrid_export/export.dart';
 
-import '../../../utils/csv2json.dart';
+import 'csv2json.dart';
 
 
 class downloadExcelFile{

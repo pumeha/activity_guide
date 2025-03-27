@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:beamer/beamer.dart';
-import '../../shared/theme/styles.dart';
+import '../../../shared/theme/styles.dart';
 import 'navigation_items_users.dart';
 
 class SideMenuUsers extends StatefulWidget {

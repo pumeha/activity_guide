@@ -1,11 +1,11 @@
 
-import 'package:activity_guide/users/home_page/large_screen_users.dart';
-import 'package:activity_guide/users/home_page/small_screen_users.dart';
+import 'package:activity_guide/users/home_page/ui/large_screen_users.dart';
+import 'package:activity_guide/users/home_page/ui/small_screen_users.dart';
 import 'package:activity_guide/shared/top_nav.dart';
-import 'package:activity_guide/users/home_page/side_menu_users.dart';
 import 'package:flutter/material.dart';
 
-import '../../shared/responsiveness.dart';
+import '../../../shared/responsiveness.dart';
+import 'side_menu_users.dart';
 
 
 class HomePageUsers extends StatefulWidget {

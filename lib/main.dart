@@ -1,14 +1,15 @@
-import 'package:activity_guide/routing/home_location_users.dart';
-import 'package:activity_guide/routing/home_location_admin.dart';
-import 'package:activity_guide/routing/login_location.dart';
-import 'package:activity_guide/utils/colors.dart';
+import 'package:activity_guide/authentication/routing/login_location.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'admin/routing/admin_routing.dart';
 import 'providers/template_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:beamer/beamer.dart';
+
+import 'shared/utils/colors.dart';
+import 'users/routing/users_routing.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -48,6 +49,7 @@ class MyApp extends StatelessWidget {
       builder: EasyLoading.init(),
      routerDelegate: _routerDelegate,
      routeInformationParser: BeamerParser(),
+     
     );
   }
 }

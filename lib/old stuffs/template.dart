@@ -1,12 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:activity_guide/models/myshared_preference.dart';
-import 'package:activity_guide/screens/admin/template/downloadExcelFile.dart';
-import 'package:activity_guide/utils/colors.dart';
+import 'package:activity_guide/shared/utils/myshared_preference.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+
+import '../shared/utils/colors.dart';
+import '../shared/utils/downloadExcelFile.dart';
 
 
 class Template extends StatefulWidget {

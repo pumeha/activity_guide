@@ -1,10 +1,11 @@
-import 'package:activity_guide/models/myshared_preference.dart';
-import 'package:activity_guide/utils/constants.dart';
+import 'package:activity_guide/shared/utils/myshared_preference.dart';
 import 'package:flutter/material.dart';
 import 'package:beamer/beamer.dart';
-import '../../utils/colors.dart';
-import '../../views/widgets/custom_text.dart';
 import 'package:google_fonts/google_fonts.dart';
+
+import '../custom_widgets/custom_text.dart';
+import '../shared/utils/colors.dart';
+import '../shared/utils/constants.dart';
 
 
 class AuthenticationPage extends StatefulWidget {
@@ -32,7 +33,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-              
+                 
                   Row(mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(' ACTIVITY ', style: TextStyle(

@@ -1,7 +1,9 @@
-import 'package:activity_guide/utils/colors.dart';
-import 'package:activity_guide/views/widgets/custom_text.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+
+import '../custom_widgets/custom_text.dart';
+import '../shared/utils/colors.dart';
 
 void showCustomDialog(BuildContext context) {
   showDialog(context: context,

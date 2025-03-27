@@ -1,9 +1,10 @@
 import 'dart:convert';
-import 'package:activity_guide/utils/colors.dart';
-import 'package:activity_guide/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
+
+import '../../shared/utils/colors.dart';
+import '../../shared/utils/constants.dart';
 
 
 class MyTable extends StatefulWidget {

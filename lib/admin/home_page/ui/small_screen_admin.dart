@@ -1,12 +1,9 @@
-import 'package:activity_guide/routing/monthly_template_location.dart';
-import 'package:activity_guide/routing/users_location.dart';
+
 import 'package:flutter/material.dart';
 import 'package:beamer/beamer.dart';
-import '../../routing/dashboard_location.dart';
-import '../../routing/mytable_location.dart';
-import '../../routing/preview_template_location.dart';
-import '../../routing/template_builder_location.dart';
-import 'template/templates.dart';
+import '../../../users/routing/users_routing.dart';
+import '../../routing/admin_routing.dart';
+import '../../template_list_page/template_list_page.dart';
 
 class SmallScreenAdmin extends StatefulWidget {
   const SmallScreenAdmin({super.key});

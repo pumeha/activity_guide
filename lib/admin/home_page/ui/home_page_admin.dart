@@ -1,10 +1,10 @@
-import 'package:activity_guide/screens/admin/side_menu_admin.dart';
-import 'package:activity_guide/screens/admin/large_screen_admin.dart';
-import 'package:activity_guide/screens/admin/small_screen_admin.dart';
-import 'package:activity_guide/shared/top_nav.dart';
+import 'side_menu_admin.dart';
+import 'large_screen_admin.dart';
+import 'small_screen_admin.dart';
+import '../../../shared/top_nav.dart';
 import 'package:flutter/material.dart';
+import '../../../shared/responsiveness.dart';
 
-import '../../authentication/responsiveness.dart';
 
 class HomePageAdmin extends StatefulWidget {
   const HomePageAdmin({super.key});

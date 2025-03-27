@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:beamer/beamer.dart';
 
-import '../routing/users_routing.dart';
+import '../../routing/users_routing.dart';
 
 class SmallScreenUsers extends StatefulWidget {
   const SmallScreenUsers({super.key});
