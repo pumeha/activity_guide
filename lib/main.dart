@@ -1,3 +1,5 @@
+import 'package:activity_guide/authentication/cubit/auth_cubit.dart';
+import 'package:activity_guide/authentication/repository/auth_repository_impl.dart';
 import 'package:activity_guide/authentication/routing/login_location.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +9,7 @@ import 'admin/routing/admin_routing.dart';
 import 'providers/template_provider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:beamer/beamer.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'shared/utils/colors.dart';
 import 'users/routing/users_routing.dart';
@@ -14,9 +17,13 @@ import 'users/routing/users_routing.dart';
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Beamer.setPathUrlStrategy();// it removes the # in the url
-  runApp(MultiProvider(providers: [
-    ChangeNotifierProvider(create: (_)=> TemplateProvider()),
-  ],child:  MyApp(),));
+  // runApp(MultiProvider(providers: [
+  //   ChangeNotifierProvider(create: (_)=> TemplateProvider()),
+  // ],child:  MyApp(),));
+  runApp(BlocProvider(
+    create: (context) => AuthCubit(AuthRepositoryImpl()),
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
