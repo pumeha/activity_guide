@@ -19,7 +19,7 @@ class AuthRepositoryImpl extends AuthRepositoryAbstract {
     Map<String,String> header = {'Content-Type' : 'application/json'};
 
     Map<String,dynamic> response = await HttpHandlerImpl.instance.post(url: ApiRoutes.loginRoute, body: body,header: header);
-
+    
    return response;
   }
 

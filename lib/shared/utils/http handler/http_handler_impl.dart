@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:activity_guide/shared/utils/http%20handler/http_handler_abstract.dart';
+import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
 class HttpHandlerImpl extends HttpHandlerAbstract {
     HttpHandlerImpl._();
@@ -21,19 +22,13 @@ class HttpHandlerImpl extends HttpHandlerAbstract {
 
   @override
   Future<Map<String, dynamic>> post({required String url, Map<String,String>? header, required body}) async{
-    print(body);
-    print(header);
-    print(url);
-    var response = await http.post(Uri.parse(url),headers: header,body: body);
-      print(response);
     try {
-      var response = await http.post(Uri.parse(url),headers: header,body: body);
-      print(response);
+      dynamic response = await http.post(Uri.parse(url),headers: header);
       return jsonDecode(response.body);
     } on Exception catch (e) {
       return {'status':'500','message':e.toString(),'data':{}};
     }
-      
+
   }
   
   @override

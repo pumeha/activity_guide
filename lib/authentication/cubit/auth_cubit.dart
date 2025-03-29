@@ -1,5 +1,7 @@
 import 'package:activity_guide/authentication/cubit/auth_cubit_state.dart';
 import 'package:activity_guide/authentication/repository/auth_repository_impl.dart';
+import 'package:activity_guide/shared/utils/http%20handler/general_json_dart.dart';
+import 'package:activity_guide/shared/utils/http%20handler/response_handler.dart';
 import 'package:bloc/bloc.dart';
 
 class AuthCubit extends Cubit<AuthCubitState>{
@@ -14,15 +16,19 @@ class AuthCubit extends Cubit<AuthCubitState>{
     emit(AuthLoading());
 
     
-      final status = await authRepositoryImpl.login(email, password);
-
-      print(status);
-     // emit(AuthSuccess());
-      // if (status) {
-      //   emit(AuthSuccess());
-      // } else {
-      //   emit(AuthFailure('Incorrect credentials'));
-      // }
+      final response = await authRepositoryImpl.login(email, password);
+      GeneralJsonDart data = GeneralJsonDart.fromJson(response);
+      int status = data.status;
+      String message = data.message;
+      if (status == HttpStatusCode.OK) {
+        emit(AuthSuccess());
+      }else if(status == HttpStatusCode.BAD_REQUEST){
+        emit(AuthFailure(message));
+      }else if(status == HttpStatusCode.SERVER_ERROR){
+        emit(AuthFailure(message));
+      }else if(status == HttpStatusCode.MANY_REQUEST){
+        emit(AuthFailure(message));
+      }
     
     
   }

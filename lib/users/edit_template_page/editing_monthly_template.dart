@@ -93,8 +93,8 @@ class _EditingMonthlyTemplateState extends State<EditingMonthlyTemplate> {
 
                   EasyLoading.showSuccess('Data Uploaded Successfully!');
                   context.beamBack();
-                },child: Icon(Icons.upload_file_outlined,color: Colors.white,),
-                  tooltip: 'Upload',heroTag: 'upload',backgroundColor: active,),
+                },
+                  tooltip: 'Upload',heroTag: 'upload',backgroundColor: active,child: const Icon(Icons.upload_file_outlined,color: Colors.white,),),
                 SizedBox(height: 12,),
                 FloatingActionButton(onPressed: (){
                   int index = controller.selectedIndex;
