@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'package:activity_guide/shared/utils/http_helper/storage_keys.dart';
 import 'package:beamer/beamer.dart';
 import 'package:activity_guide/shared/utils/myshared_preference.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../../shared/utils/constants.dart';
 import '../../shared/utils/templateJson.dart';
@@ -24,7 +26,7 @@ class _PreviewTemplateState extends State<PreviewTemplate> {
   }
 
   Future<String?> loadJSONFromPrefs() async{
-    String? template = await MysharedPreference().getPreferences('template');
+    String? template = await FlutterSecureStorage().read(key: BuilderKeys.template);
     return template;
   }
   //values holder
@@ -52,7 +54,6 @@ class _PreviewTemplateState extends State<PreviewTemplate> {
 
 
            return  SingleChildScrollView(
-             //physics: BouncingScrollPhysics(),
              child: Form( key: _formKey,
                child: Column(
                  children: List.generate(data.length, (index){
@@ -74,6 +75,7 @@ class _PreviewTemplateState extends State<PreviewTemplate> {
     }
     return null;
   }
+
   void singleDateDialog(String title) async {
     DateTime? selectedDate = await showDatePicker(
       context: context,
@@ -92,6 +94,7 @@ class _PreviewTemplateState extends State<PreviewTemplate> {
       setState(() {});// to refresh the state in order to update the date
     }
   }
+
   void doubleDateDialog(String title) {
     String  multipleDateString = '';
     showDateRangePicker(
@@ -130,16 +133,13 @@ class _PreviewTemplateState extends State<PreviewTemplate> {
 
         subtitleWidget = DropdownButtonFormField<String>(
           value: partialSave[title],
-          items: range
-              .toString()
-              .split(',')
+          items: range.toString().split(',')
               .map<DropdownMenuItem<String>>(
                   (e) => DropdownMenuItem(value: e,  child: Tooltip(message: e,child: Text(e,),),))
               .toList(),
           onChanged: (String? value) { partialSave[title] = value; },
           isExpanded: true,validator: validatorFunction,
-          decoration: InputDecoration(border: OutlineInputBorder()),
-        );
+          decoration: InputDecoration(border: OutlineInputBorder()),);
         break;
       case 'Date':
         _controllers[index].text = partialSave[title] ?? '';
@@ -180,7 +180,7 @@ class _PreviewTemplateState extends State<PreviewTemplate> {
           ),
         );
         break;
-      case 'Dynamic':
+      case 'Textfield':
         _controllers[index].text = partialSave[title] ?? '';
         subtitleWidget = TextFormField(
           controller: _controllers[index],
@@ -206,4 +206,5 @@ class _PreviewTemplateState extends State<PreviewTemplate> {
         ),),
     );
   }
+
 }

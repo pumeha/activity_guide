@@ -14,8 +14,10 @@ class AuthIntial extends AuthCubitState {
 class  AuthLoading extends AuthCubitState {
   
 }
+
 class AuthSuccess extends AuthCubitState {
-  
+  final String message;
+  AuthSuccess(this.message);
 }
 
 class AuthFailure extends AuthCubitState {

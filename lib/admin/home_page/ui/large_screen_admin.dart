@@ -26,7 +26,7 @@ class LargeScreenAdmin extends StatelessWidget {
             DatatableLocation(),UsersLocation(),TemplateBuilderLocation(),PreviewTemplateLocation()
           ]),transitionDelegate: NoAnimationTransitionDelegate()),key: _beamerKey,),)
       ],
-     ) ;
+     );
   }
 }
 

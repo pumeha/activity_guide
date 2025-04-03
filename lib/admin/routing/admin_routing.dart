@@ -5,8 +5,7 @@ import 'package:activity_guide/admin/users_page/users_page.dart';
 import '../../shared/responsiveness.dart';
 import '../../shared/utils/constants.dart';
 import '../preview_view_page/preview_template.dart';
-import '../template_builder_page/template_builder.dart';
-import '../template_builder_page/template_builder2.dart';
+import '../template_builder_page/view/template_builder.dart';
 import '../../admin/home_page/ui/home_page_admin.dart';
 
 class AdminHomeLocation extends BeamLocation{
@@ -44,7 +43,7 @@ class TemplateBuilderLocation extends BeamLocation{
 
     return [
       BeamPage(child: ResponsiveWidget.isLargeScreen(context) ?
-      TemplateBuilder() : TemplateBuilder2(),
+      TemplateBuilder() : TemplateBuilder(),
           key: ValueKey('builder'),title: 'Activity Guide')
     ];
   }

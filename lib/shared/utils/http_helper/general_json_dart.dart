@@ -1,9 +1,11 @@
-class GeneralJsonDart {
- String  message = '';
-  List<dynamic>? data; 
-  int status = 0;
+import 'dart:convert';
 
-  GeneralJsonDart({ this.message = '', this.data, this.status = 0});
+class GeneralJsonDart {
+ String?  message;
+  List<dynamic>? data; 
+  int? status;
+
+  GeneralJsonDart({ this.message, this.data, this.status});
 
   GeneralJsonDart.fromJson(Map<String, dynamic> json) {
     message = json['message'];

@@ -9,6 +9,7 @@ import '../custom_widgets/custom_text.dart';
 import '../shared/utils/colors.dart';
 import '../shared/utils/constants.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class AuthenticationPage extends StatefulWidget {
   const AuthenticationPage({super.key});
@@ -18,10 +19,10 @@ class AuthenticationPage extends StatefulWidget {
 }
 
 final _formKey = GlobalKey<FormState>();
-
 class _AuthenticationPageState extends State<AuthenticationPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  bool showPassword = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,8 +30,11 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
         listener: (context, state) {
             if(state is AuthLoading){
        EasyLoading.show();
+       
        }else if(state is AuthSuccess){
         EasyLoading.showSuccess('Success');
+        state.message == 'admin'? 
+        context.beamToReplacementNamed('/admin') : context.beamToReplacementNamed('/home');
        }else if(state is AuthFailure){
         EasyLoading.showError(state.error);
        }
@@ -111,15 +115,21 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                       TextFormField(
                         controller: passwordController,
                         keyboardType: TextInputType.visiblePassword,
-                        obscureText: true,
+                        obscureText: showPassword,
                         decoration: InputDecoration(
+                            fillColor: Colors.white,
                             labelText: "Password",
                             hintText: "********",
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(20)),
-                            focusedBorder: OutlineInputBorder(
+                            focusedBorder: OutlineInputBorder( 
                                 borderRadius: BorderRadius.circular(20),
-                                borderSide: BorderSide(color: active))),
+                                borderSide: BorderSide(color: active)),
+                                suffixIcon: IconButton(onPressed: (){setState((){
+                                  showPassword = !showPassword;
+                                 
+                                });}, icon: showPassword ? Icon(Icons.visibility) : Icon(Icons.visibility_off) )
+                                ),
                         validator: (v) {
                           if (!Constants().isValidPassword(v!)) {
                             return 'Use 8+ chars: upper, lower, number, special.';
@@ -144,7 +154,9 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                                 */
 
                           TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                          // context.read<AuthCubit>().forgotPassword(emailController.text);
+                            },
                             child: const CustomText(
                                 text: "Forgot password?", color: active),
                           )
@@ -154,10 +166,9 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                         height: 15,
                       ),
                       InkWell(
-                        onTap: () {
-                          
+                        onTap: () async{
                           if (_formKey.currentState!.validate()) {
-                            String role = emailController.text;
+                         
                             context.read<AuthCubit>().login(
                                 emailController.text.trim(), passwordController.text);
                             // if (role == 'admin') {
@@ -190,6 +201,8 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                           ),
                         ),
                       ),
+                   
+            
                     ],
                   ),
                 ),

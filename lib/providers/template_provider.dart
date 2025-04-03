@@ -18,14 +18,14 @@ class TemplateProvider with ChangeNotifier {
     jsonObject.clear();
    // EasyLoading.show(status: 'Loading...');
     for (int i = 0; i<rows.length;i++) {
-      if(rows[i].variableNameController.text.isEmpty || rows[i].dataTypeController.text.isEmpty ||
-          rows[i].rangeController.text.isEmpty){
+      if(rows[i].columnName.isEmpty || rows[i].dataType.isEmpty ||
+          rows[i].range.isEmpty){
         EasyLoading.showError('Kindly complete the fields',duration: Duration(seconds: 5));
         return;
       }
-      String name = rows[i].variableNameController.text;
-      String type = rows[i].dataTypeController.text;
-      String range = rows[i].rangeController.text.trim();
+      String name = rows[i].columnName;
+      String type = rows[i].dataType;
+      String range = rows[i].range;
 
       if(type == 'Dropdown'){
         range = '${range}';
@@ -51,7 +51,7 @@ class TemplateProvider with ChangeNotifier {
 
   void addRow() {
     int index = rows.length + 1;
-    rows.add(RowData(id: index.toString(), variableName: '',range: '',rangeStatus: false, info: ''));
+    rows.add(RowData(id: index, columnName: '', dataType: '', range: ''));
     notifyListeners();
   }
 
@@ -85,9 +85,9 @@ class TemplateProvider with ChangeNotifier {
     int  t = 1;
     for(var item in decodedData){
       rows.add(
-          RowData(id: t.toString(), variableName: item['name'],
-              dataType: item['Type'], rangeStatus: item['Type'] != 'Dynamic' ? true : false,
-              range: item['Range'], info: ''));
+          RowData(id: t, columnName: item['name'],
+              dataType: item['Type'],
+              range: item['Range']));
 
       t+=1;
     }

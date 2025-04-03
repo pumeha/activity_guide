@@ -1,26 +1,25 @@
 import 'package:flutter/material.dart';
 
 class RowData {
-  String id;
-  TextEditingController variableNameController ;
-  TextEditingController rangeController;
-  TextEditingController dataTypeController;
-  bool rangeStatus;
-  String info;
+  int id;
+  String columnName;
+  String range;
+  String dataType;
 
   RowData({
     required this.id,
-    String? variableName,
-    String? dataType,
-    String? range,
-    required this.rangeStatus,
-    required this.info
-  }) :
-    variableNameController = TextEditingController(text: variableName ?? ''),
-    rangeController = TextEditingController(text: range ?? ''),
-    dataTypeController = TextEditingController(text: dataType ?? '');
+    required  this.columnName ,
+    required this.dataType,
+    required this.range,
+  });
 
+    @override
+  String toString() {
+    // TODO: implement toString
 
+    return '${id} variableName: '+columnName+
+    ' DataType: '+dataType+' Range: '+range;
 
+  }
 
 }
