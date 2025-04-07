@@ -1,4 +1,3 @@
-import 'package:activity_guide/admin/preview_view_page/preview_template.dart';
 import 'package:activity_guide/admin/template_builder_page/bloc/builder_bloc_event.dart';
 import 'package:activity_guide/admin/template_builder_page/view/builder_dialog.dart';
 import 'package:activity_guide/shared/utils/rowdata_model.dart';
@@ -24,7 +23,6 @@ class TemplateBuilder extends StatefulWidget {
 class _TemplateBuilderState extends State<TemplateBuilder> {
   @override
   Widget build(BuildContext context) {
-    late String selectedValue = 'Workplan';
      double width = MediaQuery.of(context).size.width;
     double horizontalPadding = width >1000 ? width/4 : width/4;
     return Scaffold(
@@ -36,7 +34,7 @@ class _TemplateBuilderState extends State<TemplateBuilder> {
               children: List.generate(  state.rows.length,
               (index){
                 List<RowData> data = state.rows;
-                return CustomCard(key: ValueKey(state.rows[index].id),title:data[index].columnName,
+                return customCard(key: ValueKey(state.rows[index].id),title:data[index].columnName,
               type:data[index].dataType,range:data[index].range,
               index: index,removeRow: (i)=>context.read<BuilderBloc>().add(RemoveRowEvent(index: i)),
               editData: (i)=> BuilderDialog().showBuilderDialog(context: context,id:i,
@@ -49,7 +47,7 @@ class _TemplateBuilderState extends State<TemplateBuilder> {
                 right: 50,
                 top: MediaQuery.of(context).size.width / 12,
                 child:  Padding(
-                  padding: EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(16.0),
                   child: BlocBuilder<BuilderBloc, BuilderState>(
                     builder: (context, state) {
                       return Text(
@@ -70,9 +68,9 @@ class _TemplateBuilderState extends State<TemplateBuilder> {
                     BuilderDialog().showBuilderDialog(context:context);
                     },
                     tooltip: 'Add Row',
-                    child: const Icon(Icons.add),
                     heroTag: 'add',
                     backgroundColor: Colors.green[50],
+                    child: const Icon(Icons.add),
                   ),
                   const SizedBox(height: 24,),
                    FloatingActionButton(
@@ -80,9 +78,9 @@ class _TemplateBuilderState extends State<TemplateBuilder> {
                     context.beamToNamed('/admin/templates');
                     },
                     tooltip: 'Previous Page',
-                    child: const Icon(Icons.arrow_back,color: Colors.white,),
                     heroTag: 'page',
                     backgroundColor: const Color.fromARGB(255, 38, 32, 1),
+                    child: const Icon(Icons.arrow_back,color: Colors.white,),
                   )
                 ],
               ),
@@ -107,7 +105,7 @@ class _TemplateBuilderState extends State<TemplateBuilder> {
         ));
   }
 
-  Widget CustomCard({Key? key,int? index, title,String? type,
+  Widget customCard({Key? key,int? index, title,String? type,
   String? range,Function (int index)? removeRow,Function (int index)? editData}){
  
     Widget subtitleWidget = Container();

@@ -30,7 +30,12 @@ class Constants{
     }
     return true; // Password is valid
   }
-
+     String? validatorFunction(String? v){
+    if(v == null || v.isEmpty){
+      return 'required';
+    }
+    return null;
+  }
 }
 
 const appName = 'Activity Guide';

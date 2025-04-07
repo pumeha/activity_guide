@@ -53,7 +53,7 @@ String? name,String? type,String? Rvalue}){
                 builder: (BuildContext context,StateSetter setState){
                   return SizedBox(width: 50,
                     child: SingleChildScrollView(child: Form(key: _formKey,
-                      child: Column(children: [         
+                    child: Column(children: [         
                     Format(title: 'Column Name',child: TextFormField(
                       controller: nameController,
                     minLines: 1, maxLines: 3,
@@ -73,13 +73,13 @@ String? name,String? type,String? Rvalue}){
                       context.read<BuilderBloc>().add(SelectDataTypeEvent(selectDataType:partialSave['colType']));
                       },
                     isExpanded: true,validator: validatorFunction,
-                    decoration: InputDecoration(border: OutlineInputBorder()), )),
+                    decoration: const InputDecoration(border: OutlineInputBorder()), )),
 
                   BlocBuilder<BuilderBloc, BuilderState>(
                     builder: (context, state) {
                       Widget widget = Container();
                       if (state.selectDataType == 'TextField') {
-                       widget= Format(child: Text('No default value required'),title: 'Value');
+                       widget= Format(child: const Text('No default value required'),title: 'Value');
                       }else if(state.selectDataType == 'Dropdown'){
                        widget =   Format(title: 'Value',
                        child: TextFormField(controller: valueController,
@@ -106,26 +106,32 @@ String? name,String? type,String? Rvalue}){
             ),
             backgroundColor: Colors.white,
             actions: [
+              
               TextButton(onPressed: (){
-              Navigator.of(context).pop();
+                Navigator.of(context).pop();
               partialSave = {};
               valueController.clear();
               nameController.clear();
               context.read<BuilderBloc>().add(SelectDataTypeEvent());
               }, child: const Text('Close',style: TextStyle(color: Colors.red),),),
+
+
               TextButton(onPressed: () {
-          if (_formKey.currentState!.validate()) {
-              context.read<BuilderBloc>().add(AddRowEvent(id: id,columnName: nameController.text,
-            dataType: partialSave['colType'],range: valueController.text));
-            //clear
-            partialSave = {};
-            valueController.clear();
-            nameController.clear();
-            context.read<BuilderBloc>().add(SelectDataTypeEvent());
-            if (id != null) {
-               Navigator.of(context).pop();
-            }
-          }
+              if (_formKey.currentState!.validate()) {
+                  context.read<BuilderBloc>().add(AddRowEvent(id: id,columnName: nameController.text,
+                dataType: partialSave['colType'],range: valueController.text));
+                //clear
+                partialSave = {};
+                valueController.clear();
+                nameController.clear();
+                context.read<BuilderBloc>().add(SelectDataTypeEvent());
+                if (id != null) {
+                  Navigator.of(context).pop();
+                }else{
+                  Navigator.of(context).pop();
+                  BuilderDialog().showBuilderDialog(context: context);
+                }
+              }
               }, child: Text(id == null ? 'Add to List' : 'Update',
               style: TextStyle(color: Colors.green[900],fontWeight: FontWeight.bold),))
             ],

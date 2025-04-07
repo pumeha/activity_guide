@@ -1,7 +1,7 @@
 import 'dart:convert';
+import 'package:activity_guide/custom_widgets/custom_text.dart';
 import 'package:activity_guide/shared/utils/http_helper/storage_keys.dart';
 import 'package:beamer/beamer.dart';
-import 'package:activity_guide/shared/utils/myshared_preference.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -36,29 +36,29 @@ class _PreviewTemplateState extends State<PreviewTemplate> {
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
-      appBar: AppBar(title: const Text('Preview Template'),centerTitle: true,
-        leading: BackButton(onPressed: (){
-
-          context.beamBack();
-        },),backgroundColor: Colors.transparent,),
+      appBar: AppBar(title: const CustomText( text: 'Preview Template',weight: FontWeight.bold,),centerTitle: true,
+        leading: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: BackButton(onPressed: (){
+            context.beamToNamed('/admin/templates');
+          },style: const ButtonStyle(backgroundColor: WidgetStatePropertyAll(Color.fromARGB(255, 38, 32, 1)),
+          iconColor: WidgetStatePropertyAll(Colors.white)),), ),
+        backgroundColor: Colors.transparent,),
       body: Scaffold(
         body: FutureBuilder(future: loadJSONFromPrefs(),
             builder: (context,snapshot){
-
           switch(snapshot.connectionState){
             case ConnectionState.done:
               List<dynamic> rawdata = jsonDecode(snapshot.data!);
               List<TemplateJson> data = rawdata.map((data)=> TemplateJson.fromJson(data)).toList();
               //registering the keys to the partialSave to be able to check if they are empty or not
               _controllers = List.generate(data.length, (index) => TextEditingController());
-
-
-           return  SingleChildScrollView(
-             child: Form( key: _formKey,
-               child: Column(
-                 children: List.generate(data.length, (index){
-                   return CustomCard(index,data[index].name,data[index].type,data[index].range,_formKey);
-                 }),),),);
+                  return  SingleChildScrollView(
+                    child: Form( key: _formKey,
+                      child: Column(
+                        children: List.generate(data.length, (index){
+                          return CustomCard(index,data[index].name,data[index].type,data[index].range,_formKey);
+                        }),),),);
             case ConnectionState.waiting:
               return CustomCircleIndicator();
             default:

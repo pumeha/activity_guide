@@ -1,3 +1,5 @@
+import 'package:activity_guide/admin/dashboard_page/cubit/dashboard_cubit.dart';
+import 'package:activity_guide/admin/dashboard_page/repository/dashboard_repository_impl.dart';
 import 'package:beamer/beamer.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +30,8 @@ Future main() async {
       BlocProvider(
         create: (context) => AuthCubit(AuthRepositoryImpl()),
       ),
-      BlocProvider(create: (_)=> BuilderBloc())
+      BlocProvider(create: (_)=> BuilderBloc()),
+      BlocProvider(create: (_)=> DashboardCubit(DashboardRepositoryImpl()))
     ],
     child: MyApp(),
   ));

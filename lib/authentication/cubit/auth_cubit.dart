@@ -32,6 +32,7 @@ class AuthCubit extends Cubit<AuthCubitState>{
       await Future.wait([
        storage.write(key: LoginKeys.role,value: loginValues.role),
        storage.write(key: LoginKeys.token,value: loginValues.token),
+       storage.write(key: DashboardKey.link, value: loginValues.dashboardurl)
       ]);
 
         emit(AuthSuccess(loginValues.role!));

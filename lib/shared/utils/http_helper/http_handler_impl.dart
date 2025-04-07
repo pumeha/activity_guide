@@ -34,7 +34,7 @@ class HttpHandlerImpl extends HttpHandlerAbstract {
       Map<String,dynamic> jsonData = jsonDecode(response.body);
       return jsonData;
     } on Exception catch (e) {
-      return {'status':'500','message':e.toString(),'data':[]};
+      return {'status':500,'message':e.toString(),'data':[]};
     }
 
   }

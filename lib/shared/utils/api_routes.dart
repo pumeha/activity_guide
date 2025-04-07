@@ -15,6 +15,7 @@ static String deleteTemplate = "$baseUrl/template/delete";
 static String updateTemplate = "$baseUrl/template/update";
 static String getTemplateData = "$baseUrl/template/gettemplatedata";
 static String templateActive = "$baseUrl/template/active";
+static String dashboard = "$baseUrl/template/dashboard";
 }
 
 class UserRoutes {
@@ -28,3 +29,4 @@ static String bydept = "$baseUrl/workplans/bydept";
 static String edit = "$baseUrl/workplans/edit";
 static String delete = "$baseUrl/workplans/delete";
 }
+
