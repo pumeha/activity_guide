@@ -14,7 +14,6 @@ import 'package:activity_guide/authentication/repository/auth_repository_impl.da
 import 'package:activity_guide/authentication/routing/login_location.dart';
 
 import 'admin/routing/admin_routing.dart';
-import 'providers/template_provider.dart';
 import 'shared/utils/colors.dart';
 import 'users/routing/users_routing.dart';
 
@@ -31,7 +30,7 @@ Future main() async {
         create: (context) => AuthCubit(AuthRepositoryImpl()),
       ),
       BlocProvider(create: (_)=> BuilderBloc()),
-      BlocProvider(create: (_)=> DashboardCubit(DashboardRepositoryImpl()))
+      BlocProvider(create: (context)=> DashboardCubit(DashboardRepositoryImpl()))
     ],
     child: MyApp(),
   ));
@@ -45,7 +44,7 @@ class MyApp extends StatelessWidget {
       AdminHomeLocation(),
       HomeLocationUsers()
     ]),
-    transitionDelegate: NoAnimationTransitionDelegate(),
+    transitionDelegate: const NoAnimationTransitionDelegate(),
   );
 
   @override
@@ -56,7 +55,7 @@ class MyApp extends StatelessWidget {
           scaffoldBackgroundColor: light,
           colorScheme: ColorScheme.fromSeed(seedColor: active),
           useMaterial3: true,
-          textSelectionTheme: TextSelectionThemeData(cursorColor: active),
+          textSelectionTheme: const TextSelectionThemeData(cursorColor: active),
           textTheme: GoogleFonts.mulishTextTheme(Theme.of(context).textTheme)
               .apply(bodyColor: Colors.black),
           pageTransitionsTheme: const PageTransitionsTheme(builders: {

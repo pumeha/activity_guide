@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:activity_guide/shared/utils/http_helper/http_handler_abstract.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 class HttpHandlerImpl extends HttpHandlerAbstract {
     HttpHandlerImpl._();
@@ -21,12 +22,17 @@ class HttpHandlerImpl extends HttpHandlerAbstract {
 
   @override
   Future<Map<String, dynamic>> post({required String url, String? token, required body}) async{
-      Map<String,String> header;
-      
-      if (token == null) {
+      Map<String,String> header ={};
+     
+      if (token == null ||token.isEmpty) {
         header = {'Content-Type' : 'application/json'};
-      }else{
-     header = {'Content-Type' : 'application/json','Authorization': 'Bearer $token',};
+      }else if(token.isNotEmpty){
+
+      header  = {
+      'Authorization': 'Bearer $token',// Make sure to include Content-Type
+      'Content-Type' : 'application/json'
+      };
+
       }
       
     try {
@@ -43,10 +49,5 @@ class HttpHandlerImpl extends HttpHandlerAbstract {
   Future<Map<String, dynamic>> put({required String url, required String token, required body}) {
     // TODO: implement put
     throw UnimplementedError();
-  }
-
-
-
- 
-  
+  }  
 }

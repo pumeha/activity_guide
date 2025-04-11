@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:activity_guide/admin/dashboard_page/cubit/dashboard_cubit.dart';
-import 'package:activity_guide/admin/template_builder_page/view/template_builder.dart';
 import 'package:activity_guide/custom_widgets/custom_text.dart';
 import 'package:activity_guide/shared/utils/constants.dart';
 import 'package:activity_guide/shared/utils/http_helper/storage_keys.dart';
@@ -35,7 +34,6 @@ class _DashboardPageState extends State<DashboardPage>
       }
     });
 
-    //Add a fab for the admin for entering the new powerBi link
   }
 
   Future<void> getDashboardUrl() async {
@@ -43,27 +41,32 @@ class _DashboardPageState extends State<DashboardPage>
         await const FlutterSecureStorage().read(key: DashboardKey.link);
   }
 
+TextEditingController dashboardController = TextEditingController();
+
+final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final _formKey = GlobalKey<FormState>();
-    TextEditingController dashboardController = TextEditingController();
+
     return Scaffold(
         body: BlocListener<DashboardCubit, DashboardCubitState>(
       listener: (context, state) {
        if (state is DashboardLoading) {
+       // print('Loading');
          EasyLoading.show();
        } else if(state is DashboardSuccess){
-         EasyLoading.showSuccess(state.message!);
+       // print(state.message!);
+        EasyLoading.showSuccess(state.message!);
        }else if(state is DashboardFailure){
         EasyLoading.showError(state.errorMessage!);
-       }
-      },
+       }},
       child: SafeArea(
         child: FutureBuilder(
             future: getDashboardUrl(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
+                dashboardController.text = dashboardurl!;
                 return Column(
                   children: [
                     Padding(
@@ -81,7 +84,7 @@ class _DashboardPageState extends State<DashboardPage>
                                 child: Form(
                                     key: _formKey,
                                     child: TextFormField(
-                                      initialValue: dashboardurl,
+                                    controller: dashboardController,
                                       validator: Constants().validatorFunction,
                                     )),
                               ),
@@ -96,13 +99,12 @@ class _DashboardPageState extends State<DashboardPage>
                               padding: const EdgeInsets.all(8.0),
                               child: FilledButton(
                                   onPressed: () {
+
                                     if (_formKey.currentState!.validate()) {
                                       context
                                           .read<DashboardCubit>()
                                           .updateDashboardUrl(
-                                              dashbordUrl: dashboardController
-                                                  .text
-                                                  .toString());
+                                              dashbordUrl: dashboardController.text);
                                     }
                                   },
                                   child: const CustomText(
@@ -115,7 +117,7 @@ class _DashboardPageState extends State<DashboardPage>
                         ),
                       ),
                     ),
-                    Expanded(
+          /**        Expanded(
                       child: InAppWebView(
                         //display the swipetoRefresh in the InappBrowser
                         initialUrlRequest:
@@ -157,7 +159,7 @@ class _DashboardPageState extends State<DashboardPage>
                         },
                         onLoadStop: (controller, url) {},
                       ),
-                    ),
+                    ),*/   
                   ],
                 );
               } else {

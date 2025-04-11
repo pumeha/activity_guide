@@ -17,9 +17,10 @@ class AuthCubit extends Cubit<AuthCubitState>{
 
   Future<void> login(String email,String password) async{
    
-    emit(AuthLoading());
+      emit(AuthLoading());
 
       final response = await authRepositoryImpl.login(email, password);
+      
       GeneralJsonDart data = GeneralJsonDart.fromJson(response);
       int? status = data.status;
       String message = data.message!;
@@ -28,7 +29,6 @@ class AuthCubit extends Cubit<AuthCubitState>{
         
         final storage = FlutterSecureStorage();
         LoginJsonDart loginValues = LoginJsonDart.fromJson(data.data![0]);
-        
       await Future.wait([
        storage.write(key: LoginKeys.role,value: loginValues.role),
        storage.write(key: LoginKeys.token,value: loginValues.token),

@@ -1,11 +1,10 @@
- String baseUrl = "http://localhost:5000/endpoints";
+String baseUrl = "http://localhost:5000/endpoints";
 class LoginRoutes {
 static String loginRoute = "$baseUrl/auth/login";
 static String forgetPassword = "$baseUrl/auth/forgetpassword";
 static String requesttoken = "$baseUrl/auth/requesttoken";
 static String verify = "$baseUrl/auth/verify";
 static String register = "$baseUrl/auth/register";
-
 }
 
 class TemplateRoutes {
