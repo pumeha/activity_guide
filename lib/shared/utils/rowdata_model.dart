@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 
 class RowData {
   int id;
@@ -12,6 +11,24 @@ class RowData {
     required this.dataType,
     required this.range,
   });
+
+  factory RowData.fromJson(Map<String, dynamic> json) {
+    return RowData(
+      id: json['ID'],
+      columnName: json['name'],
+      dataType: json['Type'],
+      range: json['Range'] ?? '',
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'ID': id,
+      'name': columnName,
+      'Type': dataType,
+      'Range': range,
+    };
+  }
 
     @override
   String toString() {

@@ -1,7 +1,5 @@
 import 'dart:convert';
-
 import 'package:activity_guide/shared/utils/http_helper/http_handler_abstract.dart';
-import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 class HttpHandlerImpl extends HttpHandlerAbstract {
     HttpHandlerImpl._();
@@ -9,9 +7,21 @@ class HttpHandlerImpl extends HttpHandlerAbstract {
     static HttpHandlerImpl get instance => _instance;
 
   @override
-  Future<Map<String, dynamic>> delete({required String url, required String token, required body}) {
-    // TODO: implement delete
-    throw UnimplementedError();
+  Future<Map<String, dynamic>> delete({required String url, required String token, required body}) async{
+       
+      Map<String,String> header  = {
+      'Authorization': 'Bearer $token',// Make sure to include Content-Type
+      'Content-Type' : 'application/json'
+      };
+
+      try {
+        dynamic response = await http.delete(Uri.parse(url),headers: header,body: body);
+        
+        Map<String,dynamic> jsonData = jsonDecode(response.body);
+        return jsonData;
+      } on Exception catch (e) {
+       return {'status':500,'message':e.toString(),'data':[]};
+      }
   }
 
   @override

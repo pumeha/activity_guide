@@ -19,6 +19,10 @@ static String dashboard = "$baseUrl/template/dashboard";
 
 class UserRoutes {
 static String getUsers = "$baseUrl/users";
+static String updateUser = "$getUsers/update";
+static String suspendUser = "$getUsers/suspend";
+static String deleteUser = "$getUsers/delete";
+static String activeUser = "$getUsers/active";
 }
 
 class WorkplanRoutes {
@@ -28,4 +32,3 @@ static String bydept = "$baseUrl/workplans/bydept";
 static String edit = "$baseUrl/workplans/edit";
 static String delete = "$baseUrl/workplans/delete";
 }
-

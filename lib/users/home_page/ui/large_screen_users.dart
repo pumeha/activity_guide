@@ -19,7 +19,7 @@ class LargeScreenUsers extends StatelessWidget {
           child: Beamer(routerDelegate: BeamerDelegate(locationBuilder:
           BeamerLocationBuilder(beamLocations: [
            MonthlyTemplateLocation(),
-            DashboardLocation(),
+            UserDashboardLocation(),
             DatatableLocation(),EditingMonthlyTemplateLocation()
           ]),transitionDelegate: NoAnimationTransitionDelegate()),key: _beamerKey,),)
       ],

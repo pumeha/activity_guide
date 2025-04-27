@@ -4,7 +4,7 @@ import 'package:beamer/beamer.dart';
 
 import 'utils/constants.dart';
 
-AppBar topNavigationBar(BuildContext context,GlobalKey<ScaffoldState> key) =>
+AppBar topNavigationBar(BuildContext context) =>
     AppBar(elevation: 0,
     backgroundColor: Colors.white,
     title: Row(

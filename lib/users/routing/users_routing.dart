@@ -2,12 +2,12 @@
 import 'package:beamer/beamer.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
-import '../../admin/dashboard_page/dashboard_page.dart';
-import '../../admin/data_table_page/data_table.dart';
+import '../../sub_admin/data_table_page/data_table.dart';
 import '../../shared/utils/constants.dart';
 import '../edit_template_page/editing_monthly_template.dart';
 import '../home_page/ui/home_page_users.dart';
 import '../monthly_template_page/monthly_template.dart';
+import '../template_page/user_dashboard_page.dart';
 
 class HomeLocationUsers extends BeamLocation{
   @override
@@ -24,16 +24,16 @@ class HomeLocationUsers extends BeamLocation{
     '/home/dashboard','/home/data_entry'];
 }
 
-class DashboardLocation extends BeamLocation{
+class UserDashboardLocation extends BeamLocation{
   @override
   List<BeamPage> buildPages(BuildContext context, RouteInformationSerializable<dynamic> state) {
-    return  [const BeamPage(child: DashboardPage(),key: ValueKey('dashboard'),
+    return  [const BeamPage(child: UserDashboardPage(),key: ValueKey('dashboard'),
         title: 'Activity Guide')];
   }
 
   @override
   // TODO: implement pathPatterns
-  List<Pattern> get pathPatterns => ['/home/dashboard','/admin/dashboard'];
+  List<Pattern> get pathPatterns => ['/home/dashboard'];
 }
 
 class DatatableLocation extends BeamLocation {

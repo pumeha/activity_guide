@@ -25,3 +25,4 @@ class AuthFailure extends AuthCubitState {
   AuthFailure(this.error);
 }
 
+

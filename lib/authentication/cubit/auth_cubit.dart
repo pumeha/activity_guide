@@ -1,11 +1,13 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:activity_guide/authentication/cubit/auth_cubit_state.dart';
 import 'package:activity_guide/authentication/json_dart/login_json_dart.dart';
 import 'package:activity_guide/authentication/repository/auth_repository_impl.dart';
+import 'package:activity_guide/shared/utils/constants.dart';
 import 'package:activity_guide/shared/utils/http_helper/general_json_dart.dart';
 import 'package:activity_guide/shared/utils/http_helper/storage_keys.dart';
 import 'package:bloc/bloc.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import '../../shared/utils/myshared_preference.dart';
 
 
 class AuthCubit extends Cubit<AuthCubitState>{
@@ -26,21 +28,46 @@ class AuthCubit extends Cubit<AuthCubitState>{
       String message = data.message!;
 
       if (status == HttpStatus.ok) {
-        
-        final storage = FlutterSecureStorage();
-        LoginJsonDart loginValues = LoginJsonDart.fromJson(data.data![0]);
-      await Future.wait([
-       storage.write(key: LoginKeys.role,value: loginValues.role),
-       storage.write(key: LoginKeys.token,value: loginValues.token),
-       storage.write(key: DashboardKey.link, value: loginValues.dashboardurl)
+          LoginJsonDart loginValues = LoginJsonDart.fromJson(data.data![0]);
+      if(message == 'verification'){
+        await  MysharedPreference().setPreferences( LoginKeys.token, loginValues.token!);
+        emit(AuthSuccess(message));
+
+      }else if(message == 'success' && loginValues.role! == admin){
+        await Future.wait([
+        MysharedPreference().setPreferences(LoginKeys.role,  loginValues.role!),
+        MysharedPreference().setPreferences( LoginKeys.token, loginValues.token!)
       ]);
 
-        emit(AuthSuccess(loginValues.role!));
-      }else {
+       emit(AuthSuccess(loginValues.role!));
+     
+      }else if(message == 'success' &&  loginValues.role! == subAdmin){
+         
+          await Future.wait([
+        MysharedPreference().setPreferences(LoginKeys.role,  loginValues.role!),
+        MysharedPreference().setPreferences( LoginKeys.token, loginValues.token!)
+      ]);
+      
+      final templateJson = data.data![0]['template'] as List<dynamic>;
+      String templatesJson = jsonEncode(templateJson.toList());
+      await  MysharedPreference().setPreferences(templateListKeys, templatesJson);
+     
+    emit(AuthSuccess(loginValues.role!));
+      }
+      else{
+        
+      await Future.wait([
+        MysharedPreference().setPreferences(LoginKeys.role,  loginValues.role!),
+       MysharedPreference().setPreferences( LoginKeys.token, loginValues.token!),
+       MysharedPreference().setPreferences( DashboardKey.link,loginValues.dashboardurl!)
+      ]);
+       emit(AuthSuccess(loginValues.role!));
+      }
+      }else if(status == HttpStatus.forbidden){
+          emit(AuthFailure('Account Suspended \n Kindly Contact Admin '));
+        }else {
         emit(AuthFailure(message));
       }
-    
-    
   }
 
   Future<void> forgotPassword(String email) async{
@@ -53,10 +80,9 @@ class AuthCubit extends Cubit<AuthCubitState>{
       String message = data.message!;
 
       if (status == HttpStatus.ok) {
-        final storage = FlutterSecureStorage();
-        
-          String token = data.data![0]['token'];
-          await storage.write(key: LoginKeys.token, value: token); 
+        String token = data.data![0]['token'];
+       await MysharedPreference().setPreferences(LoginKeys.token, token);
+          
         emit(AuthSuccess(message));
       } else {
         emit(AuthFailure(message));
@@ -67,8 +93,7 @@ class AuthCubit extends Cubit<AuthCubitState>{
   Future<void> resetPassword(String inputCode,String newPassword) async{
       emit(AuthLoading());
 
-      final storage = FlutterSecureStorage();
-      String? token  = await storage.read(key: LoginKeys.token);
+      String? token  = await MysharedPreference().getPreferences(LoginKeys.token);
       Map<String,dynamic> response = await authRepositoryImpl.resetPassword(inputCode, newPassword, token!);
       GeneralJsonDart data = GeneralJsonDart.fromJson(response);
 
@@ -81,11 +106,12 @@ class AuthCubit extends Cubit<AuthCubitState>{
 
   }
 
-  Future<void> userVerification(String inputCode) async{
+  Future<void> userVerification({String? inputCode,String? newPassword}) async{
+      
       emit(AuthLoading());
-      final storage = FlutterSecureStorage();
-      String? token  = await storage.read(key: LoginKeys.token);
-      Map<String,dynamic> response = await authRepositoryImpl.userVerification(inputCode, token!);
+      
+      String? token  = await MysharedPreference().getPreferences(LoginKeys.token);
+      Map<String,dynamic> response = await authRepositoryImpl.userVerification(inputCode!, newPassword!, token!);
       GeneralJsonDart data = GeneralJsonDart.fromJson(response);
 
       int status = data.status!;
@@ -94,12 +120,13 @@ class AuthCubit extends Cubit<AuthCubitState>{
       }else{
         emit(AuthFailure(data.message!));
       }
+
   }
 
-  Future<void> requestTokenAgain(String inputCode) async{
+  Future<void> requestTokenAgain() async{
       emit(AuthLoading());
-      final storage = FlutterSecureStorage();
-      String? token  = await storage.read(key: LoginKeys.token);
+      
+      String? token  = await MysharedPreference().getPreferences(LoginKeys.token);
       Map<String,dynamic> response = await authRepositoryImpl.requestTokenAgain(token!);
       GeneralJsonDart data = GeneralJsonDart.fromJson(response);
 

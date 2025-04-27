@@ -27,7 +27,7 @@ class _SmallScreenUsersState extends State<SmallScreenUsers> {
     _beamerDelegate = BeamerDelegate(
         locationBuilder: BeamerLocationBuilder(beamLocations: [
           MonthlyTemplateLocation(),
-          DashboardLocation(),
+          UserDashboardLocation(),
           DatatableLocation(),EditingMonthlyTemplateLocation()
         ]),
     transitionDelegate: NoAnimationTransitionDelegate());

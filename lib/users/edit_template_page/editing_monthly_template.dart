@@ -80,7 +80,7 @@ class _EditingMonthlyTemplateState extends State<EditingMonthlyTemplate> {
             selectionMode: SelectionMode.multiple,
           );
         }
-        return CustomCircleIndicator();
+        return customCircleIndicator();
       },
       ),
       floatingActionButton: Stack(

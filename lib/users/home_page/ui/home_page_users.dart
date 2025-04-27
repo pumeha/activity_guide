@@ -21,7 +21,7 @@ class _HomePageUsersState extends State<HomePageUsers> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
-      appBar: topNavigationBar(context, scaffoldKey),
+      appBar: topNavigationBar(context),
      // extendBodyBehindAppBar: true,
       body: ResponsiveWidget(largeScreen: LargeScreenUsers(sideMenu: const SideMenuUsers(),),
           smallScreen: const SmallScreenUsers())
