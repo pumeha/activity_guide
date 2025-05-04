@@ -108,10 +108,10 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
                         setState(() {
                           
                         });
-                       },child: const Icon(Icons.delete_forever,color: Colors.red,),);
+                       },child: const Icon(Icons.delete_forever,color: Colors.red,),
+                       backgroundColor: Colors.black,);
                     }
                     return Container();
-                   
                   },
                 ),
                 const SizedBox(
