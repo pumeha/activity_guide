@@ -1,3 +1,4 @@
+import 'package:activity_guide/user_profile.dart';
 import 'side_menu_admin.dart';
 import 'large_screen_admin.dart';
 import 'small_screen_admin.dart';
@@ -21,10 +22,10 @@ class _HomePageState extends State<HomePageAdmin> {
         key: scaffoldKey,
         resizeToAvoidBottomInset: false,
         extendBodyBehindAppBar: false,
-        appBar: topNavigationBar(context),
+        endDrawer: const UserProfile(),
+        appBar: topNavigationBar(context: context,scaffoldKey: scaffoldKey),
         // extendBodyBehindAppBar: true,
         body: ResponsiveWidget(largeScreen: LargeScreenAdmin(sideMenu: const SideMenuAdmin(),),
             smallScreen: const SmallScreenAdmin())
     );
-  }
-}
+  }}

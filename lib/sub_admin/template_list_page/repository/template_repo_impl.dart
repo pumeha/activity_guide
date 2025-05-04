@@ -40,4 +40,25 @@ class TemplateRepoImpl extends TemplateRepoAbstr {
    
      return response;
   }
+  
+  @override
+  Future<Map<String, dynamic>> activeTemplate({required String name, required String status, required String token}) async{
+    dynamic data = {'template_name': name,'status': status};
+    dynamic body = jsonEncode(data);
+
+    Map<String,dynamic> response = await HttpHandlerImpl.instance.post(url: TemplateRoutes.templateActive, body: body,token: token);
+
+    return response;
+  }
+  
+  @override
+  Future<Map<String, dynamic>> fetchTemplateData({required String name, required String token}) async{
+    dynamic data = {'template_name':name};
+    dynamic body = jsonEncode(data);
+
+    Map<String,dynamic> response = await HttpHandlerImpl.instance.post(url: TemplateRoutes.getTemplateData,
+     token: token, body: body);
+   
+     return response;
+  }
 }

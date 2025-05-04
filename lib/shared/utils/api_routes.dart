@@ -12,7 +12,7 @@ static String createTemplate = "$baseUrl/template/create";
 static String listTemplateName = "$baseUrl/template";
 static String deleteTemplate = "$baseUrl/template/delete";
 static String updateTemplate = "$baseUrl/template/update";
-static String getTemplateData = "$baseUrl/template/gettemplatedata";
+static String getTemplateData = "$baseUrl/template/fetch";
 static String templateActive = "$baseUrl/template/active";
 static String dashboard = "$baseUrl/template/dashboard";
 }

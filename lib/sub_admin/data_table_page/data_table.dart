@@ -1,9 +1,9 @@
 import 'dart:convert';
+import 'package:activity_guide/shared/utils/http_helper/storage_keys.dart';
+import 'package:activity_guide/shared/utils/myshared_preference.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
 
-import '../../shared/utils/colors.dart';
 import '../../shared/utils/constants.dart';
 
 
@@ -21,20 +21,15 @@ class MyTable extends StatefulWidget {
 
 
   Future populateData() async{
-    final response = await http.get(Uri.parse('/rawjson.json'));
+    String? response = await MysharedPreference().getPreferences(template_data);
 
-    if (response.statusCode == 200) {
-    //  print(response.body);
-
-        data = json.decode(response.body) as List<dynamic>;
+        data = json.decode(response!) as List<dynamic>;
       if(data.isNotEmpty){
         columns = generateColumns(data[0]);
         _jsonDataGridSource = JSONDataGridSource(data,columns);
       }
       return data;
-    } else {
-      throw Exception('Failed to load JSON data');
-    }
+   
 
 
   }
@@ -45,7 +40,7 @@ class MyTable extends StatefulWidget {
       GridColumn gridColumn = GridColumn(columnName: entry.key,
           label: Container(padding: const EdgeInsets.all(8),color: Colors.white,
           alignment: Alignment.center,
-          child: Text(entry.key,style: const TextStyle(color: Colors.black,fontSize: 14,
+          child: Text(entry.key.replaceAll('_', ' ').toUpperCase(),style: const TextStyle(color: Colors.black,fontSize: 14,
           ),),));
    columns.add(gridColumn);
     }
@@ -60,50 +55,13 @@ class MyTable extends StatefulWidget {
 
   }
 final DataGridController controller = DataGridController();
-  final List<bool> _selections = [false,true];
+
   @override
   Widget build(BuildContext context) {
 
     return Scaffold( backgroundColor: Colors.white70,
       body: Column(children: [
-        ToggleButtons(
-          isSelected: _selections,
-          onPressed: (index) {
-            setState(() {
-             switch(index){
-               case 0:
-                 _selections[index] = true;
-                 _selections[1] = false;
-                 break;
-               case 1:
-                 _selections[index] = true;
-                 _selections[0] = false;
-                 break;
-
-               default:
-                 _selections[0] = true;
-                 _selections[1] = false;
-             }
-            });
-          },
-          selectedBorderColor: active,
-          selectedColor: Colors.white,
-          fillColor: active,
-          color: Colors.black,
-          borderColor: active,
-          borderWidth: 2,
-          children: const [
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
-              child: Text('Workplan', style: TextStyle(fontSize: 14)),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
-              child: Text('Monthly Activities', style: TextStyle(fontSize: 14)),
-            ),
-          ], // Set minimum size for buttons
-        ),
-        Expanded(child: FutureBuilder(
+       Expanded(child: FutureBuilder(
           future: populateData(),builder: (context,snapshot){
           if(snapshot.connectionState == ConnectionState.done){
 
@@ -143,7 +101,7 @@ class JSONDataGridSource extends DataGridSource{
       List<GridColumn> columns){
     dataGridRows = data.map((value)=>
     DataGridRow(cells: columns.map((column)=>
-    DataGridCell(columnName: column.columnName,
+    DataGridCell(columnName: column.columnName.replaceAll('_', ' ').toUpperCase(),
         value: value[column.columnName])).toList())).toList();
   }
 
@@ -155,9 +113,11 @@ class JSONDataGridSource extends DataGridSource{
   DataGridRowAdapter? buildRow(DataGridRow row) {
    return DataGridRowAdapter(cells:
    row.getCells().map((cell)=>
-   Container(child: Text(cell.value.toString(),
-     style: const TextStyle(backgroundColor: Colors.white),
-   ),
-   color: Colors.white,)).toList());
+   Padding(
+     padding: const EdgeInsets.all(8.0),
+     child: Text(cell.value.toString(),
+       style: const TextStyle(overflow: TextOverflow.visible,fontSize: 14),
+     ),
+   )).toList());
   }
 }

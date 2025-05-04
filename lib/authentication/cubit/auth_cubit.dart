@@ -22,30 +22,40 @@ class AuthCubit extends Cubit<AuthCubitState>{
       emit(AuthLoading());
 
       final response = await authRepositoryImpl.login(email, password);
-      
+
       GeneralJsonDart data = GeneralJsonDart.fromJson(response);
       int? status = data.status;
       String message = data.message!;
-
+ 
+      
       if (status == HttpStatus.ok) {
           LoginJsonDart loginValues = LoginJsonDart.fromJson(data.data![0]);
       if(message == 'verification'){
         await  MysharedPreference().setPreferences( LoginKeys.token, loginValues.token!);
         emit(AuthSuccess(message));
 
-      }else if(message == 'success' && loginValues.role! == admin){
+      }else if(loginValues.role! == admin){
+          final usersList = data.data![0]['users'] as List<dynamic>;
+          usersList.where((user)=>user['role']=='user');
+        String userJson = jsonEncode( usersList.where((user)=>user['role']=='user').toList());
+        String subadminJson = jsonEncode(usersList.where((user)=>user['role']=='sub-admin').toList());
         await Future.wait([
         MysharedPreference().setPreferences(LoginKeys.role,  loginValues.role!),
-        MysharedPreference().setPreferences( LoginKeys.token, loginValues.token!)
+        MysharedPreference().setPreferences( LoginKeys.token, loginValues.token!),
+        MysharedPreference().setPreferences(usersLists, userJson),
+        MysharedPreference().setPreferences(subAdminLists, subadminJson),
+        MysharedPreference().setPreferences(fullnameKey, data.data![0]['fullname'])
       ]);
-
-       emit(AuthSuccess(loginValues.role!));
+        
+        
+     emit(AuthSuccess(loginValues.role!));
      
       }else if(message == 'success' &&  loginValues.role! == subAdmin){
-         
-          await Future.wait([
+      
+        await Future.wait([
         MysharedPreference().setPreferences(LoginKeys.role,  loginValues.role!),
-        MysharedPreference().setPreferences( LoginKeys.token, loginValues.token!)
+        MysharedPreference().setPreferences( LoginKeys.token, loginValues.token!),
+         MysharedPreference().setPreferences(fullnameKey, data.data![0]['fullname'])
       ]);
       
       final templateJson = data.data![0]['template'] as List<dynamic>;
@@ -56,16 +66,24 @@ class AuthCubit extends Cubit<AuthCubitState>{
       }
       else{
         
+        final monthlyTempleJson = data.data![0][monthlyTemplateKey] as List<dynamic>;
+        String monthlyTempleJsonString = jsonEncode(monthlyTempleJson.toList());
+
       await Future.wait([
         MysharedPreference().setPreferences(LoginKeys.role,  loginValues.role!),
-       MysharedPreference().setPreferences( LoginKeys.token, loginValues.token!),
-       MysharedPreference().setPreferences( DashboardKey.link,loginValues.dashboardurl!)
+        MysharedPreference().setPreferences( LoginKeys.token, loginValues.token!),
+        MysharedPreference().setPreferences( DashboardKey.link,loginValues.dashboardurl!),
+        MysharedPreference().setPreferences(fullnameKey, data.data![0]['fullname']),
+        MysharedPreference().setPreferences(deptKey, data.data![0]['dept'] ),
+        MysharedPreference().setPreferences(monthlyTemplateKey,monthlyTempleJsonString ),
+      //  MysharedPreference().setPreferences(workplanTemplateKey, data.data![0][workplanTemplateKey])
       ]);
+
        emit(AuthSuccess(loginValues.role!));
       }
       }else if(status == HttpStatus.forbidden){
           emit(AuthFailure('Account Suspended \n Kindly Contact Admin '));
-        }else {
+      }else {
         emit(AuthFailure(message));
       }
   }

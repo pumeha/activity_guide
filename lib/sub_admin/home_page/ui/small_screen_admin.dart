@@ -39,8 +39,7 @@ class _SmallScreenAdminState extends State<SmallScreenAdmin> {
           BottomNavigationBarItem(icon: Icon(Icons.edit_document),
             label: 'Templates',),
           BottomNavigationBarItem(icon: Icon(Icons.dashboard_outlined),
-            label: 'Dashboard',),
-          BottomNavigationBarItem(icon: Icon(Icons.dataset),label: 'Database')
+            label: 'Dashboard',)
         ],
         currentIndex: _selectedIndex,
 
@@ -60,10 +59,6 @@ class _SmallScreenAdminState extends State<SmallScreenAdmin> {
               Beamer.of(context).beamToNamed(
                   '/admin/dashboard');
               break;
-            case 2:
-              Beamer.of(context).beamToNamed('/admin/database');
-              break;
-
             default:
               Beamer.of(context).beamToNamed(
                   '/admin/templates');

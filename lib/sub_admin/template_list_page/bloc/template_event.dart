@@ -32,3 +32,14 @@ class TemplateDeleteEvent extends TemplateEvent {
   final String templateName;
   TemplateDeleteEvent({required this.templateName});
 }
+
+class TemplateActiveOrInactiveEvent extends TemplateEvent{
+  String templateName;
+  String status;
+  TemplateActiveOrInactiveEvent({required this.templateName,required this.status});
+}
+
+class TemplateFetchDataEvent extends TemplateEvent {
+  String templateName;
+  TemplateFetchDataEvent({required this.templateName});
+}

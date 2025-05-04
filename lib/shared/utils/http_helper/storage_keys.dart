@@ -13,3 +13,8 @@ class DashboardKey {
 }
 
 const templateListKeys = 'templateListKeys';
+const template_data = 'templateData';
+const usersLists = 'usersList';
+const subAdminLists = 'adminList';
+const fullnameKey = 'name';
+const deptKey = 'dept';

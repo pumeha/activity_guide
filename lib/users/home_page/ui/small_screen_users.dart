@@ -20,17 +20,15 @@ class _SmallScreenUsersState extends State<SmallScreenUsers> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    //_beamerDelegate = _beamerKey.currentState!.routerDelegate;
-    //_beamerDelegate.addListener(_setStateListener);
+
     _beamerDelegate = BeamerDelegate(
         locationBuilder: BeamerLocationBuilder(beamLocations: [
-          MonthlyTemplateLocation(),
+         UserLandingPageLocation(), DataCollectionPageLocation(),
           UserDashboardLocation(),
           DatatableLocation(),EditingMonthlyTemplateLocation()
         ]),
-    transitionDelegate: NoAnimationTransitionDelegate());
+    transitionDelegate: const NoAnimationTransitionDelegate());
   }
 
   @override
@@ -43,13 +41,11 @@ class _SmallScreenUsersState extends State<SmallScreenUsers> {
           // fontWeight: FontWeight.bold),),
           //   label: 'Workplan',
           // ),
-          BottomNavigationBarItem(icon: Icon(Icons.edit_document),
-            label: 'Template',
+          BottomNavigationBarItem(icon: Icon(Icons.home),
+            label: 'Home',
           ),
           BottomNavigationBarItem(icon: Icon(Icons.dashboard_outlined),
             label: 'Dashboard',),
-          BottomNavigationBarItem(icon: Icon(Icons.dataset),
-          label: 'Database')
         ],
         currentIndex: _selectedIndex
         ,
@@ -62,19 +58,16 @@ class _SmallScreenUsersState extends State<SmallScreenUsers> {
           switch (index) {
             case 0:
 
-              _beamerKey.currentState!.routerDelegate.beamToNamed('/home/template');
+              _beamerKey.currentState!.routerDelegate.beamToNamed('/home/landing_page');
               // Beamer.of(context).beamToNamed(
               //     '/home/template');
               break;
             case 1:
               _beamerKey.currentState!.routerDelegate.beamToNamed('/home/dashboard');
               break;
-            case 2:
-              _beamerKey.currentState!.routerDelegate.beamToNamed('/home/database');
-
             default:
               Beamer.of(context).beamToNamed(
-                  '/home/template');
+                  '/home/landing_page');
 
               break;
           }

@@ -1,10 +1,6 @@
-import 'package:activity_guide/shared/utils/myshared_preference.dart';
 import 'package:flutter/material.dart';
-import 'package:beamer/beamer.dart';
 
-import 'utils/constants.dart';
-
-AppBar topNavigationBar(BuildContext context) =>
+AppBar topNavigationBar({required BuildContext context,required GlobalKey<ScaffoldState> scaffoldKey}) =>
     AppBar(elevation: 0,
     backgroundColor: Colors.white,
     title: Row(
@@ -21,38 +17,13 @@ AppBar topNavigationBar(BuildContext context) =>
         ],),
 
         actions: [
-            PopupMenuButton(itemBuilder: (BuildContext context) => [
-    // First menu item: User details
-    PopupMenuItem(
-    child: Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-
-    Text("Hi! 👋 Ben Otaro", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-    SizedBox(height: 8),
-    Row(
-      children: [
-        Text('Your assign dept is ',style: TextStyle(fontStyle: FontStyle.italic),),
-          Text('LEGAL',style: TextStyle(fontWeight: FontWeight.bold),)
-      ],
-    ),
-        Row(
-          children: [
-              Expanded(child: Container()),
-            TextButton(onPressed: (){
-              Beamer.of(context).beamToReplacementNamed('/login');
-              MysharedPreference().setPreferences(admin, '');
-            }, child: Text('Log out')),
-          ],
-        )
-    ],)),
-],tooltip: 'User',child:  Padding(
-  padding: const EdgeInsets.only(left: 12,top: 8,right: 8,bottom: 8),
-  child: Icon(
+              IconButton(onPressed: (){
+               
+                  scaffoldKey.currentState!.openEndDrawer();
+              }, icon: Icon(
                 Icons.person,
                 color: Colors.green[800],size: 40,
-              ),
-),)
-            ]);
+              ))
+          ]);
 
 

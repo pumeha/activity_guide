@@ -14,14 +14,6 @@ class UsersRepoImpl extends UsersRepoAbstract {
     return response;
   }
 
-  @override
-  Future<Map<String,dynamic>> refresh({required String token}) async{
-  
-      dynamic body = jsonEncode({});
-    Map<String,dynamic> response = await HttpHandlerImpl.instance.post(url: UserRoutes.getUsers, body: body,token: token);
-    return response;
-
-  }
   
   @override
   Future<Map<String, dynamic>> deleteUser({required String email, required String token}) async{

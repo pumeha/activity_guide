@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:activity_guide/admin/view/update_user_dialog.dart';
+import 'package:activity_guide/shared/utils/http_helper/storage_keys.dart';
+import 'package:activity_guide/shared/utils/myshared_preference.dart';
 import '../../../shared/custom_widgets/custom_text.dart';
 import 'package:activity_guide/shared/utils/colors.dart';
 import 'package:activity_guide/shared/utils/constants.dart';
@@ -245,10 +249,31 @@ class _UsersPageState extends State<UsersPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    context.read<UserBloc>().add(RefreshEvent());
+
   }
+
+    Future<List<UserJSON2Dart>> listUsers() async{
+        String? users = await MysharedPreference().getPreferences(usersLists);
+        if (users != null && users.isNotEmpty) {
+          List<dynamic> decodedList = jsonDecode(users);
+          List<UserJSON2Dart> list = decodedList.map((user)=> UserJSON2Dart.fromJson(user)).toList();
+          return list;
+        } else {
+          return [];
+        }
+    } 
+
+    Future<List<UserJSON2Dart>> listSubAdmin() async{
+      String? subadmin = await MysharedPreference().getPreferences(subAdminLists);
+      if (subadmin != null && subadmin.isNotEmpty) {
+        List<dynamic> decodedList = jsonDecode(subadmin);
+        List<UserJSON2Dart> list = decodedList.map((user)=> UserJSON2Dart.fromJson(user)).toList();
+        return list;
+      } else {
+        return [];
+      }
+    }
 
   @override
   Widget build(BuildContext context) {
@@ -270,49 +295,56 @@ class _UsersPageState extends State<UsersPage> {
           if (state is LoadingState) {
             EasyLoading.show(maskType: EasyLoadingMaskType.black);
           } else if (state is SuccessState) {
+            setState(() {
+              
+            });
              EasyLoading.showSuccess(state.message!);
           } else if (state is FailureState) {
+            setState(() {
+              
+            });
             EasyLoading.showInfo(state.message!);
           }
         }, child: TabBarView(
           children: [
-             BlocBuilder<UserBloc, UserState>(
-            builder: (context, state) {
-                  if (state is SuccessState) {
-                   
-                    subadmindata = state.listSubAdmin!;
-                  }
-                  
-              return subadmindata.isEmpty ? const  Center(child: Text('No Records')): ListView.builder(
-                  itemCount: subadmindata.length,
-                  itemBuilder: (context, index) {
-                    final user = subadmindata[index];
-                    return UserListItem(user: user,
-                    suspendUser: ()=> context.read<UserBloc>().add(SuspendUserEvent(email: user.email!)),
-                    deleteUser: ()=> context.read<UserBloc>().add(DeleteUserEvent(email: user.email!)),
-                     activeUser: ()=>context.read<UserBloc>().add(ActiveUserEvent(email:user.email!)));
-                  });
-            },
-          ),
-          BlocBuilder<UserBloc, UserState>(
-            builder: (context, state) {
-                  if (state is SuccessState) {
-                   
-                    usersdata = state.listUsers!;
-                  }
-                  
-              return usersdata.isEmpty ? const  Center(child: Text('No Records')): ListView.builder(
-                  itemCount: usersdata.length,
-                  itemBuilder: (context, index) {
-                    final user = usersdata[index];
+            FutureBuilder(future: listSubAdmin(), builder: (context,snapshot){
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return customCircleIndicator();
+                }else if(snapshot.hasError){
+                    return Center(child: CustomText(text: 'Error ${snapshot.error}'),);
+                } else if(!snapshot.hasData || snapshot.data!.isEmpty){
+                    return const Center(child: CustomText(text: 'No SubAdmin records',weight: FontWeight.bold,),);
+                }else{
+                  return ListView.builder(itemCount: snapshot.data!.length,
+                    itemBuilder: (context,index){
+                     final user = snapshot.data![index];
                    
                     return UserListItem(user: user,
                     suspendUser: ()=> context.read<UserBloc>().add(SuspendUserEvent(email: user.email!)),
                     deleteUser: ()=> context.read<UserBloc>().add(DeleteUserEvent(email: user.email!)),
                     activeUser: ()=>context.read<UserBloc>().add(ActiveUserEvent(email:user.email!)));
                   });
-            },
-          )],
+                }
+            }),
+          FutureBuilder(future: listUsers(), builder: (context,snapshot){
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return customCircleIndicator();
+            }else if(snapshot.hasError){
+              return Center(child: CustomText(text: snapshot.error.toString()),);
+            }else if(!snapshot.hasData || snapshot.data!.isEmpty){
+              return const Center(child: CustomText(text: 'No User records',weight: FontWeight.bold,),);
+            }else{
+           return ListView.builder(
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (context, index) {
+                    final user = snapshot.data![index];
+                   
+                    return UserListItem(user: user,
+                    suspendUser: ()=> context.read<UserBloc>().add(SuspendUserEvent(email: user.email!)),
+                    deleteUser: ()=> context.read<UserBloc>().add(DeleteUserEvent(email: user.email!)),
+                    activeUser: ()=>context.read<UserBloc>().add(ActiveUserEvent(email:user.email!)));
+                  });
+  }})],
         )),
       ),
     );

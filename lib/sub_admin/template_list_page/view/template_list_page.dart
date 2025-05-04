@@ -48,6 +48,9 @@ class _TemplatesListPageState extends State<TemplatesListPage> {
         if (state is TemplateLoadingState) {
          EasyLoading.show(maskType: EasyLoadingMaskType.black); 
         }else if(state is TemplateSuccessState){
+          if (state.message == 'data') {
+            context.beamToNamed('/admin/database');
+          }
             setState(() {
               
             });

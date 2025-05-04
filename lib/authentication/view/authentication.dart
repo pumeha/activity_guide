@@ -20,8 +20,8 @@ class AuthenticationPage extends StatefulWidget {
 
 final _formKey = GlobalKey<FormState>();
 class _AuthenticationPageState extends State<AuthenticationPage> {
-  TextEditingController emailController = TextEditingController(text: 'mikeshedrack88@gmail.com');
-  TextEditingController passwordController = TextEditingController(text: 'Shedrack88@');
+  TextEditingController emailController = TextEditingController(text: 'smarterway2024@gmail.com');
+  TextEditingController passwordController = TextEditingController(text: 'Smarter2@');
   bool showPassword = true;
 
   @override

@@ -14,7 +14,7 @@ class SideMenuUsers extends StatefulWidget {
 
 class _SideMenuUsersState extends State<SideMenuUsers> {
   int activeTab = 0;
-  List<String> iconNames = ['Template','Dashboard','Database'];
+  List<String> iconNames = ['Home','Dashboard'];
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -33,19 +33,16 @@ class _SideMenuUsersState extends State<SideMenuUsers> {
 
                   switch(e.index){
                     case 0:
-                     Beamer.of(context).beamToNamed('/home/template');
+                     Beamer.of(context).beamToNamed('/home/landing_page');
                      // context.beamTo(TemplateLocation());
                       break;
                     case 1:
                      // context.beamTo(DashboardLocation());
                      Beamer.of(context).beamToNamed('/home/dashboard');
                       break;
-                    case 2:
-                    //  context.beamTo(DatatableLocation());
-                     Beamer.of(context).beamToNamed('/home/database');
-                      break;
+                
                     default:
-                      Beamer.of(context).beamToNamed('/home/template');
+                      Beamer.of(context).beamToNamed('/home/landing_page');
                       break;
 
                   }

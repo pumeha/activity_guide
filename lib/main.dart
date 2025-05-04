@@ -2,6 +2,7 @@ import 'package:activity_guide/sub_admin/dashboard_page/cubit/dashboard_cubit.da
 import 'package:activity_guide/sub_admin/dashboard_page/repository/dashboard_repository_impl.dart';
 import 'package:activity_guide/sub_admin/template_list_page/bloc/template_bloc.dart';
 import 'package:activity_guide/sub_admin/template_list_page/repository/template_repo_impl.dart';
+import 'package:activity_guide/users/data_collection_page/bloc/data_collection_bloc.dart';
 import 'package:beamer/beamer.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +30,8 @@ Future main() async {
       BlocProvider(create: (_)=> BuilderBloc()),
       BlocProvider(create: (context)=> DashboardCubit(DashboardRepositoryImpl())),
       BlocProvider(create: (_)=> UserBloc(UsersRepoImpl())),
-      BlocProvider(create: (_)=> TemplateBloc(TemplateRepoImpl()))
+      BlocProvider(create: (_)=> TemplateBloc(TemplateRepoImpl())),
+      BlocProvider(create: (_)=> DataCollectionBloc()),
     ],
     child: MyApp(),
   ));

@@ -146,6 +146,56 @@ class TemplateBloc extends Bloc<TemplateEvent,TemplateState>{
       }   
 
     });
+
+    on<TemplateActiveOrInactiveEvent>((event, emit) async{
+      emit(TemplateLoadingState());
+
+       String? token = await MysharedPreference().getPreferences(LoginKeys.token);
+          if (token == null || token.isEmpty) {
+            emit(TemplateFailureState(message: unauthorizedUser));
+            return;
+          }
+
+      dynamic response = await repoImpl.activeTemplate(name: event.templateName, status: event.status, token: token);
+      GeneralJsonDart jsonDart = GeneralJsonDart.fromJson(response);
+      
+      if (jsonDart.status == HttpStatus.ok || jsonDart.status == HttpStatus.created) {
+        String data = jsonEncode(jsonDart.data ?? []);
+        await MysharedPreference().setPreferences(templateListKeys, data);
+        emit(TemplateSuccessState(message: jsonDart.message!));
+      }else{
+        emit(TemplateFailureState(message: jsonDart.message!));
+      }
+
+    });
+
+    on<TemplateFetchDataEvent>((event, emit) async{
+        emit(TemplateLoadingState());
+
+       String? token = await MysharedPreference().getPreferences(LoginKeys.token);
+          if (token == null || token.isEmpty) {
+            emit(TemplateFailureState(message: unauthorizedUser));
+            return;
+          }
+   
+       dynamic response = await repoImpl.fetchTemplateData(name: event.templateName, token: token);
+       
+       GeneralJsonDart jsonDart = GeneralJsonDart.fromJson(response);
+       if (jsonDart.status == HttpStatus.ok) {
+
+            if(jsonDart.data!.isEmpty) {
+              emit(TemplateSuccessState(message: 'No records yet'));
+            }else{
+        String data = jsonEncode(jsonDart.data);
+        await MysharedPreference().setPreferences(template_data, data);
+        emit(TemplateSuccessState(message: 'data'));
+        }
+        
+       }else{
+        emit(TemplateFailureState(message: jsonDart.message!));
+       }
+
+    });
   }
   
 }

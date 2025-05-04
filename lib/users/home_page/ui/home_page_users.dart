@@ -1,4 +1,5 @@
 
+import 'package:activity_guide/user_profile.dart';
 import 'package:activity_guide/users/home_page/ui/large_screen_users.dart';
 import 'package:activity_guide/users/home_page/ui/small_screen_users.dart';
 import 'package:activity_guide/shared/top_nav.dart';
@@ -21,7 +22,8 @@ class _HomePageUsersState extends State<HomePageUsers> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
-      appBar: topNavigationBar(context),
+      endDrawer: const UserProfile(),
+      appBar: topNavigationBar(context: context,scaffoldKey: scaffoldKey),
      // extendBodyBehindAppBar: true,
       body: ResponsiveWidget(largeScreen: LargeScreenUsers(sideMenu: const SideMenuUsers(),),
           smallScreen: const SmallScreenUsers())

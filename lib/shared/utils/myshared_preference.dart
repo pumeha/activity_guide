@@ -44,4 +44,13 @@ class MysharedPreference {
     pref.setInt(key, value);
   }
 
+ Future<String?> getPreferencesWithoutEncrpytion(String key) async{
+    final pref = await SharedPreferences.getInstance();
+    return pref.getString(key);
+  }
+
+  Future<void> setPreferencesWithoutEncrpytion(String key, String value) async{
+    final pref = await SharedPreferences.getInstance();
+    pref.setString(key, value);
+  }
 }

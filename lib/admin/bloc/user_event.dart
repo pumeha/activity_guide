@@ -2,10 +2,6 @@ import '../json2dart/user_json_dart.dart';
 
 abstract class UserEvent {}
 
-class RefreshEvent extends UserEvent {
-  
-} 
-
 class GetDeptUnitEvent extends UserEvent {
   String selectedDept;
   GetDeptUnitEvent({required this.selectedDept});

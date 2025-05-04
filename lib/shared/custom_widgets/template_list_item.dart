@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 
 import 'package:beamer/beamer.dart';
 import '../responsiveness.dart';
-import '../utils/colors.dart';
 
 class TemplateListItem extends StatelessWidget {
   final TemplateModel model;
@@ -17,11 +16,11 @@ class TemplateListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
+    bool isActive = model.status == 'active' ? true : false;
     return  Padding(
                 padding: EdgeInsets.symmetric(
                     horizontal:
-                        ResponsiveWidget.isLargeScreen(context) ? 500 : 100,
+                        ResponsiveWidget.isLargeScreen(context) ? 300 : 80,
                     vertical: 10),
                 child: Card(
                   color: const Color(0xFFFFFFFF),
@@ -33,16 +32,15 @@ class TemplateListItem extends StatelessWidget {
                             child: Center(
                                 child: Text(
                           model.purpose == 'mtemplate' ? 'Monthly Template' :'Workplan Template' ,
-                          style: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 18),
+                          style: const TextStyle( fontWeight: FontWeight.bold, fontSize: 18),
                         ))),
                         Tooltip(
                           message: model.status == 'active' ? 'Active Template' : 'Inactive Template',
-                          child: model.status == 'active' ? const Icon(
-                            Icons.check_circle,color:  active, size: 24,) :
-                             const Icon(Icons.cancel, color:  Colors.yellow,size: 24, ),)
-                      ],
-                    ),
+                          child: Checkbox(value: isActive, onChanged: (v){
+                           context.read<TemplateBloc>().add(TemplateActiveOrInactiveEvent(templateName: model.templateName,
+                            status: model.status!));
+                          }),)
+                      ],),
                     subtitle: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -60,6 +58,14 @@ class TemplateListItem extends StatelessWidget {
                                 icon: const Icon(Icons.preview,
                                     color: Colors.green, size: 24),
                                 tooltip: 'Preview Template',
+                              ),
+                              IconButton(
+                                onPressed: () {
+                         context.read<TemplateBloc>().add(TemplateFetchDataEvent(templateName: model.templateName));
+                                },
+                                icon: const Icon(Icons.dataset,
+                                    color: Colors.black, size: 24),
+                                tooltip: 'Template Database',
                               ),
                               IconButton(
                                 icon: const Icon(Icons.edit,

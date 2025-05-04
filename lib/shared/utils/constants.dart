@@ -58,6 +58,11 @@ const subAdmin = 'sub-admin';
 const user = 'user';
 const defaultDashboard = "https://1drv.ms/x/c/979292c95e1c918d/IQQ71B29H8udTogIbikm_fajAVnJ8TicsaX8QVwmsc67aS8?em=2&AllowTyping=True&wdHideGridlines=True&wdHideHeaders=True&wdDownloadButton=True&wdInConfigurator=True&wdInConfigurator=True";
 const unauthorizedUser = 'Unauthorized User';
+const monthlyTemplateKey = 'monthlyTemplate';
+const workplanTemplateKey = 'workplanTemplate';
+const dataCollectionKey = 'dataCollection';
+const selectedTemplate = 'stemplate';
+
 String templateName(String purpose){
   DateTime dateTime = DateTime.now();
   String value = dateTime.year.toString() + (dateTime.month+1).toString() + dateTime.day.toString() +

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class GeneralJsonDart {
  String?  message;
   List<dynamic>? data; 
@@ -9,8 +7,13 @@ class GeneralJsonDart {
 
   GeneralJsonDart.fromJson(Map<String, dynamic> response) {
     message = response['message'];
-    if (response['data'] != null) {
+    var rawData = response['data'];
+    if (rawData != null && rawData is List) {
       data = List<dynamic>.from(response['data']); // Adjusted to handle dynamic data
+    }else if(rawData is Map){
+      data = [rawData];
+    }else{
+      data = [];
     }
     status = response['status'];
   }

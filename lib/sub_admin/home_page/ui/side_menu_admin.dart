@@ -13,8 +13,7 @@ class SideMenuAdmin extends StatefulWidget {
 
 class _SideMenuAdminState extends State<SideMenuAdmin> {
   int activeTab = 0;
-  List<String> iconNames = ['Templates','Dashboard',
-                              'Database'];
+  List<String> iconNames = ['Templates','Dashboard'];
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -39,10 +38,6 @@ class _SideMenuAdminState extends State<SideMenuAdmin> {
                       Beamer.of(context).beamToNamed(
                           '/admin/dashboard');
                       break;
-                    case 2:
-                      Beamer.of(context).beamToNamed('/admin/database');
-                      break;
-                    
 
                     default:
                       Beamer.of(context).beamToNamed(

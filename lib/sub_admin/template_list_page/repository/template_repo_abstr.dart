@@ -7,4 +7,8 @@ abstract class TemplateRepoAbstr {
 
   Future<Map<String,dynamic>> deleteTemplate({required String name,required String token});                          
 
+  Future<Map<String,dynamic>> activeTemplate({required String name,required String status,required String token});
+
+   Future<Map<String,dynamic>> fetchTemplateData({required String name,required String token});  
+ 
 }

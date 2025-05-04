@@ -1,6 +1,4 @@
-import 'package:activity_guide/shared/utils/rowdata_model.dart';
 import 'package:activity_guide/sub_admin/template_list_page/template_model.dart';
-
 abstract class TemplateState {
  
 }

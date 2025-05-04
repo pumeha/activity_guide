@@ -22,7 +22,7 @@ class DashboardPage extends StatefulWidget {
 
 class _DashboardPageState extends State<DashboardPage>
     with AutomaticKeepAliveClientMixin {
-  Timer? _timer;
+ // Timer? _timer;
   String? dashboardurl;
   InAppWebViewController? webViewController;
   
@@ -31,11 +31,11 @@ class _DashboardPageState extends State<DashboardPage>
     // TODO: implement initState
     super.initState();
 
-    EasyLoading.addStatusCallback((status) {
-      if (status == EasyLoadingStatus.dismiss) {
-        _timer?.cancel();
-      }
-    });
+    // EasyLoading.addStatusCallback((status) {
+    //   if (status == EasyLoadingStatus.dismiss) {
+    //     _timer?.cancel();
+    //   }
+    // });
 
   }
 
@@ -145,7 +145,7 @@ final _formKey = GlobalKey<FormState>();
                           webViewController = controller;
                         },
                         onLoadStart: (controller, url) {
-                          _timer?.cancel();
+                         // _timer?.cancel();
                           EasyLoading.dismiss();
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
@@ -172,12 +172,12 @@ final _formKey = GlobalKey<FormState>();
                         },
                         onLoadStop: (controller, url) {
                              print(' onLoadStop');
-                           _timer?.cancel();
+                         //  _timer?.cancel();
                           EasyLoading.dismiss();
                         },
                        onReceivedError: (controller, request, error){
                           print('onReceivedError');
-                          _timer?.cancel();
+                        //  _timer?.cancel();
                           EasyLoading.dismiss();
                           EasyLoading.showError(error.description);
                        },

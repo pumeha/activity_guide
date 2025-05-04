@@ -1,13 +1,14 @@
 
+import 'package:activity_guide/users/home_page/ui/user_landing_page.dart';
 import 'package:beamer/beamer.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
 import '../../sub_admin/data_table_page/data_table.dart';
 import '../../shared/utils/constants.dart';
-import '../edit_template_page/editing_monthly_template.dart';
+import '../edit_data_collection/edit_data_collection_page.dart';
 import '../home_page/ui/home_page_users.dart';
-import '../monthly_template_page/monthly_template.dart';
-import '../template_page/user_dashboard_page.dart';
+import '../data_collection_page/data_collection_page.dart';
+import '../dashboard_page/user_dashboard_page.dart';
 
 class HomeLocationUsers extends BeamLocation{
   @override
@@ -21,7 +22,7 @@ class HomeLocationUsers extends BeamLocation{
   @override
   // TODO: implement pathPatterns
   List<Pattern> get pathPatterns => ['/home','/home/template','/home/database',
-    '/home/dashboard','/home/data_entry'];
+    '/home/dashboard','/home/data_entry','/home/landing_page'];
 }
 
 class UserDashboardLocation extends BeamLocation{
@@ -39,7 +40,7 @@ class UserDashboardLocation extends BeamLocation{
 class DatatableLocation extends BeamLocation {
   @override
   List<BeamPage> buildPages(BuildContext context, RouteInformationSerializable<dynamic> state) {
-    return [BeamPage(child: MyTable(),title: appName,
+    return [const BeamPage(child: MyTable(),title: appName,
         key: ValueKey('database'))];
   }
 
@@ -48,11 +49,11 @@ class DatatableLocation extends BeamLocation {
 
 }
 
-class MonthlyTemplateLocation extends BeamLocation{
+class DataCollectionPageLocation extends BeamLocation{
 
   @override
   List<BeamPage> buildPages(BuildContext context, RouteInformationSerializable<dynamic> state) {
-    return [BeamPage(child: MonthlyTemplate(),key: ValueKey('template'),title: 'Activity Guide'),
+    return [BeamPage(child: DataCollectionPage(),key: ValueKey('template'),title: 'Activity Guide'),
     ];
   }
 
@@ -65,11 +66,23 @@ class MonthlyTemplateLocation extends BeamLocation{
 class EditingMonthlyTemplateLocation extends BeamLocation{
   @override
   List<BeamPage> buildPages(BuildContext context, RouteInformationSerializable<dynamic> state) {
-    return [const BeamPage(child: EditingMonthlyTemplate(),key: ValueKey('data_entry'),title: 'Activity Guide')];
+    return [const BeamPage(child: EditDataCollectionPage(),key: ValueKey('data_entry'),title: 'Activity Guide')];
   }
 
   @override
   // TODO: implement pathPatterns
   List<Pattern> get pathPatterns => ['/home/data_entry'];
 
+}
+
+class UserLandingPageLocation extends BeamLocation {
+  @override
+  List<BeamPage> buildPages(BuildContext context, RouteInformationSerializable state) {
+    return [const BeamPage(child: UserLandingPage(),title:  appName,key: ValueKey('landing'))];
+  }
+
+  @override
+  // TODO: implement pathPatterns
+  List<Pattern> get pathPatterns => ['/home/landing_page'];
+  
 }
