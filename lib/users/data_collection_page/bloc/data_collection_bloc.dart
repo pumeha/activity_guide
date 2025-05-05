@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:beamer/beamer.dart';
 import 'package:activity_guide/shared/utils/constants.dart';
 import 'package:activity_guide/shared/utils/myshared_preference.dart';
 import 'package:bloc/bloc.dart';
@@ -12,7 +11,12 @@ class DataCollectionBloc extends Bloc<DataCollectionEvent, DataCollectionState> 
 
     on<LoadDataCollectionMonthlyTemplateEvent>((event, emit) async{
       emit(DataCollectionStateLoading());
-      await MysharedPreference().setPreferences(selectedTemplate, 'monthly');
+
+      await Future.wait([
+        MysharedPreference().clearPreference(dataCollectionKey),
+        MysharedPreference().setPreferences(selectedTemplate, 'monthly')
+      ]);
+
       String? monthlyTemplate = await MysharedPreference().getPreferences(monthlyTemplateKey);
       if (monthlyTemplate != null && monthlyTemplate.isNotEmpty) {
         final monthlyTemplateList = jsonDecode(monthlyTemplate) as List<dynamic>;
@@ -23,7 +27,11 @@ class DataCollectionBloc extends Bloc<DataCollectionEvent, DataCollectionState> 
     });
 
     on<LoadDataCollectionWorkplanTemplateEvent>((event, emit) async{
-      await MysharedPreference().setPreferences(selectedTemplate, 'workplan');
+      await Future.wait([
+        MysharedPreference().clearPreference(dataCollectionKey),
+         MysharedPreference().setPreferences(selectedTemplate, 'workplan')
+      ]);
+      
       String? workplanTemplate = await MysharedPreference().getPreferences(workplanTemplateKey);
       if (workplanTemplate != null && workplanTemplate.isNotEmpty) {
         final workplanTemplateList = jsonDecode(workplanTemplate) as List<dynamic>;
@@ -38,7 +46,7 @@ class DataCollectionBloc extends Bloc<DataCollectionEvent, DataCollectionState> 
       if (template != null && template.isNotEmpty) {
         if (template == 'monthly') {
             emit(DataCollectionStateLoading());
-            await MysharedPreference().setPreferences(selectedTemplate, 'monthly');
+        
             String? monthlyTemplate = await MysharedPreference().getPreferences(monthlyTemplateKey);
             if (monthlyTemplate != null && monthlyTemplate.isNotEmpty) {
               final monthlyTemplateList = jsonDecode(monthlyTemplate) as List<dynamic>;
@@ -46,7 +54,7 @@ class DataCollectionBloc extends Bloc<DataCollectionEvent, DataCollectionState> 
             }else{
               emit(DataCollectionStateFailure(errorMessage: 'Monthly template not created'));
             }
-      } else {
+      } else{
             String? workplanTemplate = await MysharedPreference().getPreferences(workplanTemplateKey);
             if (workplanTemplate != null && workplanTemplate.isNotEmpty) {
               final workplanTemplateList = jsonDecode(workplanTemplate) as List<dynamic>;
@@ -75,19 +83,19 @@ class DataCollectionBloc extends Bloc<DataCollectionEvent, DataCollectionState> 
           } else {
              newData['ID'] =  (list.length +1).toString();
           list.add(newData);
-          }
-         
-        } else {
+          }} else {
           list.add(newData);
         }
+        
       await MysharedPreference().setPreferencesWithoutEncrpytion(dataCollectionKey, jsonEncode(list));
     });
 
-    on<EditDataCollectionEvent>((event, emit) {
+    on<DataCollectionEditEvent>((event, emit) {
       
       emit(DataCollectionEditState(editData: event.data,templatData: state.data));
     });
-    
+
+
   }
 
 }

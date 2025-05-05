@@ -7,6 +7,8 @@ import 'package:beamer/beamer.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import '../../data_collection_page/bloc/data_collection_state.dart';
+import '../cubit/user_home_cubit.dart';
+import '../cubit/user_home_state.dart';
 
 class UserLandingPage extends StatefulWidget {
   const UserLandingPage({super.key});
@@ -18,17 +20,33 @@ class UserLandingPage extends StatefulWidget {
 class _UserLandingPageState extends State<UserLandingPage> {
   @override
   Widget build(BuildContext context) {
-    return BlocListener<DataCollectionBloc, DataCollectionState>(
-      listener: (context, state) {
-        if (state is DataCollectionStateLoading) {
-          EasyLoading.show(maskType: EasyLoadingMaskType.black);
-        }else if(state is DataCollectionStateFailure){
-            EasyLoading.showError(state.errorMessage);
-        }else{
-          EasyLoading.showSuccess('Template Loaded Successful');
-          context.beamToNamed('/home/template');
-        }
-      },
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<DataCollectionBloc, DataCollectionState>(
+          listener: (context, state) {
+            if (state is DataCollectionStateLoading) {
+              EasyLoading.show(maskType: EasyLoadingMaskType.black);
+            } else if (state is DataCollectionStateFailure) {
+              EasyLoading.showError(state.errorMessage);
+            } else {
+              EasyLoading.showSuccess('Template Loaded Successful');
+              context.beamToNamed('/home/template');
+            }
+          },
+        ),
+        BlocListener<UserHomeCubit, UserHomeState>(
+          listener: (context, state) {
+            if (state is UserHomeLoading) {
+              EasyLoading.show(maskType: EasyLoadingMaskType.black);
+            } else if(state is UserHomeSuccess) {
+              EasyLoading.showSuccess('Success');
+              context.beamToNamed('/home/database');
+            }else if(state is UserHomeFailure){
+                EasyLoading.showError(state.message!);
+            }
+          },
+        ),
+      ],
       child: Scaffold(
         body: SingleChildScrollView(
           child: Column(
@@ -59,7 +77,9 @@ class _UserLandingPageState extends State<UserLandingPage> {
                 children: [
                   MaterialButton(
                     onPressed: () {
-                      context.read<DataCollectionBloc>().add(LoadDataCollectionMonthlyTemplateEvent());
+                      context
+                          .read<DataCollectionBloc>()
+                          .add(LoadDataCollectionMonthlyTemplateEvent());
                     },
                     color: const Color.fromARGB(203, 4, 89, 68),
                     child: const Padding(
@@ -76,7 +96,9 @@ class _UserLandingPageState extends State<UserLandingPage> {
                   ),
                   MaterialButton(
                     onPressed: () {
-                      context.read<DataCollectionBloc>().add(LoadDataCollectionWorkplanTemplateEvent());
+                      context
+                          .read<DataCollectionBloc>()
+                          .add(LoadDataCollectionWorkplanTemplateEvent());
                     },
                     color: const Color.fromARGB(255, 37, 78, 89),
                     child: const Padding(
@@ -98,7 +120,7 @@ class _UserLandingPageState extends State<UserLandingPage> {
                 children: [
                   MaterialButton(
                     onPressed: () {
-                      context.beamToNamed('/home/database');
+                      context.read<UserHomeCubit>().downloadMonthlyData();
                     },
                     color: const Color.fromARGB(100, 75, 66, 66),
                     child: const Padding(
@@ -115,7 +137,7 @@ class _UserLandingPageState extends State<UserLandingPage> {
                   ),
                   MaterialButton(
                     onPressed: () {
-                      context.beamToNamed('/home/database');
+                      context.read<UserHomeCubit>().downloadWorkplanData();
                     },
                     color: const Color.fromARGB(255, 224, 173, 20),
                     child: const Padding(

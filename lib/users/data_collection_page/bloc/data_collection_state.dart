@@ -32,3 +32,4 @@ class DataCollectionEditState extends DataCollectionState {
   List<dynamic>? templatData;
   DataCollectionEditState({required this.editData, required templatData}) :super(data: templatData);
 }
+

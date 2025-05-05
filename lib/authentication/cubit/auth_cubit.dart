@@ -65,18 +65,36 @@ class AuthCubit extends Cubit<AuthCubitState>{
     emit(AuthSuccess(loginValues.role!));
       }
       else{
+         String monthlyTempleJsonString;
+        if (data.data![0][monthlyTemplateKey] != null && data.data![0][monthlyTemplateKey] ) {
+            final monthlyTempleJson = data.data![0][monthlyTemplateKey] as List<dynamic>;
+            monthlyTempleJsonString = jsonEncode(monthlyTempleJson.toList());
+
+            await Future.wait([
+               MysharedPreference().setPreferences(monthlyTemplateName, data.data![0][monthlyTemplateName]),
+               MysharedPreference().setPreferences(monthlyTemplateKey,monthlyTempleJsonString )
+            ]);
+        }
+      
+
+        String workplanTemplateJsonString;
+        if (data.data![0][workplanTemplateKey] != null) {
         
-        final monthlyTempleJson = data.data![0][monthlyTemplateKey] as List<dynamic>;
-        String monthlyTempleJsonString = jsonEncode(monthlyTempleJson.toList());
+          final workplanTemplateJson = data.data![0][workplanTemplateKey] as List<dynamic>;
+        workplanTemplateJsonString = jsonEncode(workplanTemplateJson.toList());
+
+        await Future.wait([
+          MysharedPreference().setPreferences(workplanTemplateKey, workplanTemplateJsonString),
+          MysharedPreference().setPreferences(workplanTemplateName, data.data![0][workplanTemplateName])
+        ]);
+        }
 
       await Future.wait([
-        MysharedPreference().setPreferences(LoginKeys.role,  loginValues.role!),
-        MysharedPreference().setPreferences( LoginKeys.token, loginValues.token!),
-        MysharedPreference().setPreferences( DashboardKey.link,loginValues.dashboardurl!),
-        MysharedPreference().setPreferences(fullnameKey, data.data![0]['fullname']),
-        MysharedPreference().setPreferences(deptKey, data.data![0]['dept'] ),
-        MysharedPreference().setPreferences(monthlyTemplateKey,monthlyTempleJsonString ),
-      //  MysharedPreference().setPreferences(workplanTemplateKey, data.data![0][workplanTemplateKey])
+      MysharedPreference().setPreferences(LoginKeys.role,  loginValues.role!),
+      MysharedPreference().setPreferences( LoginKeys.token, loginValues.token!),
+      MysharedPreference().setPreferences( DashboardKey.link,loginValues.dashboardurl!),
+      MysharedPreference().setPreferences(fullnameKey, data.data![0]['fullname']),
+      MysharedPreference().setPreferences(deptKey, data.data![0]['dept'] ),
       ]);
 
        emit(AuthSuccess(loginValues.role!));

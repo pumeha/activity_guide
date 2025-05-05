@@ -82,7 +82,7 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
                       if (editValues.isNotEmpty && editValues.isNotEmpty) {
            context.read<DataCollectionBloc>().add(AddDataFromDataCollectionEvent(data: data,updateId: editValues[0]['ID']));
                       } else {
-       context.read<DataCollectionBloc>().add(AddDataFromDataCollectionEvent(data: data));
+                      context.read<DataCollectionBloc>().add(AddDataFromDataCollectionEvent(data: data));
                       }
                       context.read<DataCollectionBloc>().add(LoadSelectedDataCollectionTemplateEvent());
                       setState(() {

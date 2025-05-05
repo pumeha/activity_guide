@@ -15,6 +15,8 @@ static String updateTemplate = "$baseUrl/template/update";
 static String getTemplateData = "$baseUrl/template/fetch";
 static String templateActive = "$baseUrl/template/active";
 static String dashboard = "$baseUrl/template/dashboard";
+static String uploadTemplateData = "$baseUrl/template/upload";
+static String fetchData = "$baseUrl/template/fetch";
 }
 
 class UserRoutes {

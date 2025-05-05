@@ -16,9 +16,8 @@ class AuthRepositoryImpl extends AuthRepositoryAbstract {
 
   @override
   Future<Map<String,dynamic>> login(String email, String password) async{
-    
 
-  dynamic body = jsonEncode({"email":email,"password":password});
+   dynamic body = jsonEncode({"email":email,"password":password});
    Map<String,dynamic> response = await HttpHandlerImpl.instance.post(url: LoginRoutes.loginRoute, body: body);
    return response;
 

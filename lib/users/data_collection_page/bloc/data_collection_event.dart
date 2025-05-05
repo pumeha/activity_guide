@@ -18,7 +18,12 @@ class AddDataFromDataCollectionEvent extends DataCollectionEvent {
   AddDataFromDataCollectionEvent({required this.data,this.updateId});
 }
 
-class EditDataCollectionEvent extends DataCollectionEvent {
+class DataCollectionEditEvent extends DataCollectionEvent {
   List<dynamic> data;
-  EditDataCollectionEvent({required this.data});
+  DataCollectionEditEvent({required this.data});
+}
+
+class RemoveDataCollectionEvent extends DataCollectionEvent {
+  List<dynamic> data;
+  RemoveDataCollectionEvent({required this.data});
 }

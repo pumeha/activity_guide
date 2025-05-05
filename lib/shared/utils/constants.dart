@@ -62,6 +62,8 @@ const monthlyTemplateKey = 'monthlyTemplate';
 const workplanTemplateKey = 'workplanTemplate';
 const dataCollectionKey = 'dataCollection';
 const selectedTemplate = 'stemplate';
+const monthlyTemplateName = 'monthlyTemplateName';
+const workplanTemplateName = 'workplanTemplateName';
 
 String templateName(String purpose){
   DateTime dateTime = DateTime.now();
