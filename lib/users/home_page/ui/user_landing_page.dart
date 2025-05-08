@@ -1,5 +1,6 @@
 import 'package:activity_guide/shared/custom_widgets/custom_text.dart';
 import 'package:activity_guide/shared/utils/colors.dart';
+import 'package:activity_guide/users/dashboard_page/cubit/user_dashboard_cubit.dart';
 import 'package:activity_guide/users/data_collection_page/bloc/data_collection_bloc.dart';
 import 'package:activity_guide/users/data_collection_page/bloc/data_collection_event.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,13 @@ class UserLandingPage extends StatefulWidget {
 }
 
 class _UserLandingPageState extends State<UserLandingPage> {
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    context.read<UserDashboardCubit>().show(false);
+  }
   @override
   Widget build(BuildContext context) {
     return MultiBlocListener(

@@ -18,3 +18,11 @@ class DashboardFailure extends DashboardCubitState {
   final String? errorMessage;
   DashboardFailure({this.errorMessage});
 }
+
+class DashboardShow extends DashboardCubitState {
+  
+}
+
+class DashboardHide extends DashboardCubitState {
+  
+}

@@ -31,4 +31,7 @@ class DashboardCubit extends Cubit<DashboardCubitState> {
       emit(DashboardFailure(errorMessage: data.message));
     }
   }
+
+  void showDashboard(){emit(DashboardShow());}
+  void hideDashboard(){emit(DashboardHide());}
 }

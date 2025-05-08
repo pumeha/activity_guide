@@ -66,7 +66,7 @@ class AuthCubit extends Cubit<AuthCubitState>{
       }
       else{
          String monthlyTempleJsonString;
-        if (data.data![0][monthlyTemplateKey] != null && data.data![0][monthlyTemplateKey] ) {
+        if (data.data![0][monthlyTemplateKey] != null ) {
             final monthlyTempleJson = data.data![0][monthlyTemplateKey] as List<dynamic>;
             monthlyTempleJsonString = jsonEncode(monthlyTempleJson.toList());
 

@@ -18,13 +18,13 @@ class _UserProfileState extends State<UserProfile> {
   @override
   void initState() {
     super.initState();
-  }
+     }
 
   Future<List<String>> loadUserDetails() async{
    String fullname = await MysharedPreference().getPreferences(fullnameKey) ?? '';
    String role = await MysharedPreference().getPreferences(LoginKeys.role) ?? '';
-    String dept = await MysharedPreference().getPreferences(deptKey) ?? '';
-    return [role,fullname,dept];
+   String dept = await MysharedPreference().getPreferences(deptKey) ?? '';
+   return [role,fullname,dept];
   }
 
   @override
@@ -41,7 +41,7 @@ class _UserProfileState extends State<UserProfile> {
                 return const CustomText(text: 'No User Details');
           }else {
             
-        
+       
        return ListView(
             children:  [
               const DrawerHeader(decoration: BoxDecoration(color: active),

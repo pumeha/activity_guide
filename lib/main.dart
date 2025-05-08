@@ -2,6 +2,7 @@ import 'package:activity_guide/sub_admin/dashboard_page/cubit/dashboard_cubit.da
 import 'package:activity_guide/sub_admin/dashboard_page/repository/dashboard_repository_impl.dart';
 import 'package:activity_guide/sub_admin/template_list_page/bloc/template_bloc.dart';
 import 'package:activity_guide/sub_admin/template_list_page/repository/template_repo_impl.dart';
+import 'package:activity_guide/users/dashboard_page/cubit/user_dashboard_cubit.dart';
 import 'package:activity_guide/users/data_collection_page/bloc/data_collection_bloc.dart';
 import 'package:activity_guide/users/edit_data_collection/bloc/edit_data_collection_bloc.dart';
 import 'package:activity_guide/users/edit_data_collection/repo/edit_repo_impl.dart';
@@ -37,7 +38,8 @@ Future main() async {
       BlocProvider(create: (_)=> TemplateBloc(TemplateRepoImpl())),
       BlocProvider(create: (_)=> DataCollectionBloc()),
       BlocProvider(create: (_)=> EditDataCollectionBloc(EditRepoImpl())),
-      BlocProvider(create: (_)=> UserHomeCubit(UserHomeImpl()))
+      BlocProvider(create: (_)=> UserHomeCubit(UserHomeImpl())),
+      BlocProvider(create: (_)=> UserDashboardCubit())
     ],
     child: MyApp(),
   ));
