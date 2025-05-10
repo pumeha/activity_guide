@@ -31,7 +31,7 @@ class MysharedPreference {
     final encrypter = Encrypter(AES(s_key));
     final encrypted = encrypter.encrypt(value, iv: _iv);
     final pref = await SharedPreferences.getInstance();
-    pref.setString(key, encrypted.base64);
+   await pref.setString(key, encrypted.base64);
   }
 
   Future<int?> getPreferencesI(String key) async{
@@ -41,7 +41,7 @@ class MysharedPreference {
 
   Future<void> setPreferencesI(String key, int value) async{
     final pref = await SharedPreferences.getInstance();
-    pref.setInt(key, value);
+   await pref.setInt(key, value);
   }
 
  Future<String?> getPreferencesWithoutEncrpytion(String key) async{
@@ -51,11 +51,11 @@ class MysharedPreference {
 
   Future<void> setPreferencesWithoutEncrpytion(String key, String value) async{
     final pref = await SharedPreferences.getInstance();
-    pref.setString(key, value);
+   await pref.setString(key, value);
   }
 
-  Future<void> clearPreference(String key) async{
+  Future<void> clearPreference() async{
   final pref =  await SharedPreferences.getInstance();
-  pref.remove(key);
+  await pref.clear();
   }
 }

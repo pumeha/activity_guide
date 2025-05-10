@@ -16,14 +16,17 @@ class EditDataCollectionBloc extends Bloc<EditDataCollectionEvent, EditDataColle
   EditDataCollectionBloc(this.impl) : super(EditInitailState()) {
 
     on<DeleteDataRow>((event, emit) async{
-    //print(event.data);
-    
-    
      emit(EditSuccessState());
     });
 
     on<UploadDataEvent>((event, emit) async{
       emit(EditLoadingState());
+
+      bool onlineOrOffline = await isDeviceOffline_Return_True();
+      if (onlineOrOffline) {
+       emit(EditFailureState(message: 'No internet connection')); return ;
+      }
+
       String? _selectedTemplate = await MysharedPreference().getPreferences(selectedTemplate);
       String? workplanTName = await MysharedPreference().getPreferences(workplanTemplateName);
       String? monthTName = await MysharedPreference().getPreferences(monthlyTemplateName);
@@ -31,7 +34,7 @@ class EditDataCollectionBloc extends Bloc<EditDataCollectionEvent, EditDataColle
         for (var element in event.data) {
           element.remove('ID');
         }
-        print(event.data);
+      
       if(event.data.isEmpty) {
         emit(EditFailureState(message: 'No data to upload'));
         return;
@@ -42,7 +45,7 @@ class EditDataCollectionBloc extends Bloc<EditDataCollectionEvent, EditDataColle
         emit(EditFailureState(message: 'Unauthorized User'));
         return;
       }
-      print(_selectedTemplate);
+     
 
       if(_selectedTemplate != null && _selectedTemplate.isNotEmpty &&_selectedTemplate == 'monthly' && 
       monthTName != null && monthTName.isNotEmpty){
@@ -50,7 +53,7 @@ class EditDataCollectionBloc extends Bloc<EditDataCollectionEvent, EditDataColle
 
        final response = await impl.upload(url: TemplateRoutes.uploadTemplateData, templateName: monthTName,
        data: event.data, token: token);
-       print('response $response');
+       
 
        GeneralJsonDart jsonDart = GeneralJsonDart.fromJson(response);
        if (jsonDart.status == HttpStatus.created || jsonDart.status == HttpStatus.ok) {

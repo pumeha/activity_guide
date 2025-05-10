@@ -17,9 +17,15 @@ class TemplateBloc extends Bloc<TemplateEvent,TemplateState>{
       on<UploadEvent>((event, emit) async{
        
       List<String> jsonObject = [];
+      
       if(event.rows.isEmpty){
         EasyLoading.showError('No records to save');
         return;
+      }
+
+      bool onlineOrOffline = await isDeviceOffline_Return_True();
+      if (onlineOrOffline) {
+        emit(TemplateFailureState(message: 'No internet connection')); return;
       }
      
       for (var row in event.rows) {
@@ -68,7 +74,6 @@ class TemplateBloc extends Bloc<TemplateEvent,TemplateState>{
     on<TemplatePurposeEvent>((event, emit) async{
     await  MysharedPreference().setPreferences(BuilderKeys.purpose, event.purpose);
     });
-
     
     on<TemplateSelectedEvent>((event, emit) {
      emit(TemplateSelectedState(model: event.model));
@@ -80,6 +85,11 @@ class TemplateBloc extends Bloc<TemplateEvent,TemplateState>{
       if(event.rows.isEmpty){
         EasyLoading.showError('No changes to made');
         return;
+      }
+
+      bool onlineOrOffline = await isDeviceOffline_Return_True();
+      if (onlineOrOffline) {
+        emit(TemplateFailureState(message: 'No internet connection')); return;
       }
      
       for (var row in event.rows) {
@@ -123,14 +133,20 @@ class TemplateBloc extends Bloc<TemplateEvent,TemplateState>{
     });
 
     on<TemplateDeleteEvent>((event, emit) async{
-     
-    String? token = await MysharedPreference().getPreferences(LoginKeys.token);
-          if (token == null || token.isEmpty) {
-            emit(TemplateFailureState(message: unauthorizedUser));
-            return;
-          }
-
+      
       emit(TemplateLoadingState());
+
+      bool onlineOrOffline = await isDeviceOffline_Return_True();
+      if (onlineOrOffline) {
+        emit(TemplateFailureState(message: 'No internet connection')); return;
+      }
+
+      String? token = await MysharedPreference().getPreferences(LoginKeys.token);
+      if (token == null || token.isEmpty) {
+        emit(TemplateFailureState(message: unauthorizedUser));
+        return;
+      }
+
       
       dynamic response = await repoImpl.deleteTemplate(name: event.templateName, token: token);
       GeneralJsonDart jsonDart = GeneralJsonDart.fromJson(response);
@@ -149,6 +165,11 @@ class TemplateBloc extends Bloc<TemplateEvent,TemplateState>{
 
     on<TemplateActiveOrInactiveEvent>((event, emit) async{
       emit(TemplateLoadingState());
+
+      bool onlineOrOffline = await isDeviceOffline_Return_True();
+      if (onlineOrOffline) {
+        emit(TemplateFailureState(message: 'No internet connection')); return;
+      }
 
        String? token = await MysharedPreference().getPreferences(LoginKeys.token);
           if (token == null || token.isEmpty) {
@@ -171,6 +192,11 @@ class TemplateBloc extends Bloc<TemplateEvent,TemplateState>{
 
     on<TemplateFetchDataEvent>((event, emit) async{
         emit(TemplateLoadingState());
+
+      bool onlineOrOffline = await isDeviceOffline_Return_True();
+      if (onlineOrOffline) {
+        emit(TemplateFailureState(message: 'No internet connection')); return;
+      }
 
        String? token = await MysharedPreference().getPreferences(LoginKeys.token);
           if (token == null || token.isEmpty) {

@@ -31,9 +31,9 @@ Future main() async {
 
   runApp(MultiBlocProvider(
     providers: [
-      BlocProvider(create: (context) => AuthCubit(AuthRepositoryImpl()),),
+      BlocProvider(create: (_) => AuthCubit(AuthRepositoryImpl()),),
       BlocProvider(create: (_)=> BuilderBloc()),
-      BlocProvider(create: (context)=> DashboardCubit(DashboardRepositoryImpl())),
+      BlocProvider(create: (_)=> DashboardCubit(DashboardRepositoryImpl())),
       BlocProvider(create: (_)=> UserBloc(UsersRepoImpl())),
       BlocProvider(create: (_)=> TemplateBloc(TemplateRepoImpl())),
       BlocProvider(create: (_)=> DataCollectionBloc()),

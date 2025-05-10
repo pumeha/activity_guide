@@ -1,16 +1,13 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-
 import 'package:activity_guide/sub_admin/dashboard_page/cubit/dashboard_cubit.dart';
 import '../../../shared/custom_widgets/custom_text.dart';
 import 'package:activity_guide/shared/utils/constants.dart';
 import 'package:activity_guide/shared/utils/http_helper/storage_keys.dart';
 import 'package:activity_guide/shared/utils/myshared_preference.dart';
-
 import 'cubit/dashboard_cubit_state.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -23,7 +20,7 @@ class DashboardPage extends StatefulWidget {
 class _DashboardPageState extends State<DashboardPage>
     with AutomaticKeepAliveClientMixin {
   // Timer? _timer;
-  String? dashboardurl;
+
   InAppWebViewController? webViewController;
 
   @override
@@ -33,8 +30,9 @@ class _DashboardPageState extends State<DashboardPage>
     context.read<DashboardCubit>().hideDashboard();
   }
 
-  Future<void> getDashboardUrl() async {
-    dashboardurl = await MysharedPreference().getPreferences(DashboardKey.link);
+  Future<String> getDashboardUrl() async {
+    String? dashboardurl;  dashboardurl = await MysharedPreference().getPreferences(DashboardKey.link);
+    return dashboardurl ?? '';
   }
 
   TextEditingController urlController = TextEditingController();
@@ -62,8 +60,14 @@ class _DashboardPageState extends State<DashboardPage>
         child: FutureBuilder(
             future: getDashboardUrl(),
             builder: (context, snapshot) {
+            
               if (snapshot.connectionState == ConnectionState.done) {
-                urlController.text = dashboardurl!;
+                if (snapshot.data == null && snapshot.data!.isEmpty) {
+                  EasyLoading.showInfo('No Dashboard found');
+                } else {
+                  urlController.text = snapshot.data!;
+                }
+                
                 return Column(
                   children: [
                     Padding(
@@ -87,16 +91,11 @@ class _DashboardPageState extends State<DashboardPage>
                               ),
                             ),
                             TextButton(
-                                onPressed: () {
+                                onPressed: () async{
+                                  
                                   if (_formKey.currentState!.validate()) {
-                                    var url = WebUri(urlController.text);
-                                    //  if (url.scheme.isEmpty) {
-                                    //     url = WebUri(url);
-                                    //   }
-                                    webViewController!.loadUrl(
-                                        urlRequest: URLRequest(url: url));
-                                    //  _timer?.cancel();
-                                    EasyLoading.show(status: 'Loading');
+                                      context.read<DashboardCubit>().showDashboard();
+                                    
                                   }
                                 },
                                 child: const CustomText(
@@ -108,89 +107,77 @@ class _DashboardPageState extends State<DashboardPage>
                               child: FilledButton(
                                   onPressed: () {
                                     if (_formKey.currentState!.validate()) {
-                                      context
-                                          .read<DashboardCubit>()
-                                          .updateDashboardUrl(
-                                              dashbordUrl: urlController.text);
-                                    }
-                                  },
+                              context.read<DashboardCubit>().updateDashboardUrl( dashbordUrl: urlController.text);
+                                    }},
                                   child: const CustomText(
                                     text: 'Save',
                                     weight: FontWeight.bold,
                                     color: Colors.white,
-                                  )),
-                            )
+                                  )),)
                           ],
                         ),
                       ),
                     ),
                     BlocBuilder<DashboardCubit, DashboardCubitState>(
                       builder: (context, state) {
-                        if(state is! DashboardHide){
-                        return Expanded(
-                          child: InAppWebView(
-                            keepAlive: InAppWebViewKeepAlive(),
-                            initialSettings: InAppWebViewSettings(
-                                cacheMode: CacheMode.LOAD_CACHE_ELSE_NETWORK,
-                                javaScriptEnabled: true),
-                            onWebViewCreated: (controller) {
-                              webViewController = controller;
-                            },
-                            onLoadStart: (controller, url) {
-                              // _timer?.cancel();
-                              EasyLoading.dismiss();
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: const Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      Expanded(
-                                          child: Text(
-                                        'Initializing Dashboard...',
-                                        style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold),
-                                      )),
-                                      CircularProgressIndicator(
-                                        color: Colors.white,
-                                      ),
-                                    ],
+                        
+                        return Visibility( visible: state is DashboardShow && urlController.text.isNotEmpty,
+                          child: Expanded(
+                            child: InAppWebView(
+                              initialUrlRequest: URLRequest(url:  WebUri(urlController.text)),
+                              keepAlive: InAppWebViewKeepAlive(),
+                              initialSettings: InAppWebViewSettings(
+                                  cacheMode: CacheMode.LOAD_CACHE_ELSE_NETWORK,
+                                  javaScriptEnabled: true),
+                              onWebViewCreated: (controller) {
+                                 EasyLoading.show(status: 'Loading');
+                                webViewController = controller;
+                              },
+                              onLoadStart: (controller, url) {
+                                // _timer?.cancel();
+                                EasyLoading.dismiss();
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: const Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Expanded(
+                                            child: Text(
+                                          'Initializing Dashboard...',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold),
+                                        )),
+                                        CircularProgressIndicator(
+                                          color: Colors.white,
+                                        ),
+                                      ],
+                                    ),
+                                    backgroundColor: Colors.green[600],
                                   ),
-                                  backgroundColor: Colors.green[600],
-                                ),
-                              );
-                            },
-                            onLoadStop: (controller, url) {
-                              print(' onLoadStop');
-                              //  _timer?.cancel();
-                              EasyLoading.dismiss();
-                            },
-                            onReceivedError: (controller, request, error) {
-                              print('onReceivedError');
-                              //  _timer?.cancel();
-                              EasyLoading.dismiss();
-                              EasyLoading.showError(error.description);
-                            },
-                            onReceivedHttpError:
-                                (controller, request, errorResponse) {
-                              print('onReceivedHttpError');
-                            },
-                          ),
-                        );
-                      }else{
-                        return SizedBox.shrink();
-                      } },
-                    ),
-                  ],
-                );
+                                );
+                              },
+                              onLoadStop: (controller, url) {
+                                print(' onLoadStop');
+                                //  _timer?.cancel();
+                                EasyLoading.dismiss();
+                              },
+                              onReceivedError: (controller, request, error) {
+                                print('onReceivedError');
+                                //  _timer?.cancel();
+                                EasyLoading.dismiss();
+                                EasyLoading.showError(error.description);
+                              },
+                              onReceivedHttpError:
+                                  (controller, request, errorResponse) {
+                                print('onReceivedHttpError');
+                              },), ),); }, ), ], );
               } else {
                 return customCircleIndicator();
               }
-            }),
-      ),
-    ));
+            }), ), ));
   }
 
   @override

@@ -12,10 +12,7 @@ class DataCollectionBloc extends Bloc<DataCollectionEvent, DataCollectionState> 
     on<LoadDataCollectionMonthlyTemplateEvent>((event, emit) async{
       emit(DataCollectionStateLoading());
 
-      await Future.wait([
-        MysharedPreference().clearPreference(dataCollectionKey),
-        MysharedPreference().setPreferences(selectedTemplate, 'monthly')
-      ]);
+      await MysharedPreference().setPreferences(selectedTemplate, 'monthly');
 
       String? monthlyTemplate = await MysharedPreference().getPreferences(monthlyTemplateKey);
       if (monthlyTemplate != null && monthlyTemplate.isNotEmpty) {
@@ -27,10 +24,10 @@ class DataCollectionBloc extends Bloc<DataCollectionEvent, DataCollectionState> 
     });
 
     on<LoadDataCollectionWorkplanTemplateEvent>((event, emit) async{
-      await Future.wait([
-        MysharedPreference().clearPreference(dataCollectionKey),
-         MysharedPreference().setPreferences(selectedTemplate, 'workplan')
-      ]);
+
+      emit(DataCollectionStateLoading());
+
+      await MysharedPreference().setPreferences(selectedTemplate, 'workplan');
       
       String? workplanTemplate = await MysharedPreference().getPreferences(workplanTemplateKey);
       if (workplanTemplate != null && workplanTemplate.isNotEmpty) {
@@ -42,10 +39,12 @@ class DataCollectionBloc extends Bloc<DataCollectionEvent, DataCollectionState> 
     });
 
     on<LoadSelectedDataCollectionTemplateEvent>((event, emit) async{
+       emit(DataCollectionStateLoading());
+       
       String? template = await MysharedPreference().getPreferences(selectedTemplate);
       if (template != null && template.isNotEmpty) {
         if (template == 'monthly') {
-            emit(DataCollectionStateLoading());
+           
         
             String? monthlyTemplate = await MysharedPreference().getPreferences(monthlyTemplateKey);
             if (monthlyTemplate != null && monthlyTemplate.isNotEmpty) {

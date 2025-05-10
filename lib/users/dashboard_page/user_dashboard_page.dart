@@ -41,56 +41,62 @@ class _UserDashboardPageState extends State<UserDashboardPage>
         future: getDashboardUrl(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            return Stack(
-              children: [BlocBuilder<UserDashboardCubit, UserDashboardState>(
-                builder: (context, state) {
-                  if (state is UserDashboard) {
-                    return Visibility(
-                      visible: state.show,
-                      child: InAppWebView(
-                          //display the swipetoRefresh in the InappBrowser
-                          initialUrlRequest:
-                              URLRequest(url: WebUri(dashboardurl!)),
-                          keepAlive: InAppWebViewKeepAlive(),
-                          initialSettings: InAppWebViewSettings(
-                              cacheMode: CacheMode.LOAD_CACHE_ELSE_NETWORK,
-                              javaScriptEnabled: true),
-                          onWebViewCreated: (controller) {
-                            EasyLoading.show(status: 'Loading');
-                          },
-                          onLoadStart: (controller, url) {
-                            EasyLoading.dismiss();
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: const Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    Expanded(
-                                        child: Text(
-                                      'Initializing Dashboard...',
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold),
-                                    )),
-                                    CircularProgressIndicator(
-                                      color: Colors.white,
-                                    ),
-                                  ],
-                                ),
-                                backgroundColor: Colors.green[600],
+            final bool hasDashboardUrl = dashboardurl != null && dashboardurl!.isNotEmpty;
+
+            return hasDashboardUrl ? BlocBuilder<UserDashboardCubit, UserDashboardState>(
+              builder: (context, state) {
+                if (state is UserDashboard) {
+                  return Visibility(
+                    visible: state.show,
+                    child: InAppWebView(
+                        //display the swipetoRefresh in the InappBrowser
+                        initialUrlRequest:
+                            URLRequest(url: WebUri(dashboardurl!) ),
+                        keepAlive: InAppWebViewKeepAlive(),
+                        initialSettings: InAppWebViewSettings(
+                            cacheMode: CacheMode.LOAD_CACHE_ELSE_NETWORK,
+                            javaScriptEnabled: true),
+                        onWebViewCreated: (controller) {
+                          EasyLoading.show(status: 'Loading');
+                        },
+                        onLoadStart: (controller, url) {
+                          EasyLoading.dismiss();
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: const Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Expanded(
+                                      child: Text(
+                                    'Initializing Dashboard...',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold),
+                                  )),
+                                  CircularProgressIndicator(
+                                    color: Colors.white,
+                                  ),
+                                ],
                               ),
-                            );
-                          }),
-                    );
-                 }else if(state is refreshDashoardState){
-                    if (webViewController  != null) {
-                        webViewController!.reload();
-                      }
-                    context.read<UserDashboardCubit>().show(true);
-                  }
-                  return CustomText(text: ''); },),  ]);
+                              backgroundColor: Colors.green[600],
+                            ),
+                          );
+                        }),
+                  );
+               }else if(state is refreshDashoardState){
+                  if (webViewController  != null) {
+                      webViewController!.reload();
+                    }
+                  context.read<UserDashboardCubit>().show(true);
+                }else if(state is offlineState){
+                    EasyLoading.showInfo('No internet connection');
+                }
+                return const CustomText(text: ''); },) :
+                
+                 const Center(child: CustomText(text: 'No Dashboard yet',
+                 weight: FontWeight.bold,style: FontStyle.italic,),);
           } else {
             return customCircleIndicator();
           }

@@ -34,7 +34,7 @@ class _PreviewTemplateState extends State<PreviewTemplate> {
         leading: Padding(
           padding: const EdgeInsets.all(8.0),
           child: BackButton(onPressed: (){
-            context.beamBack();
+            context.beamToNamed('/admin/templates');
           },style: const ButtonStyle(backgroundColor: WidgetStatePropertyAll(Color.fromARGB(255, 38, 32, 1)),
           iconColor: WidgetStatePropertyAll(Colors.white)),), ),
         backgroundColor: Colors.transparent,),

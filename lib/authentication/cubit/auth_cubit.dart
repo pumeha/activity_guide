@@ -9,7 +9,6 @@ import 'package:activity_guide/shared/utils/http_helper/storage_keys.dart';
 import 'package:bloc/bloc.dart';
 import '../../shared/utils/myshared_preference.dart';
 
-
 class AuthCubit extends Cubit<AuthCubitState>{
 
   final AuthRepositoryImpl authRepositoryImpl;
@@ -18,15 +17,20 @@ class AuthCubit extends Cubit<AuthCubitState>{
  
 
   Future<void> login(String email,String password) async{
-   
+    
       emit(AuthLoading());
+
+      bool onlineOrOffline = await isDeviceOffline_Return_True();
+      if (onlineOrOffline) {
+        emit(AuthFailure('No internet connection'));
+        return;
+      }
 
       final response = await authRepositoryImpl.login(email, password);
 
       GeneralJsonDart data = GeneralJsonDart.fromJson(response);
       int? status = data.status;
       String message = data.message!;
- 
       
       if (status == HttpStatus.ok) {
           LoginJsonDart loginValues = LoginJsonDart.fromJson(data.data![0]);
@@ -47,12 +51,12 @@ class AuthCubit extends Cubit<AuthCubitState>{
         MysharedPreference().setPreferences(fullnameKey, data.data![0]['fullname'])
       ]);
         
-        
      emit(AuthSuccess(loginValues.role!));
      
       }else if(message == 'success' &&  loginValues.role! == subAdmin){
       
         await Future.wait([
+        MysharedPreference().setPreferences( DashboardKey.link,loginValues.dashboardurl!),
         MysharedPreference().setPreferences(LoginKeys.role,  loginValues.role!),
         MysharedPreference().setPreferences( LoginKeys.token, loginValues.token!),
          MysharedPreference().setPreferences(fullnameKey, data.data![0]['fullname'])
@@ -63,8 +67,7 @@ class AuthCubit extends Cubit<AuthCubitState>{
       await  MysharedPreference().setPreferences(templateListKeys, templatesJson);
      
     emit(AuthSuccess(loginValues.role!));
-      }
-      else{
+      }else{
          String monthlyTempleJsonString;
         if (data.data![0][monthlyTemplateKey] != null ) {
             final monthlyTempleJson = data.data![0][monthlyTemplateKey] as List<dynamic>;
@@ -109,6 +112,11 @@ class AuthCubit extends Cubit<AuthCubitState>{
   Future<void> forgotPassword(String email) async{
       emit(AuthLoading());
 
+      bool onlineOrOffline = await isDeviceOffline_Return_True();
+      if (onlineOrOffline) {
+        emit(AuthFailure('No internet connection')); return;
+      }
+
       dynamic response = await authRepositoryImpl.forgotPassword(email);
       GeneralJsonDart data = GeneralJsonDart.fromJson(response);
 
@@ -129,6 +137,12 @@ class AuthCubit extends Cubit<AuthCubitState>{
   Future<void> resetPassword(String inputCode,String newPassword) async{
       emit(AuthLoading());
 
+      bool onlineOrOffline = await isDeviceOffline_Return_True();
+      if (onlineOrOffline) {
+        emit(AuthFailure('No internet connection'));
+        return;
+      }
+
       String? token  = await MysharedPreference().getPreferences(LoginKeys.token);
       Map<String,dynamic> response = await authRepositoryImpl.resetPassword(inputCode, newPassword, token!);
       GeneralJsonDart data = GeneralJsonDart.fromJson(response);
@@ -146,6 +160,11 @@ class AuthCubit extends Cubit<AuthCubitState>{
       
       emit(AuthLoading());
       
+      bool onlineOrOffline = await isDeviceOffline_Return_True();
+      if (onlineOrOffline) {
+        emit(AuthFailure('No internet connection')); return;
+      }
+
       String? token  = await MysharedPreference().getPreferences(LoginKeys.token);
       Map<String,dynamic> response = await authRepositoryImpl.userVerification(inputCode!, newPassword!, token!);
       GeneralJsonDart data = GeneralJsonDart.fromJson(response);
@@ -162,6 +181,11 @@ class AuthCubit extends Cubit<AuthCubitState>{
   Future<void> requestTokenAgain() async{
       emit(AuthLoading());
       
+      bool onlineOrOffline = await isDeviceOffline_Return_True();
+      if (onlineOrOffline) {
+        emit(AuthFailure('No internet connection')); return;
+      }
+
       String? token  = await MysharedPreference().getPreferences(LoginKeys.token);
       Map<String,dynamic> response = await authRepositoryImpl.requestTokenAgain(token!);
       GeneralJsonDart data = GeneralJsonDart.fromJson(response);

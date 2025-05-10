@@ -265,6 +265,7 @@ class _UsersPageState extends State<UsersPage> {
     } 
 
     Future<List<UserJSON2Dart>> listSubAdmin() async{
+      print('listSubAdmin');
       String? subadmin = await MysharedPreference().getPreferences(subAdminLists);
       if (subadmin != null && subadmin.isNotEmpty) {
         List<dynamic> decodedList = jsonDecode(subadmin);
@@ -315,6 +316,7 @@ class _UsersPageState extends State<UsersPage> {
                 } else if(!snapshot.hasData || snapshot.data!.isEmpty){
                     return const Center(child: CustomText(text: 'No SubAdmin records',weight: FontWeight.bold,),);
                 }else{
+                  print('else');
                   return ListView.builder(itemCount: snapshot.data!.length,
                     itemBuilder: (context,index){
                      final user = snapshot.data![index];

@@ -16,6 +16,11 @@ class UserHomeCubit extends Cubit<UserHomeState> {
   Future<void> downloadMonthlyData() async{
       emit(UserHomeLoading());
 
+      bool onlineOrOffline = await isDeviceOffline_Return_True();
+      if (onlineOrOffline) {
+        emit(UserHomeFailure(message: 'No internet connection')); return;
+      }
+
       String? token = await MysharedPreference().getPreferences(LoginKeys.token);
       if (token == null || token.isEmpty) {
        return emit(UserHomeFailure(message: 'Unauthorized user'));
@@ -23,7 +28,7 @@ class UserHomeCubit extends Cubit<UserHomeState> {
 
       String? template = await MysharedPreference().getPreferences(monthlyTemplateName);
       if (template == null || template.isEmpty) {
-        return emit(UserHomeFailure(message: 'Template name not found'));
+        return emit(UserHomeFailure(message: 'Monthly template not created'));
       }
       final response = await userHomeImpl.fetchTemplateData(token: token,templateName: template);
       GeneralJsonDart data = GeneralJsonDart.fromJson(response);
@@ -42,6 +47,11 @@ class UserHomeCubit extends Cubit<UserHomeState> {
   Future<void> downloadWorkplanData() async{
     emit(UserHomeLoading());
 
+      bool onlineOrOffline = await isDeviceOffline_Return_True();
+      if (onlineOrOffline) {
+      return  emit(UserHomeFailure(message: 'No internet connection'));
+      }
+
       String? token = await MysharedPreference().getPreferences(LoginKeys.token);
       if (token == null || token.isEmpty) {
        return emit(UserHomeFailure(message: 'Unauthorized user'));
@@ -49,7 +59,7 @@ class UserHomeCubit extends Cubit<UserHomeState> {
 
       String? template = await MysharedPreference().getPreferences(workplanTemplateName);
       if (template == null || template.isEmpty) {
-        return emit(UserHomeFailure(message: 'Template name not found'));
+        return emit(UserHomeFailure(message: 'Workplan template not created'));
       }
 
       final response = await userHomeImpl.fetchTemplateData(token: token,templateName: template);

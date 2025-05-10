@@ -111,13 +111,13 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                         },
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 30,
                     ),
                     InkWell(
                       onTap: () async {
                         if (_formKey.currentState!.validate()) {
-                   context.read<AuthCubit>().forgotPassword(emailController.text);
+                   context.read<AuthCubit>().forgotPassword(emailController.text.trim());
                         }
                       },
                       child: Container(

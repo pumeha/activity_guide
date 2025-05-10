@@ -48,7 +48,7 @@ class _UserProfileState extends State<UserProfile> {
               child: Center(child: Icon(Icons.person_sharp,color: Colors.white,size: 60,)),),
                Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: ListTile(title: const CustomText(text: 'Staff Fullname'),
+                child: ListTile(title: const CustomText(text: 'Staff Id'),
                 subtitle: Padding(
                   padding: EdgeInsets.all(8),
                   child: CustomText(text: snapshot.data![1].toUpperCase(),weight: FontWeight.bold,),
@@ -65,8 +65,11 @@ class _UserProfileState extends State<UserProfile> {
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: ElevatedButton(onPressed: (){
+                child: ElevatedButton(onPressed: () async{
+                  await  MysharedPreference().clearPreference();
+                  
                   context.beamToReplacementNamed('/login');
+                
                 },
                 style: const ButtonStyle(backgroundColor: WidgetStatePropertyAll(Colors.amberAccent)),
                  child: const Padding(

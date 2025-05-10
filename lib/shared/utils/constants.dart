@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'colors.dart';
 
 class Constants{
@@ -79,4 +79,15 @@ Widget customCircleIndicator(){
     backgroundColor: Colors.black.withOpacity(0.1),  // Lighter background color
     valueColor: const AlwaysStoppedAnimation<Color>(active), // Progress color
   ));
+}
+
+Future<bool> isDeviceOffline_Return_True() async {
+  final connectivityResult = await Connectivity().checkConnectivity();
+
+  if (connectivityResult[0] == ConnectivityResult.none) {
+    // No network connection (WiFi/Mobile)
+    return true;
+  }
+  
+  return false;
 }

@@ -93,8 +93,8 @@ class _TemplatesListPageState extends State<TemplatesListPage> {
             SelectTemplateDialog.showTransparentDialog(context);
           },
           heroTag: 'add',
-          tooltip: 'Create template',
-          child: const Icon(Icons.add),
+          tooltip: 'Create template',backgroundColor: active,
+          child: const Icon(Icons.add,color: Colors.white,),
         ),
       ),
     );

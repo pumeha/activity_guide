@@ -21,7 +21,7 @@ class AuthenticationPage extends StatefulWidget {
 final _formKey = GlobalKey<FormState>();
 class _AuthenticationPageState extends State<AuthenticationPage> {
   TextEditingController emailController = TextEditingController(text: 'smarterway2024@gmail.com');
-  TextEditingController passwordController = TextEditingController(text: 'Smarter2@');
+  TextEditingController passwordController = TextEditingController(text: 'Smarter1@');
   bool showPassword = true;
 
   @override
@@ -170,7 +170,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                           if (_formKey.currentState!.validate()) {
                          
                             context.read<AuthCubit>().login(
-                                emailController.text.trim(), passwordController.text);
+                                emailController.text.trim(), passwordController.text.trim());
                            
                           }
                         },

@@ -202,11 +202,12 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
                         ],
                       ),
                     ),
-                    SizedBox( height: 30, ),
+                    const SizedBox( height: 30, ),
                     InkWell(
                       onTap: () async {
                         if (_formKey.currentState!.validate()) {
-                          context.read<AuthCubit>().resetPassword(tokenController.text, newPasswordController.text);
+                          context.read<AuthCubit>().resetPassword(tokenController.text.trim(),
+                           newPasswordController.text.trim());
                         }
                       },child: Container(
                         decoration: BoxDecoration(

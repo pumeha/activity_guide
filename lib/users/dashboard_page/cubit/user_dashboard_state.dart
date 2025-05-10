@@ -13,3 +13,4 @@ class refreshDashoardState extends UserDashboardState {
 class showRefreshState extends UserDashboardState {
   
 }
+class offlineState extends UserDashboardState{}
