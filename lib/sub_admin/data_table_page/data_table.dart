@@ -24,7 +24,7 @@ class MyTable extends StatefulWidget {
 final GlobalKey<SfDataGridState> sfKey = GlobalKey<SfDataGridState>();
 
   Future populateData() async{
-    String? response = await MysharedPreference().getPreferences(template_data);
+    String? response = await MysharedPreference().getPreferencesWithoutEncrpytion(template_data);
 
         data = json.decode(response!) as List<dynamic>;
       if(data.isNotEmpty){
@@ -64,7 +64,7 @@ final DataGridController controller = DataGridController();
   Widget build(BuildContext context) {
 
     return Scaffold( backgroundColor: Colors.white70,
-      body: Expanded(child: FutureBuilder(
+      body: FutureBuilder(
          future: populateData(),builder: (context,snapshot){
          if(snapshot.connectionState == ConnectionState.done){
       
@@ -87,14 +87,8 @@ final DataGridController controller = DataGridController();
            );
          }
          return customCircleIndicator();
-       }, ),),
+       }, ),
       floatingActionButton: FloatingActionButton(onPressed: () async{
-         
-      //   EasyLoading.show();
-      //      print(sfKey.currentState);
-      // await downloadExcelFile().createExcel(sfKey);
-      //   EasyLoading.dismiss(animation: true);
-
 
       },child: const Icon(Icons.save_alt),),
     );

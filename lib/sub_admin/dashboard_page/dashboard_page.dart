@@ -1,11 +1,11 @@
-import 'dart:async';
+import 'dart:html' as html;
+import 'dart:ui_web' as ui;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:activity_guide/sub_admin/dashboard_page/cubit/dashboard_cubit.dart';
-import '../../../shared/custom_widgets/custom_text.dart';
-import 'package:activity_guide/shared/utils/constants.dart';
+import 'package:activity_guide/shared/custom_widgets/custom_text.dart';
 import 'package:activity_guide/shared/utils/http_helper/storage_keys.dart';
 import 'package:activity_guide/shared/utils/myshared_preference.dart';
 import 'cubit/dashboard_cubit_state.dart';
@@ -19,210 +19,184 @@ class DashboardPage extends StatefulWidget {
 
 class _DashboardPageState extends State<DashboardPage>
     with AutomaticKeepAliveClientMixin {
-  // Timer? _timer;
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController urlController = TextEditingController();
 
-  InAppWebViewController? webViewController;
+  late final String viewId;
+  html.IFrameElement? iframe;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    viewId = 'dashboard-view-${DateTime.now().millisecondsSinceEpoch}';
+    _initializeIframe();
     context.read<DashboardCubit>().hideDashboard();
+    _loadDashboardUrl();
   }
 
-  Future<String> getDashboardUrl() async {
-    String? dashboardurl;  dashboardurl = await MysharedPreference().getPreferences(DashboardKey.link);
-    return dashboardurl ?? '';
+  void _initializeIframe() {
+    iframe = html.IFrameElement()
+      ..style.border = 'none'
+      ..width = '100%'
+      ..height = '100%'
+      ..onLoad.listen((event) {
+        EasyLoading.dismiss();
+        _showCustomSnackBar();
+      });
+
+    // ignore: undefined_prefixed_name
+    ui.platformViewRegistry.registerViewFactory(viewId, (int _) => iframe!);
   }
 
-  TextEditingController urlController = TextEditingController();
-
-  final _formKey = GlobalKey<FormState>();
-
-  @override
-  Widget build(BuildContext context) {
-    super.build(context);
-
-    return Scaffold(
-        body: BlocListener<DashboardCubit, DashboardCubitState>(
-      listener: (context, state) {
-        if (state is DashboardLoading) {
-          // print('Loading');
-          EasyLoading.show();
-        } else if (state is DashboardSuccess) {
-          // print(state.message!);
-          EasyLoading.showSuccess(state.message!);
-        } else if (state is DashboardFailure) {
-          EasyLoading.showError(state.errorMessage!);
-        }
-      },
-      child: SafeArea(
-        child: FutureBuilder(
-            future: getDashboardUrl(),
-            builder: (context, snapshot) {
-            
-              if (snapshot.connectionState == ConnectionState.done) {
-                if (snapshot.data == null && snapshot.data!.isEmpty) {
-                  EasyLoading.showInfo('No Dashboard found');
-                } else {
-                  urlController.text = snapshot.data!;
-                }
-                
-                return Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 50, right: 50, top: 8, bottom: 8),
-                      child: Card(
-                        color: Colors.white,
-                        elevation: 8,
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 16, right: 8, top: 8, bottom: 8),
-                                child: Form(
-                                    key: _formKey,
-                                    child: TextFormField(
-                                      controller: urlController,
-                                      validator: validatorFunction,
-                                    )),
-                              ),
-                            ),
-                            TextButton(
-                                onPressed: () async{
-                                  
-                                  if (_formKey.currentState!.validate()) {
-                                      context.read<DashboardCubit>().showDashboard();
-                                    
-                                  }
-                                },
-                                child: const CustomText(
-                                  text: 'Test',
-                                  weight: FontWeight.bold,
-                                )),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: FilledButton(
-                                  onPressed: () {
-                                    if (_formKey.currentState!.validate()) {
-                              context.read<DashboardCubit>().updateDashboardUrl( dashbordUrl: urlController.text);
-                                    }},
-                                  child: const CustomText(
-                                    text: 'Save',
-                                    weight: FontWeight.bold,
-                                    color: Colors.white,
-                                  )),)
-                          ],
-                        ),
-                      ),
-                    ),
-                    BlocBuilder<DashboardCubit, DashboardCubitState>(
-                      builder: (context, state) {
-                        
-                        return Visibility( visible: state is DashboardShow && urlController.text.isNotEmpty,
-                          child: Expanded(
-                            child: InAppWebView(
-                              initialUrlRequest: URLRequest(url:  WebUri(urlController.text)),
-                              keepAlive: InAppWebViewKeepAlive(),
-                              initialSettings: InAppWebViewSettings(
-                                  cacheMode: CacheMode.LOAD_CACHE_ELSE_NETWORK,
-                                  javaScriptEnabled: true),
-                              onWebViewCreated: (controller) {
-                                 EasyLoading.show();
-                                webViewController = controller;
-                              },
-                              onLoadStart: (controller, url) {
-                                // _timer?.cancel();
-                                EasyLoading.dismiss();
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: const Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        Expanded(
-                                            child: Text(
-                                          'Initializing Dashboard...',
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold),
-                                        )),
-                                        CircularProgressIndicator(
-                                          color: Colors.white,
-                                        ),
-                                      ],
-                                    ),
-                                    backgroundColor: Colors.green[600],
-                                  ),
-                                );
-                              },
-                              onLoadStop: (controller, url) {
-                                print(' onLoadStop');
-                                //  _timer?.cancel();
-                                EasyLoading.dismiss();
-                              },
-                              onReceivedError: (controller, request, error) {
-                                print('onReceivedError');
-                                //  _timer?.cancel();
-                                EasyLoading.dismiss();
-                                EasyLoading.showError(error.description);
-                              },
-                              onReceivedHttpError:
-                                  (controller, request, errorResponse) {
-                                print('onReceivedHttpError');
-                              },
-                            
-                              ), ),); }, ), ], );
-              } else {
-                return customCircleIndicator();
-              }
-            }), ), ));
+  Future<void> _loadDashboardUrl() async {
+    final url = await MysharedPreference().getPreferences(DashboardKey.link);
+    if (url != null && url.isNotEmpty) {
+      setState(() {
+        urlController.text = url;
+        iframe?.src = url;
+      });
+    } else {
+      EasyLoading.showInfo('No Dashboard found');
+    }
   }
 
-  @override
-  // TODO: implement wantKeepAlive
-  bool get wantKeepAlive => true;
-
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    super.dispose();
-    EasyLoading.dismiss();
-  }
-
-  void showCustomSnackBar(BuildContext context) {
+  void _showCustomSnackBar() {
     final snackBar = SnackBar(
-      content: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.blue, Colors.green], // Your two colors here
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+      content: const Row(
+        children: [
+          Expanded(
+            child: Text(
+              'Initializing Dashboard...',
+              style: TextStyle(color: Colors.white),
+            ),
           ),
-        ),
-        child: const Row(
-          children: [
-            Expanded(
-                child: Text('Initializing Dashboard...',
-                    style: TextStyle(color: Colors.white))),
-            CircularProgressIndicator(),
-          ],
-        ),
+          SizedBox(width: 10),
+          CircularProgressIndicator(color: Colors.white),
+        ],
       ),
-      duration: const Duration(seconds: 5),
+      backgroundColor: Colors.green[600],
+      duration: const Duration(seconds: 10),
       action: SnackBarAction(
         label: 'Close',
-        textColor: Colors.white, // Change text color for the action button
+        textColor: Colors.white,
         onPressed: () {
-          // Dismiss the SnackBar
           ScaffoldMessenger.of(context).hideCurrentSnackBar();
         },
       ),
     );
 
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+
+    return Scaffold(
+      body: BlocListener<DashboardCubit, DashboardCubitState>(
+        listener: (context, state) {
+          if (state is DashboardLoading) {
+            EasyLoading.show();
+          } else if (state is DashboardSuccess) {
+            EasyLoading.showSuccess(state.message ?? 'Updated');
+            _loadDashboardUrl();
+          } else if (state is DashboardFailure) {
+            EasyLoading.showError(state.errorMessage ?? 'Error');
+          }
+        },
+        child: SafeArea(
+          child: Column(
+            children: [
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 50, vertical: 8),
+                child: Card(
+                  elevation: 8,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Form(
+                            key: _formKey,
+                            child: TextFormField(
+                              controller: urlController,
+                              validator: (val) {
+                                if (val == null || val.isEmpty) {
+                                  return 'Enter a valid URL';
+                                }
+                                if (!val.startsWith('http')) {
+                                  return 'URL must start with http or https';
+                                }
+                                return null;
+                              },
+                              decoration: const InputDecoration(
+                                hintText: 'Enter Dashboard URL',
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            iframe?.src = urlController.text;
+                            EasyLoading.show(status: 'Testing dashboard...');
+                            context.read<DashboardCubit>().showDashboard();
+                          }
+                        },
+                        child: const CustomText(
+                          text: 'Test',
+                          weight: FontWeight.bold,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: FilledButton(
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              context.read<DashboardCubit>().updateDashboardUrl(
+                                    dashbordUrl: urlController.text,
+                                  );
+                            }
+                          },
+                          child: const CustomText(
+                            text: 'Save',
+                            weight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              BlocBuilder<DashboardCubit, DashboardCubitState>(
+                builder: (context, state) {
+                  final isVisible =
+                      state is DashboardShow && urlController.text.isNotEmpty;
+                  return Visibility(
+                    visible: isVisible,
+                    child: Expanded(
+                      child: HtmlElementView(viewType: viewId),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  void dispose() {
+    EasyLoading.dismiss();
+    iframe = null;
+    super.dispose();
   }
 }

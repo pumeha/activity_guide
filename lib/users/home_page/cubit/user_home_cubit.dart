@@ -37,7 +37,7 @@ class UserHomeCubit extends Cubit<UserHomeState> {
           if(data.data == null || data.data!.isEmpty){
            return emit(UserHomeFailure(message: 'No record found'));
           }
-          await MysharedPreference().setPreferences(template_data,jsonEncode(data.data!));
+          await MysharedPreference().setPreferencesWithoutEncrpytion(template_data,jsonEncode(data.data!));
          return emit(UserHomeSuccess(message: 'Data downloaded'));
       }else{
        return emit(UserHomeFailure(message: data.message));
@@ -69,7 +69,7 @@ class UserHomeCubit extends Cubit<UserHomeState> {
           if(data.data == null || data.data!.isEmpty){
            return emit(UserHomeFailure(message: 'No record found'));
           }
-          MysharedPreference().setPreferences(template_data,jsonEncode(data.data!));
+          MysharedPreference().setPreferencesWithoutEncrpytion(template_data,jsonEncode(data.data!));
          return emit(UserHomeSuccess(message: 'Data downloaded'));
       }else{
       return  emit(UserHomeFailure(message: data.message));

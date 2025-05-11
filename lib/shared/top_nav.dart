@@ -44,7 +44,7 @@ AppBar topNavigationBar(
                   onPressed: () {
                   context.read<UserDashboardCubit>().refreshDashoard();
                   },
-                  child: const Text('Refresh Dashboard'),
+                  child: const Text('Refresh\nDashboard'),
                   
                 );
               }

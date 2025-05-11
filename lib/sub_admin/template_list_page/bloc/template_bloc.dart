@@ -213,7 +213,7 @@ class TemplateBloc extends Bloc<TemplateEvent,TemplateState>{
               emit(TemplateSuccessState(message: 'No records yet'));
             }else{
         String data = jsonEncode(jsonDart.data);
-        await MysharedPreference().setPreferences(template_data, data);
+        await MysharedPreference().setPreferencesWithoutEncrpytion(template_data, data);
         emit(TemplateSuccessState(message: 'data'));
         }
         
