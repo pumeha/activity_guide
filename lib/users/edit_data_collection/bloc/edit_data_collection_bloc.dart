@@ -22,8 +22,8 @@ class EditDataCollectionBloc extends Bloc<EditDataCollectionEvent, EditDataColle
     on<UploadDataEvent>((event, emit) async{
       emit(EditLoadingState());
 
-      bool onlineOrOffline = await isDeviceOffline_Return_True();
-      if (onlineOrOffline) {
+      bool onlineOrOffline = isDeviceOffline_Return_False();
+      if (!onlineOrOffline) {
        emit(EditFailureState(message: 'No internet connection')); return ;
       }
 

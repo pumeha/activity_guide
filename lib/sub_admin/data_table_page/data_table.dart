@@ -1,11 +1,14 @@
 import 'dart:convert';
+import 'dart:html';
+import 'package:activity_guide/shared/utils/downloadExcelFile.dart';
 import 'package:activity_guide/shared/utils/http_helper/storage_keys.dart';
 import 'package:activity_guide/shared/utils/myshared_preference.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
-
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import '../../shared/utils/constants.dart';
-
+import 'package:syncfusion_flutter_datagrid_export/export.dart';
+import 'package:syncfusion_flutter_xlsio/xlsio.dart' hide Column, Row;
 
 class MyTable extends StatefulWidget {
   const MyTable({super.key});
@@ -18,7 +21,7 @@ class MyTable extends StatefulWidget {
   late JSONDataGridSource _jsonDataGridSource;
   late List<GridColumn> columns;
   late List<dynamic> data;
-
+final GlobalKey<SfDataGridState> sfKey = GlobalKey<SfDataGridState>();
 
   Future populateData() async{
     String? response = await MysharedPreference().getPreferences(template_data);
@@ -56,43 +59,72 @@ class MyTable extends StatefulWidget {
   }
 final DataGridController controller = DataGridController();
 
+
   @override
   Widget build(BuildContext context) {
 
     return Scaffold( backgroundColor: Colors.white70,
-      body: Column(children: [
-       Expanded(child: FutureBuilder(
-          future: populateData(),builder: (context,snapshot){
-          if(snapshot.connectionState == ConnectionState.done){
+      body: Expanded(child: FutureBuilder(
+         future: populateData(),builder: (context,snapshot){
+         if(snapshot.connectionState == ConnectionState.done){
+      
+           return  SfDataGrid(
+             key: sfKey,
+             controller: controller,
+             source: _jsonDataGridSource,
+             columns: columns,
+             gridLinesVisibility: GridLinesVisibility.both,
+             headerGridLinesVisibility: GridLinesVisibility.both,
+             columnWidthMode: ColumnWidthMode.auto,
+             allowFiltering: true,
+             allowSorting: true,
+             allowMultiColumnSorting: true,
+             allowTriStateSorting: true,
+             showVerticalScrollbar: true,
+             showHorizontalScrollbar: true,
+             navigationMode: GridNavigationMode.row,
+             selectionMode: SelectionMode.multiple,
+           );
+         }
+         return customCircleIndicator();
+       }, ),),
+      floatingActionButton: FloatingActionButton(onPressed: () async{
+         
+      //   EasyLoading.show();
+      //      print(sfKey.currentState);
+      // await downloadExcelFile().createExcel(sfKey);
+      //   EasyLoading.dismiss(animation: true);
 
-            return  SfDataGrid(
-              controller: controller,
-              source: _jsonDataGridSource,
-              columns: columns,
-              gridLinesVisibility: GridLinesVisibility.both,
-              headerGridLinesVisibility: GridLinesVisibility.both,
-              columnWidthMode: ColumnWidthMode.auto,
-              allowFiltering: true,
-              allowSorting: true,
-              allowMultiColumnSorting: true,
-              allowTriStateSorting: true,
-              showVerticalScrollbar: true,
-              showHorizontalScrollbar: true,
-              navigationMode: GridNavigationMode.row,
-              selectionMode: SelectionMode.multiple,
-            );
-          }
-          return customCircleIndicator();
-        },
-        ),)
-      ],),
-      floatingActionButton: FloatingActionButton(onPressed: (){
 
       },child: const Icon(Icons.save_alt),),
     );
   }
+
+  Future<void> _exportDataGridToExcel() async {
+  
+  if (sfKey.currentState == null) {
+    print('SfDataGridState is null. The DataGrid might not be built yet.');
+    EasyLoading.showError('Data grid is not ready yet!');
+    return;
+  }
+
+    try {
+  final Workbook workbook = sfKey.currentState!.exportToExcelWorkbook();
+
+  final List<int> bytes = workbook.saveAsStream();
+  workbook.dispose();
+  
+  AnchorElement(href:"data:application/octet-stream;charset=utf-16le;base64,${base64.encode(bytes)}")
+    ..setAttribute("download", "output.csv")
+    ..click();
+} on Exception catch (e) {
+  print(e.toString());
+}
+  }
+
 }
 
+ 
 class JSONDataGridSource extends DataGridSource{
 
   List<DataGridRow> dataGridRows = [];

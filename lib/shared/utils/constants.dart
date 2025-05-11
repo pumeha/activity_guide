@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'colors.dart';
-
+import 'dart:html' as html;
 class Constants{
  bool isValidEmail(String email) {
     // Regular expression for validating an Email
@@ -81,13 +80,6 @@ Widget customCircleIndicator(){
   ));
 }
 
-Future<bool> isDeviceOffline_Return_True() async {
-  final connectivityResult = await Connectivity().checkConnectivity();
-
-  if (connectivityResult[0] == ConnectivityResult.none) {
-    // No network connection (WiFi/Mobile)
-    return true;
-  }
-  
-  return false;
+bool isDeviceOffline_Return_False() {
+ return html.window.navigator.onLine ?? false;
 }

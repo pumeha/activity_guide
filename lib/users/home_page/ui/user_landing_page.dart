@@ -130,11 +130,11 @@ class _UserLandingPageState extends State<UserLandingPage> {
                     onPressed: () {
                       context.read<UserHomeCubit>().downloadMonthlyData();
                     },
-                    color: const Color.fromARGB(100, 75, 66, 66),
+                    color: const Color.fromARGB(235, 57, 85, 11),
                     child: const Padding(
                       padding: EdgeInsets.all(16),
                       child: CustomText(
-                        text: '  \tView\n Monthly\nTemplate',
+                        text: '  \tView\n Monthly\n \tData',
                         color: Colors.white,
                         weight: FontWeight.bold,
                       ),
@@ -151,7 +151,7 @@ class _UserLandingPageState extends State<UserLandingPage> {
                     child: const Padding(
                       padding: EdgeInsets.all(16),
                       child: CustomText(
-                        text: '  \tView\n Workplan\nTemplate',
+                        text: '  \tView\n Workplan\n \tData',
                         color: Colors.white,
                         weight: FontWeight.bold,
                       ),

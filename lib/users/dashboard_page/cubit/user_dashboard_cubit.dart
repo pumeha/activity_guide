@@ -5,13 +5,16 @@ import 'user_dashboard_state.dart';
 class UserDashboardCubit extends Cubit<UserDashboardState> {
   UserDashboardCubit() : super(UserDashboardInitial());
 
-  Future<void> show(bool show) async{
+  void show(bool show) async{
 
       if(show){
-      bool onlineOrOffline = await isDeviceOffline_Return_True();
-        if (onlineOrOffline) {
+      bool onlineOrOffline =  isDeviceOffline_Return_False();
+        if (!onlineOrOffline) {
           emit(offlineState());
+        }else{
+          emit(UserDashboard(show: show));
         }
+
       }else{
         emit(UserDashboard(show: show));
       }

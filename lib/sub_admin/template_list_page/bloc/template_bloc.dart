@@ -23,8 +23,8 @@ class TemplateBloc extends Bloc<TemplateEvent,TemplateState>{
         return;
       }
 
-      bool onlineOrOffline = await isDeviceOffline_Return_True();
-      if (onlineOrOffline) {
+      bool onlineOrOffline = isDeviceOffline_Return_False();
+      if (!onlineOrOffline) {
         emit(TemplateFailureState(message: 'No internet connection')); return;
       }
      
@@ -87,8 +87,8 @@ class TemplateBloc extends Bloc<TemplateEvent,TemplateState>{
         return;
       }
 
-      bool onlineOrOffline = await isDeviceOffline_Return_True();
-      if (onlineOrOffline) {
+      bool onlineOrOffline =  isDeviceOffline_Return_False();
+      if (!onlineOrOffline) {
         emit(TemplateFailureState(message: 'No internet connection')); return;
       }
      
@@ -136,8 +136,8 @@ class TemplateBloc extends Bloc<TemplateEvent,TemplateState>{
       
       emit(TemplateLoadingState());
 
-      bool onlineOrOffline = await isDeviceOffline_Return_True();
-      if (onlineOrOffline) {
+      bool onlineOrOffline =  isDeviceOffline_Return_False();
+      if (!onlineOrOffline) {
         emit(TemplateFailureState(message: 'No internet connection')); return;
       }
 
@@ -166,8 +166,8 @@ class TemplateBloc extends Bloc<TemplateEvent,TemplateState>{
     on<TemplateActiveOrInactiveEvent>((event, emit) async{
       emit(TemplateLoadingState());
 
-      bool onlineOrOffline = await isDeviceOffline_Return_True();
-      if (onlineOrOffline) {
+      bool onlineOrOffline = isDeviceOffline_Return_False();
+      if (!onlineOrOffline) {
         emit(TemplateFailureState(message: 'No internet connection')); return;
       }
 
@@ -193,8 +193,8 @@ class TemplateBloc extends Bloc<TemplateEvent,TemplateState>{
     on<TemplateFetchDataEvent>((event, emit) async{
         emit(TemplateLoadingState());
 
-      bool onlineOrOffline = await isDeviceOffline_Return_True();
-      if (onlineOrOffline) {
+      bool onlineOrOffline =  isDeviceOffline_Return_False();
+      if (!onlineOrOffline) {
         emit(TemplateFailureState(message: 'No internet connection')); return;
       }
 

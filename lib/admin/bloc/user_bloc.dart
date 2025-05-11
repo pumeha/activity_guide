@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:activity_guide/admin/view/users_page.dart';
+import 'package:activity_guide/shared/utils/constants.dart';
 import 'package:activity_guide/shared/utils/http_helper/general_json_dart.dart';
 import 'package:activity_guide/shared/utils/http_helper/storage_keys.dart';
 import 'package:activity_guide/shared/utils/myshared_preference.dart';
 import 'package:bloc/bloc.dart';
-import '../../shared/utils/constants.dart';
 import '../repository/users_repo_impl.dart';
 import 'user_event.dart';
 import 'user_state.dart';
@@ -18,8 +18,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     on<AddUserEvent>((event, emit) async{
       emit(LoadingState());
 
-      bool onlineOrOffline = await isDeviceOffline_Return_True();
-      if (onlineOrOffline) {
+      bool onlineOrOffline =  isDeviceOffline_Return_False();
+      if (!onlineOrOffline) {
         emit(FailureState(message: 'No internet connection')); return;
       }
       
@@ -53,9 +53,9 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
     on<UpdateUserEvent>((event, emit) async{
       emit(LoadingState());
-      
-      bool onlineOrOffline = await isDeviceOffline_Return_True();
-      if (onlineOrOffline) {
+
+      bool onlineOrOffline =  isDeviceOffline_Return_False();
+      if (!onlineOrOffline) {
         emit(FailureState(message: 'No internet connection')); return;
       }
 
@@ -91,11 +91,11 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     on<SuspendUserEvent>((event, emit) async{
       emit(LoadingState());
 
-      bool onlineOrOffline = await isDeviceOffline_Return_True();
-      if (onlineOrOffline) {
+          bool onlineOrOffline =  isDeviceOffline_Return_False();
+      if (!onlineOrOffline) {
         emit(FailureState(message: 'No internet connection')); return;
       }
-    
+
     String? token = await MysharedPreference().getPreferences(LoginKeys.token);
     if(token == null || token.isEmpty) {
       emit(FailureState(message: 'Unauthorized User'));
@@ -128,8 +128,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     on<DeleteUserEvent>((event, emit) async{
      emit(LoadingState());
 
-      bool onlineOrOffline = await isDeviceOffline_Return_True();
-      if (onlineOrOffline) {
+      bool onlineOrOffline =  isDeviceOffline_Return_False();
+      if (!onlineOrOffline) {
         emit(FailureState(message: 'No internet connection')); return;
       }
 
@@ -165,8 +165,8 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     on<ActiveUserEvent>((event, emit) async{
       emit(LoadingState());
 
-      bool onlineOrOffline = await isDeviceOffline_Return_True();
-      if (onlineOrOffline) {
+      bool onlineOrOffline =  isDeviceOffline_Return_False();
+      if (!onlineOrOffline) {
         emit(FailureState(message: 'No internet connection')); return;
       }
 

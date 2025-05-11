@@ -130,7 +130,7 @@ class _DashboardPageState extends State<DashboardPage>
                                   cacheMode: CacheMode.LOAD_CACHE_ELSE_NETWORK,
                                   javaScriptEnabled: true),
                               onWebViewCreated: (controller) {
-                                 EasyLoading.show(status: 'Loading');
+                                 EasyLoading.show();
                                 webViewController = controller;
                               },
                               onLoadStart: (controller, url) {
@@ -173,7 +173,9 @@ class _DashboardPageState extends State<DashboardPage>
                               onReceivedHttpError:
                                   (controller, request, errorResponse) {
                                 print('onReceivedHttpError');
-                              },), ),); }, ), ], );
+                              },
+                            
+                              ), ),); }, ), ], );
               } else {
                 return customCircleIndicator();
               }

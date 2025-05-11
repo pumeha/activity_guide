@@ -40,16 +40,12 @@ AppBar topNavigationBar(
                  final currentLocation = Beamer.of(context).currentBeamLocation;
 
                 if (currentLocation.state.routeInformation.uri.toString() == '/home/dashboard') {
-                return TextButton.icon(
+                return TextButton(
                   onPressed: () {
                   context.read<UserDashboardCubit>().refreshDashoard();
                   },
-                  label: const Text('Refresh Dashboard'),
-                  icon: const Icon(
-                    Icons.refresh,
-                    size: 30,
-                    color: active,
-                  ),
+                  child: const Text('Refresh Dashboard'),
+                  
                 );
               }
               return SizedBox.shrink();},

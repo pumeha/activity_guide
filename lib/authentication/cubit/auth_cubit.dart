@@ -20,12 +20,11 @@ class AuthCubit extends Cubit<AuthCubitState>{
     
       emit(AuthLoading());
 
-      bool onlineOrOffline = await isDeviceOffline_Return_True();
-      if (onlineOrOffline) {
-        emit(AuthFailure('No internet connection'));
-        return;
+      bool onlineOrOffline = isDeviceOffline_Return_False();
+      if (!onlineOrOffline) {
+        emit(AuthFailure('No internet connection')); return;
       }
-
+      
       final response = await authRepositoryImpl.login(email, password);
 
       GeneralJsonDart data = GeneralJsonDart.fromJson(response);
@@ -69,14 +68,18 @@ class AuthCubit extends Cubit<AuthCubitState>{
     emit(AuthSuccess(loginValues.role!));
       }else{
          String monthlyTempleJsonString;
+
         if (data.data![0][monthlyTemplateKey] != null ) {
             final monthlyTempleJson = data.data![0][monthlyTemplateKey] as List<dynamic>;
-            monthlyTempleJsonString = jsonEncode(monthlyTempleJson.toList());
+
+           if (monthlyTempleJson.isNotEmpty) {
+              monthlyTempleJsonString = jsonEncode(monthlyTempleJson.toList());
 
             await Future.wait([
                MysharedPreference().setPreferences(monthlyTemplateName, data.data![0][monthlyTemplateName]),
                MysharedPreference().setPreferences(monthlyTemplateKey,monthlyTempleJsonString )
             ]);
+           }
         }
       
 
@@ -84,12 +87,15 @@ class AuthCubit extends Cubit<AuthCubitState>{
         if (data.data![0][workplanTemplateKey] != null) {
         
           final workplanTemplateJson = data.data![0][workplanTemplateKey] as List<dynamic>;
-        workplanTemplateJsonString = jsonEncode(workplanTemplateJson.toList());
+        
+        if (workplanTemplateJson.isNotEmpty) {
+                  workplanTemplateJsonString = jsonEncode(workplanTemplateJson.toList());
 
         await Future.wait([
           MysharedPreference().setPreferences(workplanTemplateKey, workplanTemplateJsonString),
           MysharedPreference().setPreferences(workplanTemplateName, data.data![0][workplanTemplateName])
         ]);
+                }
         }
 
       await Future.wait([
@@ -112,8 +118,8 @@ class AuthCubit extends Cubit<AuthCubitState>{
   Future<void> forgotPassword(String email) async{
       emit(AuthLoading());
 
-      bool onlineOrOffline = await isDeviceOffline_Return_True();
-      if (onlineOrOffline) {
+      bool onlineOrOffline = isDeviceOffline_Return_False();
+      if (!onlineOrOffline) {
         emit(AuthFailure('No internet connection')); return;
       }
 
@@ -137,12 +143,11 @@ class AuthCubit extends Cubit<AuthCubitState>{
   Future<void> resetPassword(String inputCode,String newPassword) async{
       emit(AuthLoading());
 
-      bool onlineOrOffline = await isDeviceOffline_Return_True();
-      if (onlineOrOffline) {
-        emit(AuthFailure('No internet connection'));
-        return;
+      bool onlineOrOffline = isDeviceOffline_Return_False();
+      if (!onlineOrOffline) {
+        emit(AuthFailure('No internet connection')); return;
       }
-
+      
       String? token  = await MysharedPreference().getPreferences(LoginKeys.token);
       Map<String,dynamic> response = await authRepositoryImpl.resetPassword(inputCode, newPassword, token!);
       GeneralJsonDart data = GeneralJsonDart.fromJson(response);
@@ -159,9 +164,9 @@ class AuthCubit extends Cubit<AuthCubitState>{
   Future<void> userVerification({String? inputCode,String? newPassword}) async{
       
       emit(AuthLoading());
-      
-      bool onlineOrOffline = await isDeviceOffline_Return_True();
-      if (onlineOrOffline) {
+
+      bool onlineOrOffline = isDeviceOffline_Return_False();
+      if (!onlineOrOffline) {
         emit(AuthFailure('No internet connection')); return;
       }
 
@@ -181,8 +186,8 @@ class AuthCubit extends Cubit<AuthCubitState>{
   Future<void> requestTokenAgain() async{
       emit(AuthLoading());
       
-      bool onlineOrOffline = await isDeviceOffline_Return_True();
-      if (onlineOrOffline) {
+      bool onlineOrOffline = isDeviceOffline_Return_False();
+      if (!onlineOrOffline) {
         emit(AuthFailure('No internet connection')); return;
       }
 
