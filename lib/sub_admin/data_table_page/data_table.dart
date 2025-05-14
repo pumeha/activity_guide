@@ -141,8 +141,10 @@ class JSONDataGridSource extends DataGridSource{
    row.getCells().map((cell)=>
    Padding(
      padding: const EdgeInsets.all(8.0),
-     child: Text(cell.value.toString(),
-       style: const TextStyle(overflow: TextOverflow.visible,fontSize: 14),
+     child: Center(
+       child: Text(cell.value.toString(),
+         style: const TextStyle(overflow: TextOverflow.visible,fontSize: 14),
+       ),
      ),
    )).toList());
   }

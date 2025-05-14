@@ -34,7 +34,7 @@ String? name,String? type,String? Rvalue}){
       partialSave['colType'] = type;
        context!.read<BuilderBloc>().add(SelectDataTypeEvent(selectDataType:partialSave['colType']));
        nameController = TextEditingController(text: name);
-      if (type == 'Dropdown') {
+      if (type == 'Dropdown'){
          valueController = TextEditingController(text: Rvalue);
       }else if(type =='Date'){
           partialSave['date'] = Rvalue;
@@ -80,8 +80,12 @@ String? name,String? type,String? Rvalue}){
                        widget= Format(child: const Text('No default value required'),title: 'Value');
                       }else if(state.selectDataType == 'Dropdown'){
                        widget =   Format(title: 'Value',
-                       child: TextFormField(controller: valueController,
-                       maxLines: 4,minLines: 4,validator: validatorFunction,));
+                       child: Column(
+                          children: [
+                            TextFormField(controller: valueController,
+                         maxLines: 4,minLines: 4,validator: validatorFunction,),
+                        const Text('Dropdown items are seperated by comma')
+                          ],));
                       }else if(state.selectDataType == 'Date'){
                         widget =   Format(title: 'Value',
                           child: DropdownButtonFormField<String>(

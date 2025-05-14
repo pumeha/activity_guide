@@ -22,7 +22,7 @@ class EditDataCollectionBloc extends Bloc<EditDataCollectionEvent, EditDataColle
     on<UploadDataEvent>((event, emit) async{
       emit(EditLoadingState());
 
-      bool onlineOrOffline = isDeviceOffline_Return_False();
+      bool onlineOrOffline = isDeviceOffline();
       if (!onlineOrOffline) {
        emit(EditFailureState(message: 'No internet connection')); return ;
       }
@@ -57,6 +57,7 @@ class EditDataCollectionBloc extends Bloc<EditDataCollectionEvent, EditDataColle
 
        GeneralJsonDart jsonDart = GeneralJsonDart.fromJson(response);
        if (jsonDart.status == HttpStatus.created || jsonDart.status == HttpStatus.ok) {
+       await MysharedPreference().setPreferencesWithoutEncrpytion(dataCollectionKey, '');
        return emit(EditSuccessState());
        }else{
        return emit(EditFailureState(message: jsonDart.message!));

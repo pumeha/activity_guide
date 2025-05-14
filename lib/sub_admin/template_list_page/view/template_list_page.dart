@@ -23,9 +23,6 @@ class TemplatesListPage extends StatefulWidget {
 
 class _TemplatesListPageState extends State<TemplatesListPage> {
 
-
-
-
   Future<List<TemplateModel>> loadTemplateFromSharedPreference() async {
     String? templatesJson =
         await MysharedPreference().getPreferences(templateListKeys);

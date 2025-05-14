@@ -17,7 +17,8 @@ class DashboardCubit extends Cubit<DashboardCubitState> {
    
     emit(DashboardLoading());
 
-      bool onlineOrOffline =  isDeviceOffline_Return_False();
+      bool onlineOrOffline =  isDeviceOffline();
+
       if (!onlineOrOffline) {
         emit(DashboardFailure(errorMessage: 'No internet connection'));
       }
@@ -27,6 +28,7 @@ class DashboardCubit extends Cubit<DashboardCubitState> {
         emit(DashboardFailure(errorMessage: 'Unauthorized User'));
         return;
       }
+      
     final response = await dashboardRepositoryImpl.updateDashboardUrl(url: dashbordUrl,token: token); 
   
     GeneralJsonDart data = GeneralJsonDart.fromJson(response);
@@ -42,7 +44,7 @@ class DashboardCubit extends Cubit<DashboardCubitState> {
   Future<void> showDashboard() async{
    emit(DashboardLoading());
 
-      bool onlineOrOffline =  isDeviceOffline_Return_False();
+      bool onlineOrOffline =  isDeviceOffline();
       if (!onlineOrOffline) {
         emit(DashboardFailure(errorMessage: 'No internet connection'));
       }else{

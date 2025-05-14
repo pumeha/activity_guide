@@ -16,7 +16,7 @@ class UserHomeCubit extends Cubit<UserHomeState> {
   Future<void> downloadMonthlyData() async{
       emit(UserHomeLoading());
 
-      bool onlineOrOffline = isDeviceOffline_Return_False();
+      bool onlineOrOffline = isDeviceOffline();
       if (!onlineOrOffline) {
         emit(UserHomeFailure(message: 'No internet connection')); return;
       }
@@ -47,7 +47,7 @@ class UserHomeCubit extends Cubit<UserHomeState> {
   Future<void> downloadWorkplanData() async{
     emit(UserHomeLoading());
 
-      bool onlineOrOffline = isDeviceOffline_Return_False();
+      bool onlineOrOffline = isDeviceOffline();
       if (!onlineOrOffline) {
       return  emit(UserHomeFailure(message: 'No internet connection'));
       }

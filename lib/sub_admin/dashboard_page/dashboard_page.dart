@@ -141,7 +141,7 @@ class _DashboardPageState extends State<DashboardPage>
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
                             iframe?.src = urlController.text;
-                            EasyLoading.show(status: 'Testing dashboard...');
+                            
                             context.read<DashboardCubit>().showDashboard();
                           }
                         },

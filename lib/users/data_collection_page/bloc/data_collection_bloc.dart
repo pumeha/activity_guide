@@ -11,7 +11,7 @@ class DataCollectionBloc extends Bloc<DataCollectionEvent, DataCollectionState> 
 
     on<LoadDataCollectionMonthlyTemplateEvent>((event, emit) async{
       emit(DataCollectionStateLoading());
-
+      await MysharedPreference().clearPreference(dataCollectionKey);
       await MysharedPreference().setPreferences(selectedTemplate, 'monthly');
 
       String? monthlyTemplate = await MysharedPreference().getPreferences(monthlyTemplateKey);
@@ -26,7 +26,7 @@ class DataCollectionBloc extends Bloc<DataCollectionEvent, DataCollectionState> 
     on<LoadDataCollectionWorkplanTemplateEvent>((event, emit) async{
 
       emit(DataCollectionStateLoading());
-
+       await MysharedPreference().clearPreference(dataCollectionKey);
       await MysharedPreference().setPreferences(selectedTemplate, 'workplan');
       
       String? workplanTemplate = await MysharedPreference().getPreferences(workplanTemplateKey);
@@ -69,7 +69,7 @@ class DataCollectionBloc extends Bloc<DataCollectionEvent, DataCollectionState> 
       List<dynamic> list = [];
       Map<String,String> newData  = {};
       String?  editId = event.updateId;       
-     
+      print(event.data);
        newData['ID'] = '1';// adding 
        newData.addAll(event.data);
 

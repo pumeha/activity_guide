@@ -18,7 +18,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     on<AddUserEvent>((event, emit) async{
       emit(LoadingState());
 
-      bool onlineOrOffline =  isDeviceOffline_Return_False();
+      bool onlineOrOffline =  isDeviceOffline();
       if (!onlineOrOffline) {
         emit(FailureState(message: 'No internet connection')); return;
       }
@@ -54,7 +54,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     on<UpdateUserEvent>((event, emit) async{
       emit(LoadingState());
 
-      bool onlineOrOffline =  isDeviceOffline_Return_False();
+      bool onlineOrOffline =  isDeviceOffline();
       if (!onlineOrOffline) {
         emit(FailureState(message: 'No internet connection')); return;
       }
@@ -91,7 +91,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     on<SuspendUserEvent>((event, emit) async{
       emit(LoadingState());
 
-          bool onlineOrOffline =  isDeviceOffline_Return_False();
+          bool onlineOrOffline =  isDeviceOffline();
       if (!onlineOrOffline) {
         emit(FailureState(message: 'No internet connection')); return;
       }
@@ -128,7 +128,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     on<DeleteUserEvent>((event, emit) async{
      emit(LoadingState());
 
-      bool onlineOrOffline =  isDeviceOffline_Return_False();
+      bool onlineOrOffline =  isDeviceOffline();
       if (!onlineOrOffline) {
         emit(FailureState(message: 'No internet connection')); return;
       }
@@ -165,7 +165,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     on<ActiveUserEvent>((event, emit) async{
       emit(LoadingState());
 
-      bool onlineOrOffline =  isDeviceOffline_Return_False();
+      bool onlineOrOffline =  isDeviceOffline();
       if (!onlineOrOffline) {
         emit(FailureState(message: 'No internet connection')); return;
       }

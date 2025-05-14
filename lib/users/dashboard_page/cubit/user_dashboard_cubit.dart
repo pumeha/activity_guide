@@ -8,7 +8,7 @@ class UserDashboardCubit extends Cubit<UserDashboardState> {
   void show(bool show) async{
 
       if(show){
-      bool onlineOrOffline =  isDeviceOffline_Return_False();
+      bool onlineOrOffline =  isDeviceOffline();
         if (!onlineOrOffline) {
           emit(offlineState());
         }else{

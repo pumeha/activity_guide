@@ -72,12 +72,8 @@ class _PreviewTemplateState extends State<PreviewTemplate> {
     DateTime? selectedDate = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
-      firstDate: DateTime(DateTime
-          .now()
-          .year),
-      lastDate: DateTime(DateTime
-          .now()
-          .year + 2),
+      firstDate: DateTime(DateTime.now().year),
+      lastDate: DateTime(DateTime.now().year + 2),
     );
     if (selectedDate != null) {
       String _date =

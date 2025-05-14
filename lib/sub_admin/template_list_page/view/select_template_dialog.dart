@@ -6,7 +6,6 @@ import '../../../shared/responsiveness.dart';
 import '../../../shared/utils/colors.dart';
 import 'package:beamer/beamer.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../../template_builder_page/bloc/builder_bloc_event.dart';
 import '../bloc/template_event.dart';
 
@@ -39,26 +38,50 @@ class SelectTemplateDialog {
                 const SizedBox(height: 40),
                 Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    ElevatedButton(style: const ButtonStyle(backgroundColor: WidgetStatePropertyAll(Colors.greenAccent)),
+                    ElevatedButton(style: const ButtonStyle(backgroundColor: WidgetStatePropertyAll(active)),
                       onPressed: (){
                         context.read<TemplateBloc>().add(TemplatePurposeEvent(purpose: 'mtemplate'));
                         Navigator.pop(context);
+                        context.read<BuilderBloc>().add(ClearBuilderDataEvent());
                         context.beamToNamed('/admin/builder');
                          },
-                      child: const CustomText(text: "Monthly Template",color: Colors.black,weight: FontWeight.bold,),
+                      child: const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: CustomText(text: "Monthly\nTemplate",color: Colors.white,weight: FontWeight.bold,),
+                      ),
                     ),
-                     ElevatedButton(style: const ButtonStyle(backgroundColor: WidgetStatePropertyAll(Colors.amberAccent)),
+                     ElevatedButton(style: const ButtonStyle(backgroundColor: WidgetStatePropertyAll(Color.fromARGB(255, 26, 23, 16))),
                       onPressed:(){
                          context.read<TemplateBloc>().add(TemplatePurposeEvent(purpose: 'wtemplate'));
                          Navigator.pop(context);
                          context.read<BuilderBloc>().add(ClearBuilderDataEvent());
                          context.beamToNamed('/admin/builder');
                        },
-                      child: const CustomText(text: "Workplan Template",color: Colors.black,weight: FontWeight.bold),
+                      child: const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: CustomText(text: "Workplan\nTemplate",color: Colors.white,weight: FontWeight.bold),
+                      ),
                     ),
                   ],
-                ),
+                ),const SizedBox(height: 8,),
+                ElevatedButton(style: const ButtonStyle(backgroundColor: WidgetStatePropertyAll(Color.fromARGB(255, 255, 64, 80),)),
+                      onPressed:(){
+                         context.read<TemplateBloc>().add(TemplatePurposeEvent(purpose: 'atemplate'));
+                         Navigator.pop(context);
+                         context.read<BuilderBloc>().add(ClearBuilderDataEvent());
+                      //   context.beamToNamed('/admin/builder');
+                       },
+                      child: const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: CustomText(text: "Additional\nTemplate",color: Colors.white,weight: FontWeight.bold),
+                      ),
+                    ),
+                    const SizedBox(height: 12,),
+              IconButton(onPressed: ()=>Navigator.pop(context),
+               icon: const Icon(Icons.close,size: 36,color: Colors.red,))
               ],
+
+            
             ),
           ),
         );

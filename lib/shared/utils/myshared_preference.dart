@@ -54,8 +54,13 @@ class MysharedPreference {
    await pref.setString(key, value);
   }
 
-  Future<void> clearPreference() async{
+  Future<void> clearPreferenceAll() async{
   final pref =  await SharedPreferences.getInstance();
   await pref.clear();
+  }
+
+  Future<void> clearPreference(String key) async{
+  final pref =  await SharedPreferences.getInstance();
+  await pref.remove(key);
   }
 }

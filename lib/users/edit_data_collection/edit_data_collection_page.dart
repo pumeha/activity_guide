@@ -78,6 +78,7 @@ class _EditDataCollectionPageState extends State<EditDataCollectionPage> {
         if(state is EditLoadingState){
           EasyLoading.show(maskType: EasyLoadingMaskType.black);
         }else if(state is EditSuccessState){
+          
             EasyLoading.showSuccess('Data Uploaded Successfully!');
                       context.beamToReplacementNamed('/home/landing_page');
         }else if(state is EditFailureState){

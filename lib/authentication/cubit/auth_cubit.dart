@@ -20,7 +20,7 @@ class AuthCubit extends Cubit<AuthCubitState>{
     
       emit(AuthLoading());
 
-      bool onlineOrOffline = isDeviceOffline_Return_False();
+      bool onlineOrOffline = isDeviceOffline();
       if (!onlineOrOffline) {
         emit(AuthFailure('No internet connection')); return;
       }
@@ -84,6 +84,7 @@ class AuthCubit extends Cubit<AuthCubitState>{
       
 
         String workplanTemplateJsonString;
+        
         if (data.data![0][workplanTemplateKey] != null) {
         
           final workplanTemplateJson = data.data![0][workplanTemplateKey] as List<dynamic>;
@@ -118,7 +119,7 @@ class AuthCubit extends Cubit<AuthCubitState>{
   Future<void> forgotPassword(String email) async{
       emit(AuthLoading());
 
-      bool onlineOrOffline = isDeviceOffline_Return_False();
+      bool onlineOrOffline = isDeviceOffline();
       if (!onlineOrOffline) {
         emit(AuthFailure('No internet connection')); return;
       }
@@ -143,7 +144,7 @@ class AuthCubit extends Cubit<AuthCubitState>{
   Future<void> resetPassword(String inputCode,String newPassword) async{
       emit(AuthLoading());
 
-      bool onlineOrOffline = isDeviceOffline_Return_False();
+      bool onlineOrOffline = isDeviceOffline();
       if (!onlineOrOffline) {
         emit(AuthFailure('No internet connection')); return;
       }
@@ -165,7 +166,7 @@ class AuthCubit extends Cubit<AuthCubitState>{
       
       emit(AuthLoading());
 
-      bool onlineOrOffline = isDeviceOffline_Return_False();
+      bool onlineOrOffline = isDeviceOffline();
       if (!onlineOrOffline) {
         emit(AuthFailure('No internet connection')); return;
       }
@@ -186,7 +187,7 @@ class AuthCubit extends Cubit<AuthCubitState>{
   Future<void> requestTokenAgain() async{
       emit(AuthLoading());
       
-      bool onlineOrOffline = isDeviceOffline_Return_False();
+      bool onlineOrOffline = isDeviceOffline();
       if (!onlineOrOffline) {
         emit(AuthFailure('No internet connection')); return;
       }

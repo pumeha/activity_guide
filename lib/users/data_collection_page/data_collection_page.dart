@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:activity_guide/users/data_collection_page/bloc/data_collection_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -40,10 +42,8 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
         builder: (context, state) {
           List<TemplateJson> data =
               state.data!.map((data) => TemplateJson.fromJson(data)).toList();
-          _controllers = List.generate(data.length, (index) {
-            return TextEditingController();
-          });
-          labels = List.generate(data.length, (index) => data[index].name);
+          _controllers = List.generate(data.length, (index) { return TextEditingController(); });
+          labels = List.generate(data.length, (index)=>data[index].name);
 
           if (state is DataCollectionEditState) {
             editValues = state.editData;
@@ -56,12 +56,7 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
                 children: List.generate(data.length, (index) {
                   return CustomCard(index, data[index].name, data[index].type,
                       data[index].range, _formKey, editValues, labels);
-                }),
-              ),
-            ),
-          );
-        },
-      ),
+                }),  ), ), );}, ),
       floatingActionButton: Stack(
         children: [
           Positioned(
@@ -71,23 +66,26 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
               children: [
                 FloatingActionButton(
                   onPressed: () {
+                  
                     if (_formKey.currentState!.validate()) {
                       Map<String, String> data = {};
-
+                        
                       for (var i = 0; i < _controllers.length; i++) {
                         data[labels[i]] = _controllers[i].text;
                       }
                       
-                      EasyLoading.showSuccess('Success');
+                      
                       if (editValues.isNotEmpty && editValues.isNotEmpty) {
-           context.read<DataCollectionBloc>().add(AddDataFromDataCollectionEvent(data: data,updateId: editValues[0]['ID']));
+                  context.read<DataCollectionBloc>().add(AddDataFromDataCollectionEvent(data: data,
+                  updateId: editValues[0]['ID']));
                       } else {
                       context.read<DataCollectionBloc>().add(AddDataFromDataCollectionEvent(data: data));
                       }
-                      context.read<DataCollectionBloc>().add(LoadSelectedDataCollectionTemplateEvent());
-                      setState(() {
-                        
-                      });
+                   for (var element in _controllers) {
+                     element.clear();
+                   }
+
+                   EasyLoading.showSuccess('Success');
                     }
                   },
                   tooltip: 'Save',
@@ -143,7 +141,7 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
     return null;
   }
 
-  void singleDateDialog(String title) async {
+  void singleDateDialog(String title,TextEditingController controller) async {
     DateTime? selectedDate = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -154,11 +152,11 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
       String _date =
           '${selectedDate.month}/${selectedDate.day}/${selectedDate.year}';
       partialSave[title] = _date;
-      setState(() {}); // to refresh the state in order to update the date
+     controller.text = partialSave[title];
     }
   }
 
-  void doubleDateDialog(String title) {
+  void doubleDateDialog(String title,TextEditingController controller) {
     String multipleDateString = '';
     showDateRangePicker(
             context: context,
@@ -173,7 +171,7 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
             '${onValue.end.month}/${onValue.end.day}/${onValue.end.year}';
         multipleDateString = startDate + '-' + endDate;
         partialSave[title] = multipleDateString;
-        setState(() {});
+        controller.text = partialSave[title];
       }
     });
   }
@@ -184,10 +182,12 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
     // Get the width of the device
     double width = MediaQuery.of(context).size.width;
     double horizontalPadding = width > 1000 ? width / 4 : width / 6;
-    _controllers[index].text =
-        editValues.isNotEmpty ? editValues[0][labels[index]] : '';
-    partialSave[title] =
-        editValues.isNotEmpty ? editValues[0][labels[index]] : null;
+    if (editValues.isNotEmpty) {
+      _controllers[index].text =  editValues[0][labels[index]];
+       partialSave[title] = editValues[0][labels[index]] ;
+    }
+    
+   
     switch (type) {
       case 'Dropdown':
         subtitleWidget = DropdownButtonFormField<String>(
@@ -215,6 +215,7 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
         );
         break;
       case 'Date':
+       
         range == 'Single Date'
             ?
             // Render Date Picker
@@ -223,12 +224,17 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Expanded(child: Text(partialSave[title] ?? '')),
+                    Expanded(child: TextFormField(
+                      controller: _controllers[index],
+                      validator: validatorFunction,
+                      enabled: false,
+                      style: TextStyle(color: Colors.black),
+                    )),
                     TextButton(
                       child: Icon(Icons.arrow_drop_down_circle),
                       onPressed: () {
-                        singleDateDialog(title);
-                        _controllers[index].text = partialSave[title] ?? '';
+                        singleDateDialog(title,_controllers[index]);
+                      
                       },
                     ),
                   ],
@@ -249,7 +255,7 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
                     TextButton(
                       child: Icon(Icons.arrow_drop_down_circle),
                       onPressed: () {
-                        doubleDateDialog(title);
+                        doubleDateDialog(title,_controllers[index]);
                       },
                     ),
                   ],

@@ -80,6 +80,6 @@ Widget customCircleIndicator(){
   ));
 }
 
-bool isDeviceOffline_Return_False() {
+bool isDeviceOffline() {
  return html.window.navigator.onLine ?? false;
 }

@@ -21,7 +21,7 @@ class LargeScreenUsers extends StatelessWidget {
            UserLandingPageLocation(),DataCollectionPageLocation(),
             UserDashboardLocation(),
             DatatableLocation(),EditingMonthlyTemplateLocation()
-          ]),transitionDelegate: NoAnimationTransitionDelegate()),key: _beamerKey,),)
+          ]),transitionDelegate: const NoAnimationTransitionDelegate()),key: _beamerKey,),)
       ],
     ) ;
   }

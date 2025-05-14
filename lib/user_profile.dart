@@ -66,7 +66,7 @@ class _UserProfileState extends State<UserProfile> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: ElevatedButton(onPressed: () async{
-                  await  MysharedPreference().clearPreference();
+                  await  MysharedPreference().clearPreferenceAll();
                   
                   context.beamToReplacementNamed('/login');
                 
