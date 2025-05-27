@@ -72,8 +72,7 @@ class _SmallScreenUsersState extends State<SmallScreenUsers> {
               break;
           }
         },
-       selectedItemColor: Colors.green[800],
-        unselectedItemColor: Colors.black,
+       showUnselectedLabels: false,
 
       ),
       body: Beamer(routerDelegate: _beamerDelegate, key: _beamerKey,

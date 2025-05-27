@@ -13,6 +13,7 @@ import '../../shared/utils/constants.dart';
 import '../data_collection_page/bloc/data_collection_bloc.dart';
 import 'bloc/edit_data_collection_event.dart';
 import 'bloc/edit_data_collection_state.dart';
+import 'package:syncfusion_flutter_core/theme.dart';
 
 class EditDataCollectionPage extends StatefulWidget {
   const EditDataCollectionPage({super.key});
@@ -46,12 +47,10 @@ class _EditDataCollectionPageState extends State<EditDataCollectionPage> {
             columnName: entry.key,
             label: Container(
               padding: const EdgeInsets.all(8),
-              color: Colors.white,
               alignment: Alignment.center,
               child: Text(
                 entry.key,
                 style: const TextStyle(
-                  color: Colors.black,
                   fontSize: 14,
                 ),
               ),
@@ -91,31 +90,34 @@ class _EditDataCollectionPageState extends State<EditDataCollectionPage> {
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               return (_jsonDataGridSource != null)
-                  ? SfDataGrid(
-                      controller: controller,
-                      source: _jsonDataGridSource!,
-                      columns: columns,
-                      gridLinesVisibility: GridLinesVisibility.both,
-                      headerGridLinesVisibility: GridLinesVisibility.both,
-                      columnWidthMode: ColumnWidthMode.auto,
-                      // allowFiltering: true,
-                      // allowSorting: true,
-                      // allowMultiColumnSorting: true,
-                      // allowTriStateSorting: true,
-                      showVerticalScrollbar: true,
-                      showHorizontalScrollbar: true,
-                      navigationMode: GridNavigationMode.row,
-                      selectionMode: SelectionMode.multiple,
-                      onCellDoubleTap: (details) {
-                        dynamic index = details.rowColumnIndex.rowIndex - 1;
-
-                        List<dynamic> editData = [data[index]];
-                        context.beamToReplacementNamed('/home/template');
-                        context
-                            .read<DataCollectionBloc>()
-                            .add(DataCollectionEditEvent(data: editData));
-                      },
-                    )
+                  ? SfDataGridTheme(
+                    data: SfDataGridThemeData(gridLineStrokeWidth: 1,gridLineColor: Colors.grey),
+                    child: SfDataGrid(
+                        controller: controller,
+                        source: _jsonDataGridSource!,
+                        columns: columns,
+                        gridLinesVisibility: GridLinesVisibility.both,
+                        headerGridLinesVisibility: GridLinesVisibility.both,
+                        columnWidthMode: ColumnWidthMode.auto,
+                        // allowFiltering: true,
+                        // allowSorting: true,
+                        // allowMultiColumnSorting: true,
+                        // allowTriStateSorting: true,
+                        showVerticalScrollbar: true,
+                        showHorizontalScrollbar: true,
+                        navigationMode: GridNavigationMode.row,
+                        selectionMode: SelectionMode.multiple,
+                        onCellDoubleTap: (details) {
+                          dynamic index = details.rowColumnIndex.rowIndex - 1;
+                    
+                          List<dynamic> editData = [data[index]];
+                          context.beamToReplacementNamed('/home/template');
+                          context
+                              .read<DataCollectionBloc>()
+                              .add(DataCollectionEditEvent(data: editData));
+                        },
+                      ),
+                  )
                   : const Center(
                       child: CustomText(text: 'No records Found'),
                     );
@@ -224,11 +226,9 @@ class JSONDataGridSource extends DataGridSource {
         cells: row
             .getCells()
             .map((cell) => Container(
-                  color: Colors.white,
                   child: Center(
                     child: Text(
                       cell.value.toString(),
-                      style: TextStyle(backgroundColor: Colors.white),
                     ),
                   ),
                 ))

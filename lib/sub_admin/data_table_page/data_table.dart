@@ -9,6 +9,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import '../../shared/utils/constants.dart';
 import 'package:syncfusion_flutter_datagrid_export/export.dart';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart' hide Column, Row;
+import 'package:syncfusion_flutter_core/theme.dart';
 
 class MyTable extends StatefulWidget {
   const MyTable({super.key});
@@ -41,9 +42,9 @@ final GlobalKey<SfDataGridState> sfKey = GlobalKey<SfDataGridState>();
     List<GridColumn> columns = [];
     for(var entry in data.entries){
       GridColumn gridColumn = GridColumn(columnName: entry.key,
-          label: Container(padding: const EdgeInsets.all(8),color: Colors.white,
+          label: Container(padding: const EdgeInsets.all(8),
           alignment: Alignment.center,
-          child: Text(entry.key.replaceAll('_', ' ').toUpperCase(),style: const TextStyle(color: Colors.black,fontSize: 14,
+          child: Text(entry.key.replaceAll('_', ' ').toUpperCase(),style: const TextStyle(fontSize: 14,fontWeight: FontWeight.bold
           ),),));
    columns.add(gridColumn);
     }
@@ -63,27 +64,30 @@ final DataGridController controller = DataGridController();
   @override
   Widget build(BuildContext context) {
 
-    return Scaffold( backgroundColor: Colors.white70,
+    return Scaffold(
       body: FutureBuilder(
          future: populateData(),builder: (context,snapshot){
          if(snapshot.connectionState == ConnectionState.done){
       
-           return  SfDataGrid(
-             key: sfKey,
-             controller: controller,
-             source: _jsonDataGridSource,
-             columns: columns,
-             gridLinesVisibility: GridLinesVisibility.both,
-             headerGridLinesVisibility: GridLinesVisibility.both,
-             columnWidthMode: ColumnWidthMode.auto,
-             allowFiltering: true,
-             allowSorting: true,
-             allowMultiColumnSorting: true,
-             allowTriStateSorting: true,
-             showVerticalScrollbar: true,
-             showHorizontalScrollbar: true,
-             navigationMode: GridNavigationMode.row,
-             selectionMode: SelectionMode.multiple,
+           return  SfDataGridTheme(data:  SfDataGridThemeData(gridLineStrokeWidth: 1,
+           gridLineColor: Colors.grey) ,
+             child: SfDataGrid(
+               key: sfKey,
+               controller: controller,
+               source: _jsonDataGridSource,
+               columns: columns,
+               gridLinesVisibility: GridLinesVisibility.both,
+               headerGridLinesVisibility: GridLinesVisibility.both,
+               columnWidthMode: ColumnWidthMode.auto,
+               allowFiltering: true,
+               allowSorting: true,
+               allowMultiColumnSorting: true,
+               allowTriStateSorting: true,
+               showVerticalScrollbar: true,
+               showHorizontalScrollbar: true,
+               navigationMode: GridNavigationMode.row,
+               selectionMode: SelectionMode.single,
+                         ),
            );
          }
          return customCircleIndicator();
@@ -97,7 +101,7 @@ final DataGridController controller = DataGridController();
   Future<void> _exportDataGridToExcel() async {
   
   if (sfKey.currentState == null) {
-    print('SfDataGridState is null. The DataGrid might not be built yet.');
+    
     EasyLoading.showError('Data grid is not ready yet!');
     return;
   }
@@ -112,7 +116,7 @@ final DataGridController controller = DataGridController();
     ..setAttribute("download", "output.csv")
     ..click();
 } on Exception catch (e) {
-  print(e.toString());
+ // print(e.toString());
 }
   }
 

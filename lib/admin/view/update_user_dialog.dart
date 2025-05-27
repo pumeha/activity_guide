@@ -195,7 +195,6 @@ class UpdateUserDialog {
                 ),
               );
             }),
-            backgroundColor: Colors.white,
             actions: [
               TextButton(
                 onPressed: () {

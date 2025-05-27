@@ -55,7 +55,6 @@ class _TemplateBuilderUpdateState extends State<TemplateBuilderUpdate> {
             ),
         ],
               child: Scaffold(
-              backgroundColor: Colors.white,
               body: BlocBuilder<BuilderBloc, BuilderState>(
                 builder: (context, state) {
                   return ReorderableListView(
@@ -114,8 +113,8 @@ class _TemplateBuilderUpdateState extends State<TemplateBuilderUpdate> {
                           },
                           tooltip: 'Add Row',
                           heroTag: 'add',
-                          backgroundColor: Colors.green[50],
-                          child: const Icon(Icons.add),
+                          backgroundColor: Colors.black,
+                          child: const Icon(Icons.add,color: Colors.white,),
                         ),
                         
                       ],
@@ -160,10 +159,9 @@ class _TemplateBuilderUpdateState extends State<TemplateBuilderUpdate> {
       case 'Dropdown':
         subtitleWidget = DropdownButtonFormField<String>(
           key: key,
-          value: range.toString().split(',')[0],
           items: range
               .toString()
-              .split(',')
+              .split(',').toSet()
               .map<DropdownMenuItem<String>>((e) => DropdownMenuItem(
                     key: key,
                     value: e,
@@ -233,6 +231,10 @@ class _TemplateBuilderUpdateState extends State<TemplateBuilderUpdate> {
           maxLines: 3,
           onChanged: (value) {},
         );
+         break;
+      case 'Dropdown using active workplan columns':
+        subtitleWidget =  Text('Data from ${range} column in active workplan will be use for the Dropdown list');
+        break;
     }
     //here
     return Padding(
@@ -250,7 +252,6 @@ class _TemplateBuilderUpdateState extends State<TemplateBuilderUpdate> {
               right: horizontalPadding / 2),
       child: Card(
         key: key,
-        color: Colors.white,
         shape: Border.all(color: active),
         child: ListTile(
           key: key,
@@ -279,7 +280,7 @@ class _TemplateBuilderUpdateState extends State<TemplateBuilderUpdate> {
                         editData!(index!);
                       },
                       tooltip: 'Edit',
-                      icon: const Icon(Icons.edit),
+                      icon: const Icon(Icons.edit,color: Colors.black,),
                     ),
                   ),
                   // Remove Button

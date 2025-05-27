@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import '../../../shared/custom_widgets/custom_text.dart';
+import '../../../shared/utils/http_helper/storage_keys.dart';
+import '../../../shared/utils/myshared_preference.dart';
 import '../bloc/builder_bloc.dart';
 import '../bloc/builder_bloc_event.dart';
 import '../bloc/builder_bloc_state.dart';
@@ -9,10 +13,23 @@ class BuilderDialog {
   
 
 Future<void> showBuilderDialog({ required BuildContext? context,int? id,
-String? name,String? type,String? Rvalue}){
-
-  
-    String range = 'TextField,Dropdown,Date';//change dynamic to textfield
+String? name,String? type,String? Rvalue}) async{
+    String? range;
+    String? activeWorkplanColumns;
+        String? templatePurpose = await MysharedPreference().getPreferences(BuilderKeys.purpose);
+                          
+      if (templatePurpose != null && templatePurpose == 'mtemplate') {
+       activeWorkplanColumns  = await MysharedPreference().getPreferencesWithoutEncrpytion('activeWorkplanColumns');
+    //    print(templatePurpose);
+      
+    if (activeWorkplanColumns != null && activeWorkplanColumns.isNotEmpty) {
+     range = 'TextField,Dropdown,Dropdown using active workplan columns,Date';
+    }
+    // range = 'TextField,Dropdown,Dropdown using active workplan columns,Date';
+    }else{
+      range = 'TextField,Dropdown,Date';
+    }
+    
 
     String? validatorFunction(String? v){
     if(v == null || v.isEmpty){
@@ -38,6 +55,8 @@ String? name,String? type,String? Rvalue}){
          valueController = TextEditingController(text: Rvalue);
       }else if(type =='Date'){
           partialSave['date'] = Rvalue;
+      }else if(type == 'Dropdown using active workplan columns'){
+          partialSave['columnFromWorkplan'] = Rvalue;
       }
     }
 
@@ -73,6 +92,7 @@ String? name,String? type,String? Rvalue}){
                     isExpanded: true,validator: validatorFunction,
                     decoration: const InputDecoration(border: OutlineInputBorder()), )),
 
+                   
                   BlocBuilder<BuilderBloc, BuilderState>(
                     builder: (context, state) {
                       Widget widget = Container();
@@ -86,7 +106,24 @@ String? name,String? type,String? Rvalue}){
                          maxLines: 4,minLines: 4,validator: validatorFunction,),
                         const Text('Dropdown items are seperated by comma')
                           ],));
-                      }else if(state.selectDataType == 'Date'){
+                      }else if(state.selectDataType == 'Dropdown using active workplan columns'){
+                        //--------------------------------------------------------------------
+                       widget =   Format(title: 'Active workplan Columns',
+                       child: DropdownButtonFormField<String>(
+                      value: partialSave['columnFromWorkplan'],
+                   items: activeWorkplanColumns.toString().split(',')
+                        .map<DropdownMenuItem<String>>(
+                            (e) => DropdownMenuItem(value: e,  child: Tooltip(message: e,child: Text(e,),),))
+                        .toList(),
+                    onChanged: (String? value) {
+                          partialSave['columnFromWorkplan'] = value;
+                          valueController.text = value!;
+                      },
+                    isExpanded: true,validator: validatorFunction,
+                    decoration: const InputDecoration(border: OutlineInputBorder()), ));
+                      //----------------------------------------------------------------------
+                      }
+                      else if(state.selectDataType == 'Date'){
                         widget =   Format(title: 'Value',
                           child: DropdownButtonFormField<String>(
                           value:  partialSave['date'],items: 
@@ -106,7 +143,6 @@ String? name,String? type,String? Rvalue}){
                   );
                 }
             ),
-            backgroundColor: Colors.white,
             actions: [
               
               TextButton(onPressed: (){
@@ -145,7 +181,7 @@ String? name,String? type,String? Rvalue}){
 
 Widget Format({String? title, Widget? child}){
 
-    return Card(color: const Color.fromARGB(255, 231, 227, 227),
+    return Card(
       child: ListTile(
         title:  Padding(
           padding: const EdgeInsets.all(8.0),

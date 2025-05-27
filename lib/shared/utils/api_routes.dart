@@ -1,5 +1,6 @@
-String baseUrl = "https://activityguide.smarterwayltd.com/endpoints";
+String baseUrl = "https://www.smarterwayltd.com/endpoints";
 //String baseUrl = "http://localhost:5000/endpoints";
+
 class LoginRoutes {
 static String loginRoute = "$baseUrl/auth/login";
 static String forgetPassword = "$baseUrl/auth/forgetpassword";

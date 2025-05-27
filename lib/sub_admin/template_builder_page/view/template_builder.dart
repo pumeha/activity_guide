@@ -1,4 +1,3 @@
-import 'package:activity_guide/admin/bloc/user_state.dart';
 import 'package:activity_guide/sub_admin/template_builder_page/bloc/builder_bloc_event.dart';
 import 'package:activity_guide/sub_admin/template_builder_page/view/builder_dialog.dart';
 import 'package:activity_guide/shared/utils/rowdata_model.dart';
@@ -73,7 +72,6 @@ class _TemplateBuilderState extends State<TemplateBuilder> {
             ),
         ],
               child: Scaffold(
-              backgroundColor: Colors.white,
               body: BlocBuilder<BuilderBloc, BuilderState>(
                 builder: (context, state) {
                   return ReorderableListView(
@@ -115,7 +113,7 @@ class _TemplateBuilderState extends State<TemplateBuilder> {
                           builder: (context, state) {
                             return Text(
                               '${state.rows.length}',
-                              style: AppTextStyles.tableColumns,
+                            style: AppTextStyles.tableColumns,
                             );
                           },
                         ),
@@ -127,13 +125,13 @@ class _TemplateBuilderState extends State<TemplateBuilder> {
                     child: Column(
                       children: [
                         FloatingActionButton(
-                          onPressed: () {
-                            BuilderDialog().showBuilderDialog(context: context);
+                          onPressed: () async{
+                            BuilderDialog().showBuilderDialog(context: context); 
                           },
                           tooltip: 'Add Row',
                           heroTag: 'add',
-                          backgroundColor: Colors.green[50],
-                          child: const Icon(Icons.add),
+                          backgroundColor: Colors.black,
+                          child: const Icon(Icons.add,color: Colors.white),
                         ),
                         
                       ],
@@ -174,15 +172,16 @@ class _TemplateBuilderState extends State<TemplateBuilder> {
     // Get the width of the device
     double width = MediaQuery.of(context).size.width;
     double horizontalPadding = width > 1000 ? width / 4 : width / 8;
-
     switch (type) {
+      
       case 'Dropdown':
+      
         subtitleWidget = DropdownButtonFormField<String>(
           key: key,
-          value: range.toString().split(',')[0],
+         // value: range.toString().split(',')[0],
           items: range
               .toString()
-              .split(',')
+              .split(',').toSet()
               .map<DropdownMenuItem<String>>((e) => DropdownMenuItem(
                     key: key,
                     value: e,
@@ -245,6 +244,7 @@ class _TemplateBuilderState extends State<TemplateBuilder> {
                 ),
               );
         break;
+        
       case 'TextField':
         subtitleWidget = TextFormField(
           key: key,
@@ -252,6 +252,10 @@ class _TemplateBuilderState extends State<TemplateBuilder> {
           maxLines: 3,
           onChanged: (value) {},
         );
+      break;
+      case 'Dropdown using active workplan columns':
+        subtitleWidget =  Text('Data from ${range} column in active workplan will be use for the Dropdown list');
+        break;
     }
     //here
     return Padding(
@@ -269,7 +273,6 @@ class _TemplateBuilderState extends State<TemplateBuilder> {
               right: horizontalPadding / 2),
       child: Card(
         key: key,
-        color: Colors.white,
         shape: Border.all(color: active),
         child: ListTile(
           key: key,
@@ -298,7 +301,7 @@ class _TemplateBuilderState extends State<TemplateBuilder> {
                         editData!(index!);
                       },
                       tooltip: 'Edit',
-                      icon: const Icon(Icons.edit),
+                      icon: const Icon(Icons.edit,color: Colors.black,),
                     ),
                   ),
                   // Remove Button

@@ -95,11 +95,8 @@ class _UserLandingPageState extends State<UserLandingPage> {
                     color: const Color.fromARGB(203, 4, 89, 68),
                     child: const Padding(
                       padding: EdgeInsets.all(16),
-                      child: CustomText(
-                        text: 'Monthly\nTemplate',
-                        color: Colors.white,
-                        weight: FontWeight.bold,
-                      ),
+                      child: Text('Monthly\nTemplate',
+                      style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
                     ),
                   ),
                   const SizedBox(
@@ -114,11 +111,8 @@ class _UserLandingPageState extends State<UserLandingPage> {
                     color: const Color.fromARGB(255, 37, 78, 89),
                     child: const Padding(
                       padding: EdgeInsets.all(16),
-                      child: CustomText(
-                        text: 'Workplan\nTemplate',
-                        color: Colors.white,
-                        weight: FontWeight.bold,
-                      ),
+                      child: Text('Workplan\nTemplate',
+                      style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
                     ),
                   )
                 ],
@@ -136,11 +130,8 @@ class _UserLandingPageState extends State<UserLandingPage> {
                     color: const Color.fromARGB(235, 57, 85, 11),
                     child: const Padding(
                       padding: EdgeInsets.all(16),
-                      child: CustomText(
-                        text: '  \tView\n Monthly\n \tData',
-                        color: Colors.white,
-                        weight: FontWeight.bold,
-                      ),
+                      child:  Text('  \tView\n Monthly\n \tData',
+                      style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
                     ),
                   ),
                   const SizedBox(
@@ -153,11 +144,8 @@ class _UserLandingPageState extends State<UserLandingPage> {
                     color: const Color.fromARGB(255, 224, 173, 20),
                     child: const Padding(
                       padding: EdgeInsets.all(16),
-                      child: CustomText(
-                        text: '  \tView\n Workplan\n \tData',
-                        color: Colors.white,
-                        weight: FontWeight.bold,
-                      ),
+                      child: Text('  \tView\n Workplan\n \tData',
+                      style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
                     ),
                   )
                 ],

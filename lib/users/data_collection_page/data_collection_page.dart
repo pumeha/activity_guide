@@ -42,6 +42,7 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
         builder: (context, state) {
           List<TemplateJson> data =
               state.data!.map((data) => TemplateJson.fromJson(data)).toList();
+            
           _controllers = List.generate(data.length, (index) { return TextEditingController(); });
           labels = List.generate(data.length, (index)=>data[index].name);
 
@@ -123,7 +124,7 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
                   tooltip: 'View',
                   heroTag: 'view',
                   child: const Icon(
-                    Icons.description_outlined,
+                    Icons.description_outlined,color: Colors.black,
                   ),
                 ),
               ],
@@ -194,7 +195,7 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
           value: partialSave[title],
           items: range
               .toString()
-              .split(',')
+              .split(',').toSet()
               .map<DropdownMenuItem<String>>((e) => DropdownMenuItem(
                     value: e,
                     child: Tooltip(
@@ -277,7 +278,6 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: 8),
       child: Card(
-        color: Colors.white,
         elevation: 2,
         child: ListTile(
           title: Padding(

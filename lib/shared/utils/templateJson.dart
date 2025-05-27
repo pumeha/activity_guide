@@ -15,10 +15,10 @@ class TemplateJson {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['ID'] = this.iD;
-    data['name'] = this.name;
-    data['Type'] = this.type;
-    data['Range'] = this.range;
+    data['ID'] = iD;
+    data['name'] = name;
+    data['Type'] = type;
+    data['Range'] = range;
     return data;
   }
 }

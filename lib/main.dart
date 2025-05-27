@@ -1,3 +1,6 @@
+import 'package:activity_guide/shared/theme/styles.dart';
+import 'package:activity_guide/shared/theme_mode_bloc/theme_bloc.dart';
+import 'package:activity_guide/shared/theme_mode_bloc/theme_event_et_state.dart';
 import 'package:activity_guide/sub_admin/dashboard_page/cubit/dashboard_cubit.dart';
 import 'package:activity_guide/sub_admin/dashboard_page/repository/dashboard_repository_impl.dart';
 import 'package:activity_guide/sub_admin/template_list_page/bloc/template_bloc.dart';
@@ -31,15 +34,18 @@ Future main() async {
 
   runApp(MultiBlocProvider(
     providers: [
-      BlocProvider(create: (_) => AuthCubit(AuthRepositoryImpl()),),
-      BlocProvider(create: (_)=> BuilderBloc()),
-      BlocProvider(create: (_)=> DashboardCubit(DashboardRepositoryImpl())),
-      BlocProvider(create: (_)=> UserBloc(UsersRepoImpl())),
-      BlocProvider(create: (_)=> TemplateBloc(TemplateRepoImpl())),
-      BlocProvider(create: (_)=> DataCollectionBloc()),
-      BlocProvider(create: (_)=> EditDataCollectionBloc(EditRepoImpl())),
-      BlocProvider(create: (_)=> UserHomeCubit(UserHomeImpl())),
-      BlocProvider(create: (_)=> UserDashboardCubit())
+      BlocProvider(
+        create: (_) => AuthCubit(AuthRepositoryImpl()),
+      ),
+      BlocProvider(create: (_) => BuilderBloc()),
+      BlocProvider(create: (_) => DashboardCubit(DashboardRepositoryImpl())),
+      BlocProvider(create: (_) => UserBloc(UsersRepoImpl())),
+      BlocProvider(create: (_) => TemplateBloc(TemplateRepoImpl())),
+      BlocProvider(create: (_) => DataCollectionBloc()),
+      BlocProvider(create: (_) => EditDataCollectionBloc(EditRepoImpl())),
+      BlocProvider(create: (_) => UserHomeCubit(UserHomeImpl())),
+      BlocProvider(create: (_) => UserDashboardCubit()),
+      BlocProvider(create: (_) => ThemeBloc()..add(LoadTheme()))
     ],
     child: MyApp(),
   ));
@@ -49,7 +55,10 @@ class MyApp extends StatelessWidget {
   MyApp({super.key});
   final _routerDelegate = BeamerDelegate(
     locationBuilder: BeamerLocationBuilder(beamLocations: [
-      LoginLocation(),AccountVerificationLocation(),ForgetPasswordLocation(),NewPasswordLocation(),
+      LoginLocation(),
+      AccountVerificationLocation(),
+      ForgetPasswordLocation(),
+      NewPasswordLocation(),
       AdminHomeLocation(),
       HomeLocationUsers(),
       SuperAdminLocation()
@@ -59,23 +68,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: 'Activity Guide',
-      theme: ThemeData(
-          scaffoldBackgroundColor: light,
-          colorScheme: ColorScheme.fromSeed(seedColor: active),
-          useMaterial3: true,
-          textSelectionTheme: const TextSelectionThemeData(cursorColor: active),
-          textTheme: GoogleFonts.mulishTextTheme(Theme.of(context).textTheme)
-              .apply(bodyColor: Colors.black),
-          pageTransitionsTheme: const PageTransitionsTheme(builders: {
-            TargetPlatform.iOS: FadeUpwardsPageTransitionsBuilder(),
-            TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
-          })),
-      debugShowCheckedModeBanner: false,
-      builder: EasyLoading.init(),
-      routerDelegate: _routerDelegate,
-      routeInformationParser: BeamerParser(),
+    return BlocBuilder<ThemeBloc, ThemeState>(
+      builder: (context, state) {
+        return MaterialApp.router(
+          title: 'Activity Guide',
+          darkTheme: Styles.darkTheme,
+          theme: Styles.lightTheme,
+              themeMode: state.themeMode,
+          debugShowCheckedModeBanner: false,
+          builder: EasyLoading.init(),
+          routerDelegate: _routerDelegate,
+          routeInformationParser: BeamerParser(),
+        );
+      },
     );
   }
 }

@@ -1,11 +1,13 @@
 import 'package:activity_guide/shared/custom_widgets/custom_text.dart';
+import 'package:activity_guide/shared/theme_mode_bloc/theme_bloc.dart';
+import 'package:activity_guide/shared/theme_mode_bloc/theme_event_et_state.dart';
 import 'package:activity_guide/shared/utils/constants.dart';
 import 'package:activity_guide/shared/utils/http_helper/storage_keys.dart';
 import 'package:activity_guide/shared/utils/myshared_preference.dart';
 import 'package:flutter/material.dart';
 import 'package:beamer/beamer.dart';
 import 'shared/utils/colors.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
 class UserProfile extends StatefulWidget {
   const UserProfile({super.key});
 
@@ -30,7 +32,7 @@ class _UserProfileState extends State<UserProfile> {
   @override
   Widget build(BuildContext context) {
    
-    return Drawer(backgroundColor: Colors.white,
+    return Drawer(
     child: FutureBuilder( future: loadUserDetails(),
       builder: (context,snapshot){
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -71,10 +73,10 @@ class _UserProfileState extends State<UserProfile> {
                   context.beamToReplacementNamed('/login');
                 
                 },
-                style: const ButtonStyle(backgroundColor: WidgetStatePropertyAll(Colors.amberAccent)),
+               style: const ButtonStyle(backgroundColor: WidgetStatePropertyAll(Colors.amberAccent)),
                  child: const Padding(
                   padding: EdgeInsets.all(8.0),
-                  child: CustomText(text: 'Sign Out',color: Colors.black,),
+                  child: Text('Sign Out',style: TextStyle(color: Colors.black),),
                 ),)
               )
             ],

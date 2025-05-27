@@ -5,6 +5,5 @@ class AppTextStyles{
  static const tableColumns = TextStyle(
    fontSize: 18,
    fontWeight: FontWeight.bold,
-     color: Colors.black
  );
 }

@@ -5,9 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:activity_guide/sub_admin/template_list_page/bloc/template_bloc.dart';
 import 'package:activity_guide/sub_admin/template_list_page/template_model.dart';
 import 'package:flutter/material.dart';
-
+import 'package:activity_guide/shared/utils/myshared_preference.dart';
 import 'package:beamer/beamer.dart';
 import '../responsiveness.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 class TemplateListItem extends StatelessWidget {
   final TemplateModel model;
@@ -17,13 +18,32 @@ class TemplateListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool isActive = model.status == 'active' ? true : false;
+
+          double currentWidth = MediaQuery.of(context).size.width;
+      if (currentWidth > largeScreenSize) {
+        currentWidth = 400;
+      }else if(currentWidth > 1018 && currentWidth < largeScreenSize){
+            currentWidth = 300;
+      }else if (currentWidth > mediumScreenSize) {
+        currentWidth = currentWidth > 880 ? 150 + currentWidth / 20 : 150;
+      } else if (currentWidth > 500 && currentWidth < mediumScreenSize) {
+        currentWidth = 80 + currentWidth / 20;
+      } else if (currentWidth > smallScreenSize) {
+        currentWidth = 40 + smallScreenSize / 20;
+      } else {
+        currentWidth = 0;
+      }
+      
+// const int largeScreenSize = 1366;
+// const int mediumScreenSize = 768;
+// const int smallScreenSize = 360;
+// const int customScreenSize = 1100;
     return  Padding(
                 padding: EdgeInsets.symmetric(
-                    horizontal:
-                        ResponsiveWidget.isLargeScreen(context) ? 300 : 80,
+                    horizontal: currentWidth,
                     vertical: 10),
                 child: Card(
-                  color: const Color(0xFFFFFFFF),
+                 
                   elevation: 12,
                   child: ListTile(
                     title: Row(
@@ -63,16 +83,22 @@ class TemplateListItem extends StatelessWidget {
                                 onPressed: () {
                          context.read<TemplateBloc>().add(TemplateFetchDataEvent(templateName: model.templateName));
                                 },
-                                icon: const Icon(Icons.dataset,
-                                    color: Colors.black, size: 24),
+                                icon: const Icon(Icons.dataset,size: 24),
                                 tooltip: 'Template Database',
                               ),
                               IconButton(
                                 icon: const Icon(Icons.edit,
                                     color: Color.fromARGB(255, 251, 180, 0), size: 24),
-                                onPressed: () {
-                                  context.read<BuilderBloc>().add(EditTemplateEvent(rows: model.values,templateName: model.templateName));
-                                  context.beamToNamed('/admin/update_template');
+                                onPressed: () async{
+                                   String? activeWorkplan = await MysharedPreference().getPreferencesWithoutEncrpytion('activeWorkplan');
+
+                                  if (model.purpose == 'mtemplate' && (activeWorkplan == null || activeWorkplan.isEmpty)) {
+                                    EasyLoading.showError('Active Workplan required');
+                                  }else{
+                                    context.read<BuilderBloc>().add(EditTemplateEvent(rows: model.values,templateName: model.templateName));
+                                    context.beamToNamed('/admin/update_template');
+                                  }
+                                  
                                 },
                                 tooltip: 'Edit Template',
                               ),

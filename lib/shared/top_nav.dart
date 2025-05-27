@@ -5,13 +5,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:beamer/beamer.dart';
 
 import '../users/dashboard_page/cubit/user_dashboard_state.dart';
+import 'theme_mode_bloc/theme_bloc.dart';
+import 'theme_mode_bloc/theme_event_et_state.dart';
 
 AppBar topNavigationBar(
         {required BuildContext context,
         required GlobalKey<ScaffoldState> scaffoldKey}) =>
     AppBar(
         elevation: 0,
-        backgroundColor: Colors.white,
         title: Row(
           children: [
             Text('  '),
@@ -27,8 +28,9 @@ AppBar topNavigationBar(
               'GUIDE',
               style: TextStyle(
                   fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.green[900]),
+                  fontWeight: FontWeight.bold, color: Theme.of(context).brightness == Brightness.light ? active : Colors.white
+
+                 ),
             ),
             Expanded(child: Container()),
           ],
@@ -36,20 +38,26 @@ AppBar topNavigationBar(
         actions: [
          
             BlocBuilder<UserDashboardCubit, UserDashboardState>(
-              builder: (context, state) {
-                 final currentLocation = Beamer.of(context).currentBeamLocation;
+              builder: (c, state) {
+                 final currentLocation = Beamer.of(c).currentBeamLocation;
 
                 if (currentLocation.state.routeInformation.uri.toString() == '/home/dashboard') {
                 return TextButton(
                   onPressed: () {
-                  context.read<UserDashboardCubit>().refreshDashoard();
+                  c.read<UserDashboardCubit>().refreshDashoard();
                   },
                   child: const Text('Refresh\nDashboard'),
                   
                 );
+              }else{
+               return  IconButton(onPressed: (){
+                     context.read<ThemeBloc>().add(ToggleTheme());
+              }, icon:  Icon(Icons.brightness_6_sharp,size: 20,
+              color: const Color.fromARGB(255, 255, 200, 0),));
               }
-              return SizedBox.shrink();},
+              },
             ),
+           
           IconButton(
               onPressed: () {
                 scaffoldKey.currentState!.openEndDrawer();

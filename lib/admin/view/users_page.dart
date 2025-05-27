@@ -211,7 +211,6 @@ class _UsersPageState extends State<UsersPage> {
                 ),
               );
             }),
-            backgroundColor: Colors.white,
             actions: [
               TextButton(
                 onPressed: () {
@@ -280,7 +279,7 @@ class _UsersPageState extends State<UsersPage> {
   Widget build(BuildContext context) {
     return DefaultTabController( length: 2,
       child: Scaffold(
-        backgroundColor: Colors.white,
+        
         appBar: const TabBar(tabs: [Tab(text: 'Sub-Admins',),Tab(text: 'Users',)],),
         floatingActionButton:   FloatingActionButton(
           onPressed: () {
@@ -369,7 +368,7 @@ class _UsersPageState extends State<UsersPage> {
                         width: 350,
                         child: Card(
                           shadowColor: Colors.black,
-                          color: Colors.white,
+                         
                           child: Row(
                             children: [
                               Container(

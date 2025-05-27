@@ -56,6 +56,7 @@ class EditDataCollectionBloc extends Bloc<EditDataCollectionEvent, EditDataColle
        
 
        GeneralJsonDart jsonDart = GeneralJsonDart.fromJson(response);
+       
        if (jsonDart.status == HttpStatus.created || jsonDart.status == HttpStatus.ok) {
        await MysharedPreference().setPreferencesWithoutEncrpytion(dataCollectionKey, '');
        return emit(EditSuccessState());

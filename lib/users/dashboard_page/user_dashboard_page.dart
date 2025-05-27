@@ -78,7 +78,6 @@ class _UserDashboardPageState extends State<UserDashboardPage>
       ..width = '100%'
       ..height = '100%'
       ..onLoad.listen((event) {
-        print('✅ Iframe loaded');
         EasyLoading.dismiss();
         showCustomSnackBar();
       });

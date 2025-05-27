@@ -69,7 +69,7 @@ class DataCollectionBloc extends Bloc<DataCollectionEvent, DataCollectionState> 
       List<dynamic> list = [];
       Map<String,String> newData  = {};
       String?  editId = event.updateId;       
-      print(event.data);
+   
        newData['ID'] = '1';// adding 
        newData.addAll(event.data);
 

@@ -65,8 +65,7 @@ class _SmallScreenAdminState extends State<SmallScreenAdmin> {
               break;
           }
         },
-       selectedItemColor: Colors.green[800],
-        unselectedItemColor: Colors.black,
+     showUnselectedLabels: false,
 
       ),
       body: Beamer(routerDelegate: _beamerDelegate, key: _beamerKey,),

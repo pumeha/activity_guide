@@ -2,6 +2,7 @@ import 'package:activity_guide/shared/utils/myshared_preference.dart';
 import 'package:activity_guide/sub_admin/template_builder_page/bloc/builder_bloc_state.dart';
 import 'package:activity_guide/shared/utils/rowdata_model.dart';
 import 'package:bloc/bloc.dart';
+import '../../../shared/utils/http_helper/storage_keys.dart';
 import 'builder_bloc_event.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
@@ -61,8 +62,11 @@ class BuilderBloc extends Bloc<BuilderEvent, BuilderState> {
      * return List<RowData>, templateName(SelectDataType)
      */
    on<EditTemplateEvent>((event, emit) async{
-    //I will pass templateName
-   await MysharedPreference().setPreferences('templateName',event.templateName);
+   await Future.wait([
+           MysharedPreference().setPreferences(BuilderKeys.purpose, event.templateName.split('_')[0]),
+  MysharedPreference().setPreferences('templateName',event.templateName)
+      ]);
+
     emit(state.currentData(rows: event.rows,selectDataType: 'update'));
    });
 

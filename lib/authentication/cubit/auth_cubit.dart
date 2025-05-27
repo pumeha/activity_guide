@@ -18,7 +18,7 @@ class AuthCubit extends Cubit<AuthCubitState>{
 
   Future<void> login(String email,String password) async{
     
-      emit(AuthLoading());
+      emit(AuthLoading()); 
 
       bool onlineOrOffline = isDeviceOffline();
       if (!onlineOrOffline) {
@@ -82,16 +82,16 @@ class AuthCubit extends Cubit<AuthCubitState>{
            }
         }
       
-
+        
         String workplanTemplateJsonString;
         
         if (data.data![0][workplanTemplateKey] != null) {
         
           final workplanTemplateJson = data.data![0][workplanTemplateKey] as List<dynamic>;
-        
+         
         if (workplanTemplateJson.isNotEmpty) {
                   workplanTemplateJsonString = jsonEncode(workplanTemplateJson.toList());
-
+          
         await Future.wait([
           MysharedPreference().setPreferences(workplanTemplateKey, workplanTemplateJsonString),
           MysharedPreference().setPreferences(workplanTemplateName, data.data![0][workplanTemplateName])

@@ -18,9 +18,7 @@ class _SideMenuAdminState extends State<SideMenuAdmin> {
   Widget build(BuildContext context) {
     return Container(
         constraints: const BoxConstraints(minWidth: 80),
-        decoration: const BoxDecoration(
-          color: Colors.white,
-        ),
+       
         child:   Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: NavigationItemsAdmin.values

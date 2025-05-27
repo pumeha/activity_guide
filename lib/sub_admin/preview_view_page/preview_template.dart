@@ -98,7 +98,7 @@ class _PreviewTemplateState extends State<PreviewTemplate> {
             '${onValue.start.month}/${onValue.start.day}/${onValue.start.year}';
         String endDate =
             '${onValue.end.month}/${onValue.end.day}/${onValue.end.year}';
-        multipleDateString = startDate + '-' + endDate;
+        multipleDateString = '$startDate-$endDate';
         partialSave[title] = multipleDateString;
         setState(() {
 
@@ -118,7 +118,7 @@ class _PreviewTemplateState extends State<PreviewTemplate> {
     switch(type){
 
       case 'Dropdown':
-
+      
         subtitleWidget = DropdownButtonFormField<String>(
           value: partialSave[title],
           items: range.toString().split(',')
@@ -177,11 +177,15 @@ class _PreviewTemplateState extends State<PreviewTemplate> {
             partialSave[title]= value;
           },validator: validatorFunction,
         );
+      break;
+       case 'Dropdown using active workplan columns':
+        subtitleWidget =  Text('Data from ${range} column in active workplan will be use for the Dropdown list');
+        break;  
     }
 
     return  Padding(
       padding: EdgeInsets.symmetric(horizontal: horizontalPadding,vertical: 8),
-      child: Card(color: Colors.white,
+      child: Card(
         child: ListTile(
           title:  Padding(
             padding: const EdgeInsets.all(8.0),
