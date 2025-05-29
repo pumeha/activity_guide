@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:activity_guide/authentication/cubit/auth_cubit.dart';
-import 'package:activity_guide/shared/theme/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../shared/custom_widgets/custom_text.dart';
@@ -47,7 +46,6 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     startTimer();
   }
@@ -231,13 +229,13 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
                             onPressed: () {
                               context.beamToReplacementNamed('/login');
                             },
-                            child: CustomText(
-                              text: 'Return to Login Page',
-                              color: Colors.white,
-                            ),
-                            style: ButtonStyle(
+                            style: const ButtonStyle(
                                 backgroundColor:
                                     WidgetStatePropertyAll(Colors.black54)),
+                            child: const Text(
+                             'Return to Login Page',
+                              style: TextStyle(color: Colors.white),
+                            ),
                           ),
                         ],
                       )

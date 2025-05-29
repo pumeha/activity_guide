@@ -1,8 +1,6 @@
 import 'package:activity_guide/authentication/cubit/auth_cubit.dart';
-import 'package:activity_guide/shared/theme/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../../../shared/custom_widgets/custom_text.dart';
 import '../../shared/utils/colors.dart';
 import '../../shared/utils/constants.dart';
 import 'package:beamer/beamer.dart';
