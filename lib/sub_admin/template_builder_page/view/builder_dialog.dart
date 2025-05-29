@@ -65,7 +65,8 @@ String? name,String? type,String? Rvalue}) async{
         builder: (BuildContext context){
           return AlertDialog(
             
-            title:  Center(child: CustomText(text: id == null ? 'Add Template Columns' : 'Update Template Column',weight: FontWeight.bold,)),
+            title:  Center(child: CustomText(text: id == null ? 'Add Template Columns' : 'Update Template Column',
+            weight: FontWeight.bold,)),
             content: StatefulBuilder(
                 builder: (BuildContext context,StateSetter setState){
                   return SizedBox(width: 50,
@@ -171,7 +172,7 @@ String? name,String? type,String? Rvalue}) async{
                 }
               }
               }, child: Text(id == null ? 'Add to List' : 'Update',
-              style: TextStyle(color: Colors.green[900],fontWeight: FontWeight.bold),))
+              style: TextStyle(fontWeight: FontWeight.bold),))
             ],
           );
         });

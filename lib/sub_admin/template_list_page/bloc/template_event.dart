@@ -18,8 +18,8 @@ class UpdateEvent extends TemplateEvent {
 
 class TemplatePurposeEvent extends TemplateEvent {
  final String purpose;
-
-  TemplatePurposeEvent({required this.purpose});
+  final String workingTemplate;
+  TemplatePurposeEvent({required this.purpose,required this.workingTemplate});
 }
 
 class TemplateSelectedEvent extends TemplateEvent {

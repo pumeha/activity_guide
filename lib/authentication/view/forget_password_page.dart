@@ -23,7 +23,7 @@ final _formKey = GlobalKey<FormState>();
 class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
   @override
   Widget build(BuildContext context) {
-    return Theme(data: Styles.lightTheme,
+    return Theme(data: ThemeData.light(),
       child: Scaffold(
         body: BlocListener<AuthCubit, AuthCubitState>(
           listener: (context, state) {
@@ -129,9 +129,9 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                           alignment: Alignment.center,
                           width: double.maxFinite,
                           padding: const EdgeInsets.symmetric(vertical: 16),
-                          child: const CustomText(
-                            text: "Proceed",
-                            color: Colors.white,
+                          child: const Text(
+                            "Proceed",
+                            style: TextStyle(color:Colors.white),
                           ),
                         ),
                       ),

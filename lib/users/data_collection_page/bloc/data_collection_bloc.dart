@@ -17,7 +17,7 @@ class DataCollectionBloc extends Bloc<DataCollectionEvent, DataCollectionState> 
       String? monthlyTemplate = await MysharedPreference().getPreferences(monthlyTemplateKey);
       if (monthlyTemplate != null && monthlyTemplate.isNotEmpty) {
         final monthlyTemplateList = jsonDecode(monthlyTemplate) as List<dynamic>;
-        emit(DataCollectionStateSuccess(dataList: monthlyTemplateList));
+        emit(DataCollectionStateSuccess(dataList: monthlyTemplateList,templateType: 'Monthly Template'));
       }else{
         emit(DataCollectionStateFailure(errorMessage: 'Monthly template not created'));
       }
@@ -32,7 +32,7 @@ class DataCollectionBloc extends Bloc<DataCollectionEvent, DataCollectionState> 
       String? workplanTemplate = await MysharedPreference().getPreferences(workplanTemplateKey);
       if (workplanTemplate != null && workplanTemplate.isNotEmpty) {
         final workplanTemplateList = jsonDecode(workplanTemplate) as List<dynamic>;
-        emit(DataCollectionStateSuccess(dataList: workplanTemplateList));
+        emit(DataCollectionStateSuccess(dataList: workplanTemplateList,templateType: 'Workplan Template'));
       }else{
         emit(DataCollectionStateFailure(errorMessage: 'Workplan template not created'));
       }
@@ -49,7 +49,7 @@ class DataCollectionBloc extends Bloc<DataCollectionEvent, DataCollectionState> 
             String? monthlyTemplate = await MysharedPreference().getPreferences(monthlyTemplateKey);
             if (monthlyTemplate != null && monthlyTemplate.isNotEmpty) {
               final monthlyTemplateList = jsonDecode(monthlyTemplate) as List<dynamic>;
-              emit(DataCollectionStateSuccess(dataList: monthlyTemplateList));
+              emit(DataCollectionStateSuccess(dataList: monthlyTemplateList,templateType: 'Monthly Template'));
             }else{
               emit(DataCollectionStateFailure(errorMessage: 'Monthly template not created'));
             }
@@ -57,7 +57,7 @@ class DataCollectionBloc extends Bloc<DataCollectionEvent, DataCollectionState> 
             String? workplanTemplate = await MysharedPreference().getPreferences(workplanTemplateKey);
             if (workplanTemplate != null && workplanTemplate.isNotEmpty) {
               final workplanTemplateList = jsonDecode(workplanTemplate) as List<dynamic>;
-              emit(DataCollectionStateSuccess(dataList: workplanTemplateList));
+              emit(DataCollectionStateSuccess(dataList: workplanTemplateList,templateType: 'Workplan Template'));
             }else{
               emit(DataCollectionStateFailure(errorMessage: 'Workplan template not created'));
             }

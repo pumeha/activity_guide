@@ -30,10 +30,10 @@ class Styles {
                 
               }));
 
-      static ThemeData darkTheme = ThemeData(
+               static ThemeData darkTheme = ThemeData(
               scaffoldBackgroundColor: darkBackground,
               colorScheme: ColorScheme.fromSeed(seedColor: defaultLightGreyColor,
-               brightness: Brightness.dark),
+               brightness: Brightness.dark,),
               useMaterial3: true,
               textSelectionTheme: TextSelectionThemeData(cursorColor: active),
               textTheme: GoogleFonts.mulishTextTheme().apply(bodyColor: Colors.white),
@@ -41,5 +41,5 @@ class Styles {
                 TargetPlatform.iOS: FadeUpwardsPageTransitionsBuilder(),
                 TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
                 
-              }));
+              }),dialogTheme: DialogTheme(barrierColor: Color.fromARGB(68, 75, 141, 117)));
 }

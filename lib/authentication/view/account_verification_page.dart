@@ -64,7 +64,7 @@ class _AccountVerificationPageState extends State<AccountVerificationPage> {
   }
   @override
   Widget build(BuildContext context) {
-    return Theme( data: Styles.lightTheme,
+    return Theme( data: ThemeData.light(),
       child: Scaffold(
         body: BlocListener<AuthCubit, AuthCubitState>(
           listener: (context, state) {

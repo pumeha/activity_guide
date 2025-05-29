@@ -50,14 +50,22 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
             editValues = state.editData;
           }
 
-          return SingleChildScrollView(
-            child: Form(
-              key: _formKey,
-              child: Column(
-                children: List.generate(data.length, (index) {
-                  return CustomCard(index, data[index].name, data[index].type,
-                      data[index].range, _formKey, editValues, labels);
-                }),  ), ), );}, ),
+          return Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(state.templateType!,style: TextStyle(fontWeight: FontWeight.bold),),
+              ),
+              SingleChildScrollView(
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: List.generate(data.length, (index) {
+                      return CustomCard(index, data[index].name, data[index].type,
+                          data[index].range, _formKey, editValues, labels);
+                    }),  ), ), ),
+            ],
+          );}, ),
       floatingActionButton: Stack(
         children: [
           Positioned(

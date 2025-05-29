@@ -25,11 +25,13 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
   // TextEditingController passwordController = TextEditingController(text: 'Smarter1@');
   TextEditingController emailController = TextEditingController(text: 'mikeshedrack88@gmail.com');
   TextEditingController passwordController = TextEditingController(text: 'Shedrack88@');
+  //   TextEditingController emailController = TextEditingController();
+  // TextEditingController passwordController = TextEditingController();
   bool showPassword = true;
 
   @override
   Widget build(BuildContext context) {
-    return Theme(data: Styles.lightTheme,
+    return Theme(data: ThemeData.light(),
       child: Scaffold( 
         body: BlocListener<AuthCubit, AuthCubitState>(
           listener: (context, state) async{

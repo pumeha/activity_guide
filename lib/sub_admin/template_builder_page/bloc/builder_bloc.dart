@@ -62,9 +62,20 @@ class BuilderBloc extends Bloc<BuilderEvent, BuilderState> {
      * return List<RowData>, templateName(SelectDataType)
      */
    on<EditTemplateEvent>((event, emit) async{
+    String purpose = event.templateName.split('_')[0];
+    String? workingTemplate;
+    if (purpose == 'atemplate') {
+      workingTemplate = 'Editing Additional Template';
+    }else if(purpose == 'wtemplate'){
+      workingTemplate = 'Editing Workplan Template';
+    }else if(purpose == 'mtemplate'){
+        workingTemplate = 'Editing Monthly Template';
+    }
+  
    await Future.wait([
-           MysharedPreference().setPreferences(BuilderKeys.purpose, event.templateName.split('_')[0]),
-  MysharedPreference().setPreferences('templateName',event.templateName)
+           MysharedPreference().setPreferences(BuilderKeys.purpose, purpose),
+    MysharedPreference().setPreferences('templateName',event.templateName),
+    MysharedPreference().setPreferencesWithoutEncrpytion(BuilderKeys.workingtemplate, workingTemplate!)
       ]);
 
     emit(state.currentData(rows: event.rows,selectDataType: 'update'));

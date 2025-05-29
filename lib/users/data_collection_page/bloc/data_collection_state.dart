@@ -1,6 +1,7 @@
 abstract class DataCollectionState {
   List<dynamic>? data;
-  DataCollectionState({this.data});
+  String? templateType;
+  DataCollectionState({this.data,this.templateType});
 }
 
 class DataCollectionStateInitial extends DataCollectionState {
@@ -12,9 +13,10 @@ class DataCollectionStateLoading extends DataCollectionState {
 }
 
 class DataCollectionStateSuccess extends DataCollectionState{
-
+ String? templateType;
   List<dynamic>? dataList;
-  DataCollectionStateSuccess({required this.dataList}) : super(data: dataList);
+  DataCollectionStateSuccess({required this.dataList,
+  required this.templateType}) : super(data: dataList,templateType: templateType);
 }
 
 class DataCollectionStateFailure extends DataCollectionState {

@@ -6,6 +6,7 @@ class LoginKeys {
 class BuilderKeys {
   static const String template = 'template';
   static const String purpose = 'purpose';
+  static const String workingtemplate = 'workingtemplate';
 }
 
 class DashboardKey {

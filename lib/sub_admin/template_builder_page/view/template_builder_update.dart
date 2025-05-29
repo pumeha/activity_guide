@@ -14,6 +14,8 @@ import '../../../shared/utils/colors.dart';
 
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
+import '../../../shared/utils/http_helper/storage_keys.dart';
+import '../../../shared/utils/myshared_preference.dart';
 import '../../template_list_page/bloc/template_event.dart';
 import '../../template_list_page/bloc/template_state.dart';
 class TemplateBuilderUpdate extends StatefulWidget {
@@ -57,38 +59,61 @@ class _TemplateBuilderUpdateState extends State<TemplateBuilderUpdate> {
               child: Scaffold(
               body: BlocBuilder<BuilderBloc, BuilderState>(
                 builder: (context, state) {
-                  return ReorderableListView(
-                    padding: EdgeInsets.only(right: horizontalPadding),
-                    onReorder: (oldIndex, newIndex) {
-                      context.read<BuilderBloc>().add(
-                          ReorderEvent(oldIndex: oldIndex, newIndex: newIndex));
-                    },
-                    children: List.generate(state.rows.length, (index) {
-                      List<RowData> data = state.rows;
-                      return customCard(
-                        key: ValueKey(state.rows[index].id),
-                        title: data[index].columnName,
-                        type: data[index].dataType,
-                        range: data[index].range,
-                        index: index,
-                        removeRow: (i) => context
-                            .read<BuilderBloc>()
-                            .add(RemoveRowEvent(index: i)),
-                        editData: (i) => BuilderDialog().showBuilderDialog(
-                            context: context,
-                            id: i,
-                            name: data[i].columnName,
-                            type: data[i].dataType,
-                            Rvalue: data[i].range),
-                      );
-                    }),
+                  return Column(
+                    children: [
+                      FutureBuilder<String?>(
+                          future: MysharedPreference().getPreferencesWithoutEncrpytion(BuilderKeys.workingtemplate),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState == ConnectionState.waiting) {
+                              return Text(''); // or a placeholder
+                            } else if (snapshot.hasError) {
+                              return Text('');
+                            } else if (!snapshot.hasData || snapshot.data == null) {
+                              return Text('');
+                            } else {
+                              return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(snapshot.data!,style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
+                              );
+                            }
+                          },
+                        ),
+                      Expanded(
+                        child: ReorderableListView(
+                          padding: EdgeInsets.only(right: horizontalPadding),
+                          onReorder: (oldIndex, newIndex) {
+                            context.read<BuilderBloc>().add(
+                                ReorderEvent(oldIndex: oldIndex, newIndex: newIndex));
+                          },
+                          children: List.generate(state.rows.length, (index) {
+                            List<RowData> data = state.rows;
+                            return customCard(
+                              key: ValueKey(state.rows[index].id),
+                              title: data[index].columnName,
+                              type: data[index].dataType,
+                              range: data[index].range,
+                              index: index,
+                              removeRow: (i) => context
+                                  .read<BuilderBloc>()
+                                  .add(RemoveRowEvent(index: i)),
+                              editData: (i) => BuilderDialog().showBuilderDialog(
+                                  context: context,
+                                  id: i,
+                                  name: data[i].columnName,
+                                  type: data[i].dataType,
+                                  Rvalue: data[i].range),
+                            );
+                          }),
+                        ),
+                      ),
+                    ],
                   );
                 },
               ),
               floatingActionButton: Stack(
                 children: [
                   Positioned(
-                      right: 50,
+                      right: 0,
                       top: MediaQuery.of(context).size.width / 12,
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
@@ -103,7 +128,7 @@ class _TemplateBuilderUpdateState extends State<TemplateBuilderUpdate> {
                       )),
                   // Add Button
                   Positioned(
-                    right: 50,
+                    right: 0,
                     top: MediaQuery.of(context).size.height / 2 - 100,
                     child: Column(
                       children: [
@@ -121,7 +146,7 @@ class _TemplateBuilderUpdateState extends State<TemplateBuilderUpdate> {
                     ),
                   ),
                 Positioned(
-                    right: 50, // Distance from the right edge
+                    right: 0, // Distance from the right edge
                     top: MediaQuery.of(context).size.height / 4, // Below the center
                     child: FloatingActionButton(
                       onPressed: () {

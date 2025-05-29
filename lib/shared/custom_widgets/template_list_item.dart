@@ -19,6 +19,19 @@ class TemplateListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     bool isActive = model.status == 'active' ? true : false;
 
+    switch (model.purpose) {
+      case 'mtemplate':
+        model.purpose = 'Monthly Template';
+        break;
+      case 'wtemplate':
+      model.purpose = 'Workplan Template';
+      break;
+      case 'atemplate':
+      model.purpose = 'Additional Template';
+      break;  
+      default:
+    }
+
           double currentWidth = MediaQuery.of(context).size.width;
       if (currentWidth > largeScreenSize) {
         currentWidth = 400;
@@ -51,7 +64,7 @@ class TemplateListItem extends StatelessWidget {
                         Expanded(
                             child: Center(
                                 child: Text(
-                          model.purpose == 'mtemplate' ? 'Monthly Template' :'Workplan Template' ,
+                          model.purpose ,
                           style: const TextStyle( fontWeight: FontWeight.bold, fontSize: 18),
                         ))),
                         Tooltip(

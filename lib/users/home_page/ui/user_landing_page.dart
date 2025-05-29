@@ -150,6 +150,20 @@ class _UserLandingPageState extends State<UserLandingPage> {
                   )
                 ],
               ),
+              const SizedBox(
+                height: 24,
+              ),
+              MaterialButton(
+                    onPressed: () {
+                      context.read<UserHomeCubit>().downloadWorkplanData();
+                    },
+                    color: const Color.fromARGB(255, 245, 245, 245),
+                    child: const Padding(
+                      padding: EdgeInsets.all(16),
+                      child: Text('     \tAdditional\nTemplates & Data',
+                      style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),),
+                    ),
+                  )
             ],
           ),
         ),

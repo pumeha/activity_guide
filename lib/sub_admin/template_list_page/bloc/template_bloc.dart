@@ -72,7 +72,9 @@ class TemplateBloc extends Bloc<TemplateEvent,TemplateState>{
       });
 
     on<TemplatePurposeEvent>((event, emit) async{
-    await  MysharedPreference().setPreferences(BuilderKeys.purpose, event.purpose);
+    await Future.wait([ MysharedPreference().setPreferences(BuilderKeys.purpose, event.purpose),
+           MysharedPreference().setPreferencesWithoutEncrpytion(BuilderKeys.workingtemplate, event.workingTemplate)]);
+
     });
     
     on<TemplateSelectedEvent>((event, emit) {
