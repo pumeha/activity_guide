@@ -123,7 +123,7 @@ class _TemplatesListPageState extends State<TemplatesListPage>   with SingleTick
             label: 'Additional Template', labelStyle: TextStyle(fontWeight: FontWeight.bold),
             onTap: (){
                       context.read<TemplateBloc>().add(TemplatePurposeEvent(purpose: 'atemplate',
-                      workingTemplate: 'Additional Template'));
+                      workingTemplate: 'Creating Additional Template'));
                          Navigator.pop(context);
                          context.read<BuilderBloc>().add(ClearBuilderDataEvent());
                      context.beamToNamed('/admin/builder');
@@ -132,7 +132,8 @@ class _TemplatesListPageState extends State<TemplatesListPage>   with SingleTick
           SpeedDialChild(
             label: 'Workplan Template', labelStyle: TextStyle(fontWeight: FontWeight.bold),
             onTap: (){
-                   context.read<TemplateBloc>().add(TemplatePurposeEvent(purpose: 'wtemplate',workingTemplate: 'Workplan Template'));
+                   context.read<TemplateBloc>().add(TemplatePurposeEvent(purpose: 'wtemplate',
+                   workingTemplate: 'Creating Workplan Template'));
                          Navigator.pop(context);
                          context.read<BuilderBloc>().add(ClearBuilderDataEvent());
                          context.beamToNamed('/admin/builder');
@@ -145,7 +146,7 @@ class _TemplatesListPageState extends State<TemplatesListPage>   with SingleTick
                         
                         if (activeWorkplan != null && activeWorkplan.isNotEmpty) {
                           context.read<TemplateBloc>().add(TemplatePurposeEvent(purpose: 'mtemplate',
-                           workingTemplate: 'Monthly Template'));
+                           workingTemplate: 'Creating Monthly Template'));
                         Navigator.pop(context);
                         context.read<BuilderBloc>().add(ClearBuilderDataEvent());
                         context.beamToNamed('/admin/builder');

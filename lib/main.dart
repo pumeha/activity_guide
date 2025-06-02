@@ -74,7 +74,7 @@ class MyApp extends StatelessWidget {
           title: 'Activity Guide',
           darkTheme: Styles.darkTheme,
           theme: Styles.lightTheme,
-              themeMode: state.themeMode,
+          themeMode: state.themeMode,
           debugShowCheckedModeBanner: false,
           builder: EasyLoading.init(),
           routerDelegate: _routerDelegate,

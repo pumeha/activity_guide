@@ -23,49 +23,69 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
   Map<String, dynamic> partialSave = {};
   Map<String, dynamic> emptyMap = {};
   late List<TextEditingController> _controllers;
-  late List<String> labels;
-  late List<dynamic> editValues;
+  late List<String> _labels;
+  List<dynamic> _editValues = [];
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     final _formKey = GlobalKey<FormState>();
-    editValues = [];
+
     return Scaffold(
-      backgroundColor: Color(0xF4FAEF),
       body: BlocBuilder<DataCollectionBloc, DataCollectionState>(
         builder: (context, state) {
           List<TemplateJson> data =
               state.data!.map((data) => TemplateJson.fromJson(data)).toList();
-            
-          _controllers = List.generate(data.length, (index) { return TextEditingController(); });
-          labels = List.generate(data.length, (index)=>data[index].name);
+
+          _controllers = List.generate(data.length, (index) {
+            return TextEditingController();
+          });
+          _labels = List.generate(data.length, (index) => data[index].name);
 
           if (state is DataCollectionEditState) {
-            editValues = state.editData;
+            _editValues = state.editData;
+            for (int i = 0; i < _controllers.length; i++) {
+              _controllers[i].text = _editValues[0][_labels[i]] ?? '';
+              partialSave[_labels[i]] = _editValues[0][_labels[i]] ?? null;
+            }
           }
 
           return Column(
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(state.templateType!,style: TextStyle(fontWeight: FontWeight.bold),),
+                child: Text(
+                  state.templateType!,
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
               ),
-              SingleChildScrollView(
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    children: List.generate(data.length, (index) {
-                      return CustomCard(index, data[index].name, data[index].type,
-                          data[index].range, _formKey, editValues, labels);
-                    }),  ), ), ),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      children: List.generate(data.length, (index) {
+                        return CustomCard(
+                            index,
+                            data[index].name,
+                            data[index].type,
+                            data[index].range,
+                            _formKey,
+                            _editValues,
+                            _labels);
+                      }),
+                    ),
+                  ),
+                ),
+              ),
             ],
-          );}, ),
+          );
+        },
+      ),
       floatingActionButton: Stack(
         children: [
           Positioned(
@@ -75,26 +95,31 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
               children: [
                 FloatingActionButton(
                   onPressed: () {
-                  
                     if (_formKey.currentState!.validate()) {
                       Map<String, String> data = {};
-                        
-                      for (var i = 0; i < _controllers.length; i++) {
-                        data[labels[i]] = _controllers[i].text;
-                      }
-                      
-                      
-                      if (editValues.isNotEmpty && editValues.isNotEmpty) {
-                  context.read<DataCollectionBloc>().add(AddDataFromDataCollectionEvent(data: data,
-                  updateId: editValues[0]['ID']));
-                      } else {
-                      context.read<DataCollectionBloc>().add(AddDataFromDataCollectionEvent(data: data));
-                      }
-                   for (var element in _controllers) {
-                     element.clear();
-                   }
 
-                   EasyLoading.showSuccess('Success');
+                      for (var i = 0; i < _controllers.length; i++) {
+                        data[_labels[i]] = _controllers[i].text;
+                      }
+
+                      if (_editValues.isNotEmpty) {
+                        context.read<DataCollectionBloc>().add(
+                            AddDataFromDataCollectionEvent(
+                                data: data, updateId: _editValues[0]['ID']));
+                      } else {
+                        context
+                            .read<DataCollectionBloc>()
+                            .add(AddDataFromDataCollectionEvent(data: data));
+                      }
+                      for (var element in _controllers) {
+                        element.clear();
+                      }
+                      for (int i = 0; i < data.length; i++) {
+                        partialSave[_labels[i]] = null;
+                      }
+                      EasyLoading.showSuccess('Success');
+
+                      refreshPage();
                     }
                   },
                   tooltip: 'Save',
@@ -105,20 +130,31 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
                     color: Colors.white,
                   ),
                 ),
-                SizedBox(height: 12,),
+                const SizedBox(
+                  height: 12,
+                ),
                 BlocBuilder<DataCollectionBloc, DataCollectionState>(
                   builder: (context, state) {
-                     
-                    if(state is DataCollectionEditState){
-                      return FloatingActionButton(onPressed: (){
-                        context.read<DataCollectionBloc>().add(LoadSelectedDataCollectionTemplateEvent());
-                        setState(() {
-                          
-                        });
-                       },child: const Icon(Icons.delete_forever,color: Colors.red,),
-                       backgroundColor: Colors.black,);
+                    if (state is DataCollectionEditState) {
+                      return FloatingActionButton(
+                        onPressed: () {
+                          context
+                              .read<DataCollectionBloc>()
+                              .add(LoadSelectedDataCollectionTemplateEvent());
+                          for (int i = 0; i < _labels.length; i++) {
+                            partialSave[_labels[i]] = null;
+                          }
+                          _editValues.clear();
+                        },
+                        backgroundColor: Colors.black,
+                        child: const Icon(
+                          Icons.delete_forever,
+                          color: Colors.red,
+                        ),
+                      );
+                    } else {
+                      return Container();
                     }
-                    return Container();
                   },
                 ),
                 const SizedBox(
@@ -132,7 +168,8 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
                   tooltip: 'View',
                   heroTag: 'view',
                   child: const Icon(
-                    Icons.description_outlined,color: Colors.black,
+                    Icons.description_outlined,
+                    color: Colors.black,
                   ),
                 ),
               ],
@@ -150,7 +187,11 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
     return null;
   }
 
-  void singleDateDialog(String title,TextEditingController controller) async {
+  void refreshPage() {
+    setState(() {});
+  }
+
+  void singleDateDialog(String title, TextEditingController controller) async {
     DateTime? selectedDate = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
@@ -161,11 +202,11 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
       String _date =
           '${selectedDate.month}/${selectedDate.day}/${selectedDate.year}';
       partialSave[title] = _date;
-     controller.text = partialSave[title];
+      controller.text = partialSave[title];
     }
   }
 
-  void doubleDateDialog(String title,TextEditingController controller) {
+  void doubleDateDialog(String title, TextEditingController controller) {
     String multipleDateString = '';
     showDateRangePicker(
             context: context,
@@ -192,18 +233,19 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
     double width = MediaQuery.of(context).size.width;
     double horizontalPadding = width > 1000 ? width / 4 : width / 6;
     if (editValues.isNotEmpty) {
-      _controllers[index].text =  editValues[0][labels[index]];
-       partialSave[title] = editValues[0][labels[index]] ;
+      _controllers[index].text = editValues[0][labels[index]];
+      partialSave[title] =
+          editValues[0][labels[index]]; //editValues[0]['Output']
     }
-    
-   
+
     switch (type) {
       case 'Dropdown':
         subtitleWidget = DropdownButtonFormField<String>(
           value: partialSave[title],
           items: range
               .toString()
-              .split(',').toSet()
+              .split(',')
+              .toSet()
               .map<DropdownMenuItem<String>>((e) => DropdownMenuItem(
                     value: e,
                     child: Tooltip(
@@ -216,7 +258,7 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
               .toList(),
           onChanged: (String? value) {
             partialSave[title] = value;
-            _controllers[index].text = partialSave[title];
+            _controllers[index].text = value!;
           },
           isExpanded: true,
           validator: validatorFunction,
@@ -224,7 +266,6 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
         );
         break;
       case 'Date':
-       
         range == 'Single Date'
             ?
             // Render Date Picker
@@ -233,17 +274,16 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Expanded(child: TextFormField(
+                    Expanded(
+                        child: TextFormField(
                       controller: _controllers[index],
                       validator: validatorFunction,
                       enabled: false,
-                      style: TextStyle(color: Colors.black),
                     )),
                     TextButton(
                       child: Icon(Icons.arrow_drop_down_circle),
                       onPressed: () {
-                        singleDateDialog(title,_controllers[index]);
-                      
+                        singleDateDialog(title, _controllers[index]);
                       },
                     ),
                   ],
@@ -259,12 +299,11 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
                       controller: _controllers[index],
                       validator: validatorFunction,
                       enabled: false,
-                      style: TextStyle(color: Colors.black),
                     )),
                     TextButton(
                       child: Icon(Icons.arrow_drop_down_circle),
                       onPressed: () {
-                        doubleDateDialog(title,_controllers[index]);
+                        doubleDateDialog(title, _controllers[index]);
                       },
                     ),
                   ],

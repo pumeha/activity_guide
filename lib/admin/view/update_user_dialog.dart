@@ -102,6 +102,7 @@ class UpdateUserDialog {
                           width: 300,
                           child: TextFormField(
                             enabled: false,
+                            keyboardType: TextInputType.emailAddress,
                             controller: emailController,
                             decoration: InputDecoration(
                               border: const OutlineInputBorder(),

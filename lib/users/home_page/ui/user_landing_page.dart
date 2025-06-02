@@ -19,13 +19,14 @@ class UserLandingPage extends StatefulWidget {
 }
 
 class _UserLandingPageState extends State<UserLandingPage> {
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     context.read<UserDashboardCubit>().show(false);
   }
+
+  Template template = Template.Monthly;
   @override
   Widget build(BuildContext context) {
     return MultiBlocListener(
@@ -37,7 +38,7 @@ class _UserLandingPageState extends State<UserLandingPage> {
             } else if (state is DataCollectionStateFailure) {
               EasyLoading.showError(state.errorMessage);
             } else {
-              EasyLoading.showSuccess('Template Loaded Successful');
+              EasyLoading.dismiss();
               context.beamToNamed('/home/template');
             }
           },
@@ -46,128 +47,129 @@ class _UserLandingPageState extends State<UserLandingPage> {
           listener: (context, state) {
             if (state is UserHomeLoading) {
               EasyLoading.show(maskType: EasyLoadingMaskType.black);
-            } else if(state is UserHomeSuccess) {
+            } else if (state is UserHomeSuccess) {
               EasyLoading.showSuccess('Success');
               context.beamToNamed('/home/database');
-            }else if(state is UserHomeFailure){
-                EasyLoading.showError(state.message!);
+            } else if (state is UserHomeFailure) {
+              EasyLoading.showError(state.message!);
             }
           },
         ),
       ],
       child: Scaffold(
         body: SingleChildScrollView(
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 12,
-              ),
-              const Padding(
-                padding: EdgeInsets.all(12),
-                child: CustomText(
-                  text: 'Warm Welcome',
-                  size: 24,
-                  color: active,
-                  weight: FontWeight.bold,
+          child: Center(
+            child: Column(
+              children: [
+                const SizedBox(
+                  height: 12,
                 ),
-              ),
-              const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: CustomText(
-                  text: 'What do you want to work on?',
-                  size: 16,
-                  color: Color.fromARGB(255, 0, 0, 0),
-                  weight: FontWeight.bold,
+                const Padding(
+                  padding: EdgeInsets.all(12),
+                  child: CustomText(
+                    text: 'Warm Welcome',
+                    size: 24,
+                    color: active,
+                    weight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              const SizedBox(
-                height: 12,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  MaterialButton(
-                    onPressed: () {
-                      context
-                          .read<DataCollectionBloc>()
-                          .add(LoadDataCollectionMonthlyTemplateEvent());
-                    },
-                    color: const Color.fromARGB(203, 4, 89, 68),
-                    child: const Padding(
-                      padding: EdgeInsets.all(16),
-                      child: Text('Monthly\nTemplate',
-                      style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
-                    ),
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: CustomText(
+                    text: 'Which template do you want to work on?',
+                    size: 16,
+                    color: Color.fromARGB(255, 0, 0, 0),
+                    weight: FontWeight.bold,
                   ),
-                  const SizedBox(
-                    width: 50,
-                  ),
-                  MaterialButton(
-                    onPressed: () {
-                      context
-                          .read<DataCollectionBloc>()
-                          .add(LoadDataCollectionWorkplanTemplateEvent());
-                    },
-                    color: const Color.fromARGB(255, 37, 78, 89),
-                    child: const Padding(
-                      padding: EdgeInsets.all(16),
-                      child: Text('Workplan\nTemplate',
-                      style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
+                ),
+                const SizedBox(
+                  height: 24,
+                ),
+                SegmentedButton<Template>(
+                  style: ButtonStyle(
+                      backgroundColor: WidgetStateProperty.resolveWith<Color?>((states){
+                        if(states.contains(WidgetState.selected)){
+                          return active;
+                        }return Colors.white;
+                      }),
+                      foregroundColor: WidgetStateProperty.resolveWith<Color?>((states){
+                        if(states.contains(WidgetState.selected)){
+                          return Colors.white;
+                        } return Colors.black;
+                      }),),
+                  segments: const <ButtonSegment<Template>>[
+                    ButtonSegment<Template>(
+                        value: Template.Monthly, label: Text('Monthly',style: TextStyle(fontWeight: FontWeight.bold),)),
+                    ButtonSegment<Template>(
+                        value: Template.Workplan, label: Text('Workplan',style: TextStyle(fontWeight: FontWeight.bold))),
+                    ButtonSegment<Template>(
+                        value: Template.Additional, label: Text('Additional',style: TextStyle(fontWeight: FontWeight.bold)))
+                  ],
+                  selected: <Template>{template},
+                  onSelectionChanged: (Set<Template> newTemplate) {
+                    setState(() {
+                      template = newTemplate.first;
+                    });
+                  },
+                ),
+                const SizedBox(
+                  height: 24,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    MaterialButton(
+                      onPressed: () {
+                        if (template.name == 'Monthly') {
+                          context
+                              .read<DataCollectionBloc>()
+                              .add(LoadDataCollectionMonthlyTemplateEvent());
+                        } else if (template.name == 'Workplan') {
+                          context
+                              .read<DataCollectionBloc>()
+                              .add(LoadDataCollectionWorkplanTemplateEvent());
+                        }
+                      },
+                      color: Color.fromARGB(255, 6, 115, 41),
+                      child: Padding(
+                        padding: EdgeInsets.all(16),
+                        child: Text(
+                          '\t ${template.name}\n\t Template',
+                          style: TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.bold),
+                        ),
+                      ),
                     ),
-                  )
-                ],
-              ),
-              const SizedBox(
-                height: 24,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  MaterialButton(
-                    onPressed: () {
-                      context.read<UserHomeCubit>().downloadMonthlyData();
-                    },
-                    color: const Color.fromARGB(235, 57, 85, 11),
-                    child: const Padding(
-                      padding: EdgeInsets.all(16),
-                      child:  Text('  \tView\n Monthly\n \tData',
-                      style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
+                    const SizedBox(
+                      width: 50,
                     ),
-                  ),
-                  const SizedBox(
-                    width: 50,
-                  ),
-                  MaterialButton(
-                    onPressed: () {
-                      context.read<UserHomeCubit>().downloadWorkplanData();
-                    },
-                    color: const Color.fromARGB(255, 224, 173, 20),
-                    child: const Padding(
-                      padding: EdgeInsets.all(16),
-                      child: Text('  \tView\n Workplan\n \tData',
-                      style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
-                    ),
-                  )
-                ],
-              ),
-              const SizedBox(
-                height: 24,
-              ),
-              MaterialButton(
-                    onPressed: () {
-                      context.read<UserHomeCubit>().downloadWorkplanData();
-                    },
-                    color: const Color.fromARGB(255, 245, 245, 245),
-                    child: const Padding(
-                      padding: EdgeInsets.all(16),
-                      child: Text('     \tAdditional\nTemplates & Data',
-                      style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold),),
-                    ),
-                  )
-            ],
+                    MaterialButton(
+                      onPressed: () {
+                        if (template.name == 'Monthly') {
+                          context.read<UserHomeCubit>().downloadMonthlyData();
+                        } else if (template.name == 'Workplan') {
+                          context.read<UserHomeCubit>().downloadWorkplanData();
+                        }
+                      },
+                      color: Colors.white,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Text(
+                          '${template.name} \n\t Data',
+                          style: TextStyle(
+                              color: Colors.black, fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 }
+
+enum Template { Monthly, Workplan, Additional }

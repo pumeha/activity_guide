@@ -108,9 +108,10 @@ class _EditDataCollectionPageState extends State<EditDataCollectionPage> {
                         navigationMode: GridNavigationMode.row,
                         selectionMode: SelectionMode.multiple,
                         onCellDoubleTap: (details) {
-                          dynamic index = details.rowColumnIndex.rowIndex - 1;
+                          dynamic index = details.rowColumnIndex.rowIndex-1;
                     
                           List<dynamic> editData = [data[index]];
+                       
                           context.beamToReplacementNamed('/home/template');
                           context
                               .read<DataCollectionBloc>()

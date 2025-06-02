@@ -30,8 +30,9 @@ class DataCollectionSuccess extends DataCollectionState {
 }
 
 class DataCollectionEditState extends DataCollectionState {
+  String? templateType;
   List<dynamic> editData;
   List<dynamic>? templatData;
-  DataCollectionEditState({required this.editData, required templatData}) :super(data: templatData);
+  DataCollectionEditState({required this.editData, required templatData,required this.templateType}) :super(data: templatData);
 }
 

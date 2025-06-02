@@ -157,7 +157,7 @@ class _PreviewTemplateState extends State<PreviewTemplate> {
             children: [
 
               Expanded(child: TextFormField(controller: _controllers[index],validator: validatorFunction,
-                enabled: false,style: TextStyle(color: Colors.black),)),
+                enabled: false,)),
               TextButton(
                 child: Icon(Icons.arrow_drop_down_circle),
                 onPressed: () {

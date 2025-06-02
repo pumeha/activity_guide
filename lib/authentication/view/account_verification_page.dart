@@ -11,7 +11,6 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import '../cubit/auth_cubit_state.dart';
 
-
 class AccountVerificationPage extends StatefulWidget {
   const AccountVerificationPage({super.key});
 
@@ -31,7 +30,6 @@ final _formKey = GlobalKey<FormState>();
 Timer? timer;
 
 class _AccountVerificationPageState extends State<AccountVerificationPage> {
-  
   void startTimer() {
     setState(() {
       showTimer = true;
@@ -54,30 +52,33 @@ class _AccountVerificationPageState extends State<AccountVerificationPage> {
     super.initState();
     startTimer();
   }
+
   @override
   void dispose() {
     super.dispose();
     timer!.cancel();
   }
+
   @override
   Widget build(BuildContext context) {
-    return Theme( data: ThemeData.light(),
+    return Theme(
+      data: ThemeData.light(),
       child: Scaffold(
         body: BlocListener<AuthCubit, AuthCubitState>(
           listener: (context, state) {
-          if (state is AuthLoading) {
-           EasyLoading.show(maskType: EasyLoadingMaskType.black); 
-          } else if(state is AuthSuccess){
-            if (state.message == 'Sent') {
-              EasyLoading.showSuccess(state.message);
-              startTimer();
-            } else {
+            if (state is AuthLoading) {
+              EasyLoading.show(maskType: EasyLoadingMaskType.black);
+            } else if (state is AuthSuccess) {
+              if (state.message == 'Sent') {
                 EasyLoading.showSuccess(state.message);
-            context.beamToReplacementNamed('/login');
+                startTimer();
+              } else {
+                EasyLoading.showSuccess(state.message);
+                context.beamToReplacementNamed('/login');
+              }
+            } else if (state is AuthFailure) {
+              EasyLoading.showError(state.error);
             }
-           }else if(state is AuthFailure){
-            EasyLoading.showError(state.error);
-          }
           },
           child: Container(
             decoration: const BoxDecoration(
@@ -154,20 +155,24 @@ class _AccountVerificationPageState extends State<AccountVerificationPage> {
                                           child: Text(
                                             '${remainingTime}',
                                             textAlign: TextAlign.center,
-                                            style: const TextStyle(fontSize: 16),
+                                            style:
+                                                const TextStyle(fontSize: 16),
                                           ),
                                         )
                                       : TextButton(
                                           onPressed: () {
-                                         context.read<AuthCubit>().requestTokenAgain();
+                                            context
+                                                .read<AuthCubit>()
+                                                .requestTokenAgain();
                                           },
-                                          child: Text('Request another token'))),
+                                          child:
+                                              Text('Request another token'))),
                               validator: (v) {
                                 if (v == null || v.isEmpty) {
                                   return 'required';
                                 } else if (v.length != 6) {
                                   return 'token must be up to 6';
-                                }else{
+                                } else {
                                   return null;
                                 }
                               },
@@ -198,12 +203,13 @@ class _AccountVerificationPageState extends State<AccountVerificationPage> {
                                           ? const Icon(Icons.visibility)
                                           : Icon(Icons.visibility_off))),
                               validator: (v) {
-                               String? result = Constants().isValidPassword(v!);
-                            if (result == null) {
-                              return null;
-                            } else {
-                              return result;
-                            }
+                                String? result =
+                                    Constants().isValidPassword(v!);
+                                if (result == null) {
+                                  return null;
+                                } else {
+                                  return result;
+                                }
                               },
                             ),
                           ],
@@ -215,8 +221,9 @@ class _AccountVerificationPageState extends State<AccountVerificationPage> {
                       InkWell(
                         onTap: () async {
                           if (_formKey.currentState!.validate()) {
-                          context.read<AuthCubit>().userVerification(inputCode: tokenController.text,
-                          newPassword: newPasswordController.text);
+                            context.read<AuthCubit>().userVerification(
+                                inputCode: tokenController.text,
+                                newPassword: newPasswordController.text);
                           }
                         },
                         child: Container(

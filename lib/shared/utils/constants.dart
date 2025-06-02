@@ -51,6 +51,19 @@ class Constants{
     }
   }
 
+  String formatDateTime(String isoString) {
+  DateTime dateTime = DateTime.parse(isoString).toUtc();
+  dateTime = dateTime.add(const Duration(hours: 1));
+  final year = dateTime.year.toString().padLeft(4, '0');
+  final month = dateTime.month.toString().padLeft(2, '0');
+  final day = dateTime.day.toString().padLeft(2, '0');
+  final hour = dateTime.hour.toString().padLeft(2, '0');
+  final minute = dateTime.minute.toString().padLeft(2, '0');
+
+  return '$year-$month-$day $hour:$minute';
+}
+
+
 const appName = 'Activity Guide';
 const admin  = 'admin';
 const subAdmin = 'sub-admin';

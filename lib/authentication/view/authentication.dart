@@ -1,5 +1,6 @@
 import 'package:activity_guide/authentication/cubit/auth_cubit.dart';
 import 'package:activity_guide/authentication/cubit/auth_cubit_state.dart';
+import 'package:activity_guide/shared/theme/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:beamer/beamer.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -13,53 +14,57 @@ class AuthenticationPage extends StatefulWidget {
 
   @override
   State<AuthenticationPage> createState() => _AuthenticationPageState();
-  
 }
 
 final _formKey = GlobalKey<FormState>();
+
 class _AuthenticationPageState extends State<AuthenticationPage> {
-  // TextEditingController emailController = TextEditingController(text: 'smarterway2024@gmail.com');
-  // TextEditingController passwordController = TextEditingController(text: 'Smarter1@');
-  TextEditingController emailController = TextEditingController(text: 'mikeshedrack88@gmail.com');
-  TextEditingController passwordController = TextEditingController(text: 'Shedrack88@');
-  //   TextEditingController emailController = TextEditingController();
-  // TextEditingController passwordController = TextEditingController();
+  // TextEditingController emailController =
+  //     TextEditingController(text: 'smarterway2024@gmail.com');
+  // TextEditingController passwordController =
+  //     TextEditingController(text: 'Smarter1@');
+  // TextEditingController emailController = TextEditingController(text: 'mikeshedrack88@gmail.com');
+  // TextEditingController passwordController = TextEditingController(text: 'Shedrack88@');
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   bool showPassword = true;
 
   @override
   Widget build(BuildContext context) {
-    return Theme(data: ThemeData.light(),
-      child: Scaffold( 
+    return Theme(
+      data: Styles.lightTheme,
+      child: Scaffold(
         body: BlocListener<AuthCubit, AuthCubitState>(
-          listener: (context, state) async{
-              if(state is AuthLoading){
-          EasyLoading.show(maskType: EasyLoadingMaskType.black);
-         }else if(state is AuthSuccess){
-          EasyLoading.showSuccess('Success');
-          switch (state.message) {
-            case 'admin':
-              context.beamToReplacementNamed('/super_admin');
-              break;
-            case subAdmin:
-              EasyLoading.showInfo('Glad to see you!');
-              context.beamToReplacementNamed('/admin');
-              break;  
-            case 'user':
-                context.beamToReplacementNamed('/home');
-            case 'verification':
-                context.beamToReplacementNamed('/account_verification');    
-            default:
-          }
-          
-         }else if(state is AuthFailure){
-          EasyLoading.showError(state.error);
-         }},
+          listener: (context, state) async {
+            if (state is AuthLoading) {
+              EasyLoading.show(maskType: EasyLoadingMaskType.black);
+            } else if (state is AuthSuccess) {
+              EasyLoading.dismiss();
+              switch (state.message) {
+                case 'admin':
+                  context.beamToReplacementNamed('/super_admin');
+                  break;
+                case subAdmin:
+                  EasyLoading.showInfo('Glad to see you!');
+                  context.beamToReplacementNamed('/admin');
+                  break;
+                case 'user':
+                  context.beamToReplacementNamed('/home');
+                case 'verification':
+                  context.beamToReplacementNamed('/account_verification');
+                default:
+              }
+            } else if (state is AuthFailure) {
+              EasyLoading.showError(state.error);
+            }
+          },
           child: Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
                   image: AssetImage('/images/background.jpg'),
                   fit: BoxFit.cover,
-                  opacity: 0.7), ),
+                  opacity: 0.7),
+            ),
             child: Center(
               child: Container(
                 constraints: const BoxConstraints(maxWidth: 400),
@@ -97,7 +102,9 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                           children: [
                             Text("Login",
                                 style: GoogleFonts.roboto(
-                                    fontSize: 30, fontWeight: FontWeight.bold,color: Colors.black)),
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black)),
                           ],
                         ),
                         const SizedBox(
@@ -105,7 +112,9 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                         ),
                         TextFormField(
                           controller: emailController,
-                          decoration: InputDecoration(labelStyle: TextStyle(color: active),
+                          keyboardType: TextInputType.emailAddress,
+                          decoration: InputDecoration(
+                              labelStyle: TextStyle(color: active),
                               labelText: "Email",
                               hintText: "abc@domain.com",
                               border: OutlineInputBorder(
@@ -133,17 +142,22 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                           decoration: InputDecoration(
                               fillColor: Colors.white,
                               labelText: "Password",
-                              hintText: "********",labelStyle: TextStyle(color: active),
+                              hintText: "********",
+                              labelStyle: TextStyle(color: active),
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(20)),
-                              focusedBorder: OutlineInputBorder( 
+                              focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(20),
                                   borderSide: BorderSide(color: active)),
-                                  suffixIcon: IconButton(onPressed: (){setState((){
-                                    showPassword = !showPassword;
-                                   
-                                  });}, icon: showPassword ? Icon(Icons.visibility) : Icon(Icons.visibility_off) )
-                                  ),
+                              suffixIcon: IconButton(
+                                  onPressed: () {
+                                    setState(() {
+                                      showPassword = !showPassword;
+                                    });
+                                  },
+                                  icon: showPassword
+                                      ? Icon(Icons.visibility)
+                                      : Icon(Icons.visibility_off))),
                           validator: (v) {
                             String? result = Constants().isValidPassword(v!);
                             if (result == null) {
@@ -159,21 +173,25 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                          
-                            TextButton(onPressed: () {
-                         context.beamToReplacementNamed('/reset_password');
+                            TextButton(
+                              onPressed: () {
+                                context
+                                    .beamToReplacementNamed('/reset_password');
                               },
-                              child: Text("Forgot password?",style: TextStyle(color: active)),
-                            )], ),
-                        const SizedBox( height: 15,
+                              child: Text("Forgot password?",
+                                  style: TextStyle(color: active)),
+                            )
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 15,
                         ),
                         InkWell(
-                          onTap: () async{
+                          onTap: () async {
                             if (_formKey.currentState!.validate()) {
-                           
                               context.read<AuthCubit>().login(
-                                  emailController.text.trim(), passwordController.text.trim());
-                             
+                                  emailController.text.trim(),
+                                  passwordController.text.trim());
                             }
                           },
                           child: Container(
@@ -183,11 +201,12 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                             alignment: Alignment.center,
                             width: double.maxFinite,
                             padding: const EdgeInsets.symmetric(vertical: 16),
-                            child: Text("Login",style: TextStyle(color: Colors.white),),
+                            child: Text(
+                              "Login",
+                              style: TextStyle(color: Colors.white),
+                            ),
                           ),
                         ),
-                     
-              
                       ],
                     ),
                   ),

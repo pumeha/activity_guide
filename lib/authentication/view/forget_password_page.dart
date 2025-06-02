@@ -21,29 +21,30 @@ final _formKey = GlobalKey<FormState>();
 class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
   @override
   Widget build(BuildContext context) {
-    return Theme(data: ThemeData.light(),
+    return Theme(
+      data: ThemeData.light(),
       child: Scaffold(
         body: BlocListener<AuthCubit, AuthCubitState>(
           listener: (context, state) {
-            
-           if (state is AuthLoading) {
-             EasyLoading.show(maskType: EasyLoadingMaskType.black);
-           }else if(state is AuthSuccess){
-            EasyLoading.showSuccess('Success');
-            context.beamToReplacementNamed('/new_password');
-           }else if(state is AuthFailure){
-      
-            if (state.error == 'inactive') {
-            EasyLoading.showInfo('Account yet to be verified.\n Kindly Login with the welcome details sent to your email or \n Check your spam',
-            duration: const Duration(seconds: 5));
-            context.beamToReplacementNamed('/login');
-            }else if(state.error == 'suspend'){
-              EasyLoading.showInfo('Account suspended.',
-            duration: const Duration(seconds: 5));
-            }else{
-              EasyLoading.showError(state.error);
+            if (state is AuthLoading) {
+              EasyLoading.show(maskType: EasyLoadingMaskType.black);
+            } else if (state is AuthSuccess) {
+              EasyLoading.showSuccess('Success');
+              context.beamToReplacementNamed('/new_password');
+            } else if (state is AuthFailure) {
+              if (state.error == 'inactive') {
+                EasyLoading.showInfo(
+                    'Account yet to be verified.\n Kindly Login with the welcome details sent to your email or \n Check your spam',
+                    duration: const Duration(seconds: 5));
+                context.beamToReplacementNamed('/login');
+              } else if (state.error == 'suspend') {
+                EasyLoading.showInfo('Account suspended.',
+                    duration: const Duration(seconds: 5));
+              } else {
+                EasyLoading.showError(state.error);
+              }
             }
-            }},
+          },
           child: Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
@@ -79,7 +80,9 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                           )
                         ],
                       ),
-                      const SizedBox(height: 60,),
+                      const SizedBox(
+                        height: 60,
+                      ),
                       Row(
                         children: [
                           Text("Reset Password",
@@ -87,11 +90,14 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                                   fontSize: 24, fontWeight: FontWeight.w600)),
                         ],
                       ),
-                      const SizedBox(  height: 20,  ),
+                      const SizedBox(
+                        height: 20,
+                      ),
                       Form(
                         key: _formKey,
                         child: TextFormField(
                           controller: emailController,
+                          keyboardType: TextInputType.emailAddress,
                           decoration: InputDecoration(
                               labelText: "Email",
                               hintText: "abc@domain.com",
@@ -117,7 +123,9 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                       InkWell(
                         onTap: () async {
                           if (_formKey.currentState!.validate()) {
-                     context.read<AuthCubit>().forgotPassword(emailController.text.trim());
+                            context
+                                .read<AuthCubit>()
+                                .forgotPassword(emailController.text.trim());
                           }
                         },
                         child: Container(
@@ -129,11 +137,13 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           child: const Text(
                             "Proceed",
-                            style: TextStyle(color:Colors.white),
+                            style: TextStyle(color: Colors.white),
                           ),
                         ),
                       ),
-                      const SizedBox( height: 40, ),
+                      const SizedBox(
+                        height: 40,
+                      ),
                       Row(
                         children: [
                           TextButton(
@@ -143,7 +153,10 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                             style: const ButtonStyle(
                                 backgroundColor:
                                     WidgetStatePropertyAll(Colors.black54)),
-                            child: Text('Return to Login Page',style: TextStyle(color: light),),
+                            child: Text(
+                              'Return to Login Page',
+                              style: TextStyle(color: light),
+                            ),
                           ),
                         ],
                       )
@@ -157,6 +170,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
       ),
     );
   }
+
   @override
   void dispose() {
     // TODO: implement dispose

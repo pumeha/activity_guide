@@ -18,8 +18,7 @@ class UserDashboardPage extends StatefulWidget {
   State<UserDashboardPage> createState() => _UserDashboardPageState();
 }
 
-class _UserDashboardPageState extends State<UserDashboardPage>
-    with AutomaticKeepAliveClientMixin {
+class _UserDashboardPageState extends State<UserDashboardPage> {
   String? dashboardUrl;
   late String viewId;
   html.IFrameElement? iframe;
@@ -61,12 +60,12 @@ class _UserDashboardPageState extends State<UserDashboardPage>
         label: 'Close',
         textColor: Colors.white,
         onPressed: () {
-          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+          _smsKey.currentState?.hideCurrentSnackBar();
         },
       ),
     );
 
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    _smsKey.currentState?.showSnackBar(snackBar);
   }
 
   void _createIframe() {
@@ -77,13 +76,16 @@ class _UserDashboardPageState extends State<UserDashboardPage>
       ..style.border = 'none'
       ..width = '100%'
       ..height = '100%'
+      ..style.height = '100%'
+      ..style.width = '100%'
       ..onLoad.listen((event) {
         EasyLoading.dismiss();
         showCustomSnackBar();
       });
 
     // ignore: undefined_prefixed_name
-    ui.platformViewRegistry.registerViewFactory(viewId, (int viewId) => iframe!);
+    ui.platformViewRegistry
+        .registerViewFactory(viewId, (int viewId) => iframe!);
     EasyLoading.show(status: 'Loading dashboard...');
   }
 
@@ -93,10 +95,10 @@ class _UserDashboardPageState extends State<UserDashboardPage>
     }
   }
 
+  final GlobalKey<ScaffoldMessengerState> _smsKey =
+      GlobalKey<ScaffoldMessengerState>();
   @override
   Widget build(BuildContext context) {
-    super.build(context);
-
     if (dashboardUrl == null) {
       return const Center(
         child: CustomText(
@@ -118,11 +120,13 @@ class _UserDashboardPageState extends State<UserDashboardPage>
 
         final isVisible = state is UserDashboard ? state.show : true;
 
-        return Scaffold(
-         
-          body: Visibility(
-            visible: isVisible,
-            child: HtmlElementView(viewType: viewId),
+        return ScaffoldMessenger(
+          key: _smsKey,
+          child: Scaffold(
+            body: Visibility(
+              visible: isVisible,
+              child: HtmlElementView(viewType: viewId),
+            ),
           ),
         );
       },
@@ -130,11 +134,9 @@ class _UserDashboardPageState extends State<UserDashboardPage>
   }
 
   @override
-  bool get wantKeepAlive => true;
-
-  @override
   void dispose() {
     EasyLoading.dismiss();
+    _smsKey.currentState?.hideCurrentSnackBar();
     super.dispose();
   }
 }
