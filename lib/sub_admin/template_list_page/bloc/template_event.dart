@@ -7,13 +7,15 @@ abstract class TemplateEvent {
 class UploadEvent extends TemplateEvent {
   
    List<RowData> rows;
-   UploadEvent({required this.rows});
+   String? displayName;
+   UploadEvent({required this.rows,this.displayName});
 }
 
 class UpdateEvent extends TemplateEvent {
   
    List<RowData> rows;
-   UpdateEvent({required this.rows});
+   String? displayName;
+   UpdateEvent({required this.rows,this.displayName});
 }
 
 class TemplatePurposeEvent extends TemplateEvent {

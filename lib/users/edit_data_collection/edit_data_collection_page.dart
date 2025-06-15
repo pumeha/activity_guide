@@ -91,7 +91,7 @@ class _EditDataCollectionPageState extends State<EditDataCollectionPage> {
             if (snapshot.connectionState == ConnectionState.done) {
               return (_jsonDataGridSource != null)
                   ? SfDataGridTheme(
-                    data: SfDataGridThemeData(gridLineStrokeWidth: 1,gridLineColor: Colors.grey),
+                    data: const SfDataGridThemeData(gridLineStrokeWidth: 1,gridLineColor: Colors.grey),
                     child: SfDataGrid(
                         controller: controller,
                         source: _jsonDataGridSource!,

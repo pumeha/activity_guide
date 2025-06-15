@@ -23,10 +23,10 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
   //     TextEditingController(text: 'smarterway2024@gmail.com');
   // TextEditingController passwordController =
   //     TextEditingController(text: 'Smarter1@');
-  // TextEditingController emailController = TextEditingController(text: 'mikeshedrack88@gmail.com');
-  // TextEditingController passwordController = TextEditingController(text: 'Shedrack88@');
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  TextEditingController emailController = TextEditingController(text: 'mikeshedrack88@gmail.com');
+  TextEditingController passwordController = TextEditingController(text: 'Shedrack88@');
+  // TextEditingController emailController = TextEditingController();
+  // TextEditingController passwordController = TextEditingController();
   bool showPassword = true;
 
   @override

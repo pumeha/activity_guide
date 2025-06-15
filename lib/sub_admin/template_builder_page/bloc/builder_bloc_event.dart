@@ -37,5 +37,6 @@ class ClearBuilderDataEvent extends BuilderEvent {
 class EditTemplateEvent extends BuilderEvent{
   final List<RowData> rows;
   final String templateName;
-  EditTemplateEvent({required this.rows, required this.templateName});
+  final String? displayName;
+  EditTemplateEvent({required this.rows, required this.templateName,this.displayName});
 }

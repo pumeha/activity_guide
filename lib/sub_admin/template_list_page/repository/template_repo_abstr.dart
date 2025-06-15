@@ -1,9 +1,9 @@
 abstract class TemplateRepoAbstr {
   Future<Map<String,dynamic>> uploadTemplate({required String name,required String value,
-                    required String purpose,required String token});
+                    required String purpose,required String token,required String displayName});
 
   Future<Map<String, dynamic>> updateTemplate({required String name,required String values,
-                  required String token});        
+                  required String token,String? displayName});
 
   Future<Map<String,dynamic>> deleteTemplate({required String name,required String token});                          
 

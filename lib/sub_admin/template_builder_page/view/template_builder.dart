@@ -16,6 +16,7 @@ import '../../../shared/utils/colors.dart';
 
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
+import '../../../shared/utils/constants.dart';
 import '../../template_list_page/bloc/template_event.dart';
 import '../../template_list_page/bloc/template_state.dart';
 
@@ -24,24 +25,21 @@ class TemplateBuilder extends StatefulWidget {
 
   @override
   State<TemplateBuilder> createState() => _TemplateBuilderState();
-
 }
-
 
 class _TemplateBuilderState extends State<TemplateBuilder> {
   String? workingPurpose;
+  bool? additional;
   @override
-  void dispose(){
-  
-   //print('dispose');
-   super.dispose();
-
+  void dispose() {
+    super.dispose();
   }
-  
+
+  TextEditingController controller = TextEditingController();
+  final displayKey = GlobalKey<FormState>();
   @override
-  initState(){
+  initState() {
     super.initState();
-    
   }
 
   List<RowData>? rows;
@@ -50,144 +48,190 @@ class _TemplateBuilderState extends State<TemplateBuilder> {
     double width = MediaQuery.of(context).size.width;
     double horizontalPadding = width > 1000 ? width / 4 : width / 4;
     return MultiBlocListener(
-        listeners: [
-            BlocListener<BuilderBloc, BuilderState>(
+      listeners: [
+        BlocListener<BuilderBloc, BuilderState>(
           listener: (context, state) {
-          rows = state.rows;
-         
+            rows = state.rows;
           },
-    
         ),
-            BlocListener<TemplateBloc, TemplateState>(
-                listener: (context, state) {
-                if (state is TemplateLoadingState) {
-                  EasyLoading.show(maskType: EasyLoadingMaskType.black);
-                }else if(state is TemplateSuccessState){
-                    EasyLoading.showSuccess('Success');
-                    context.read<BuilderBloc>().add(ClearBuilderDataEvent());
-                    context.beamToNamed('/admin/templates');
-                }else if(state is TemplateFailureState){
-                  print(state.message.contains('template'));
-                     if(!state.message.contains('template')){
-                       EasyLoading.showError(state.message);
-                     }else{
-                      workingPurpose = state.message;
-                     }
-
-                }},), ],
-
-              child: Scaffold(
-              body: BlocBuilder<BuilderBloc, BuilderState>(
-                builder: (context, state) {
-                  return Column(
-                    children: [
-                         FutureBuilder<String?>(
-                          future: MysharedPreference().getPreferencesWithoutEncrpytion(BuilderKeys.workingtemplate),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState == ConnectionState.waiting) {
-                              return Text(''); // or a placeholder
-                            } else if (snapshot.hasError) {
-                              return Text('');
-                            } else if (!snapshot.hasData || snapshot.data == null) {
-                              return Text('');
-                            } else {
-                              return Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(snapshot.data!,style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
-                              );
-                            }
-                          },
-                        ),
-                      Expanded(
-                        child: ReorderableListView(
-                          padding: EdgeInsets.only(right: horizontalPadding),
-                          onReorder: (oldIndex, newIndex) {
-                            context.read<BuilderBloc>().add(
-                                ReorderEvent(oldIndex: oldIndex, newIndex: newIndex));
-                          },
-                          children: List.generate(state.rows.length, (index) {
-                            List<RowData> data = state.rows;
-                            return customCard(
-                              key: ValueKey(state.rows[index].id),
-                              title: data[index].columnName,
-                              type: data[index].dataType,
-                              range: data[index].range,
-                              index: index,
-                              removeRow: (i) => context
-                                  .read<BuilderBloc>()
-                                  .add(RemoveRowEvent(index: i)),
-                              editData: (i) => BuilderDialog().showBuilderDialog(
-                                  context: context,
-                                  id: i,
-                                  name: data[i].columnName,
-                                  type: data[i].dataType,
-                                  Rvalue: data[i].range),
-                            );
-                          }),
-                        ),
-                      ),
-                    ],
-                  );
-                },
-              ),
-              floatingActionButton: Stack(
+        BlocListener<TemplateBloc, TemplateState>(
+          listener: (context, state) {
+            if (state is TemplateLoadingState) {
+              EasyLoading.show(maskType: EasyLoadingMaskType.black);
+            } else if (state is TemplateSuccessState) {
+              EasyLoading.showSuccess('Success');
+              context.read<BuilderBloc>().add(ClearBuilderDataEvent());
+              context.beamToNamed('/admin/templates');
+            } else if (state is TemplateFailureState) {
+              if (!state.message.contains('template')) {
+                EasyLoading.showError(state.message);
+              } else {
+                workingPurpose = state.message;
+               // print('workingPurpose $workingPurpose');
+              }
+            }
+          },
+        ),
+      ],
+      child: Scaffold(
+          body: BlocBuilder<BuilderBloc, BuilderState>(
+            builder: (context, state) {
+              return Column(
                 children: [
-                  Positioned(
-                      right: 0,
-                      top: MediaQuery.of(context).size.width / 12,
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: BlocBuilder<BuilderBloc, BuilderState>(
-                          builder: (context, state) {
-                            return Text(
-                              '${state.rows.length}',
-                            style: AppTextStyles.tableColumns,
-                            );
-                          },
-                        ),
-                      )),
-                  // Add Button
-                  Positioned(
-                    right: 0,
-                    top: MediaQuery.of(context).size.height / 2 - 100,
-                    child: Column(
-                      children: [
-                        FloatingActionButton(
-                          onPressed: () async{
-                            BuilderDialog().showBuilderDialog(context: context); 
-                          },
-                          tooltip: 'Add Row',
-                          heroTag: 'add',
-                          backgroundColor: Colors.black,
-                          child: const Icon(Icons.add,color: Colors.white),
-                        ),
-                        
-                      ],
+                  FutureBuilder<String?>(
+                    future: MysharedPreference()
+                        .getPreferencesWithoutEncrpytion(
+                            BuilderKeys.workingtemplate),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Text(''); // or a placeholder
+                      } else if (snapshot.hasError) {
+                        return Text('');
+                      } else if (!snapshot.hasData || snapshot.data == null) {
+                        return Text('');
+                      } else {
+                        if (!snapshot.data!.contains('Additional')) {
+                          additional = false;
+                          controller.text = snapshot.data!;
+                          return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  snapshot.data!,
+                                  style: const TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              );
+                        } else {
+                          additional = true;
+                          return Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      snapshot.data!,
+                                      style: const TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 300,
+                                    child: Form(
+                                      key: displayKey,
+                                      child: TextFormField(
+                                        controller: controller,
+                                        validator: validatorFunction,
+                                        decoration: InputDecoration(labelText: 'Display Name',),
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: SizedBox(child: Divider(thickness: 2,color: Theme.of(context).primaryColor,),width: 500,),
+                                  )
+                                ],
+                              );
+                        }
+                      }
+                    },
+                  ),
+                  Expanded(
+                    child: ReorderableListView(
+                      padding: EdgeInsets.only(right: horizontalPadding),
+                      onReorder: (oldIndex, newIndex) {
+                        context.read<BuilderBloc>().add(ReorderEvent(
+                            oldIndex: oldIndex, newIndex: newIndex));
+                      },
+                      children: List.generate(state.rows.length, (index) {
+                        List<RowData> data = state.rows;
+                        return customCard(
+                          key: ValueKey(state.rows[index].id),
+                          title: data[index].columnName,
+                          type: data[index].dataType,
+                          range: data[index].range,
+                          index: index,
+                          removeRow: (i) => context
+                              .read<BuilderBloc>()
+                              .add(RemoveRowEvent(index: i)),
+                          editData: (i) => BuilderDialog().showBuilderDialog(
+                              context: context,
+                              id: i,
+                              name: data[i].columnName,
+                              type: data[i].dataType,
+                              Rvalue: data[i].range),
+                        );
+                      }),
                     ),
                   ),
-                   Positioned(
-                    right: 0, // Distance from the right edge
-                    top: MediaQuery.of(context).size.height / 4, // Below the center
-                    child: FloatingActionButton(
-                      onPressed: () {
-                         context.read<TemplateBloc>().add(UploadEvent(rows: rows ?? []));
-                      },
-                      tooltip: 'Save',
-                      heroTag: 'save',
-                      backgroundColor: Colors.green,
-                      child: const Icon(
-                        Icons.save,
-                        color: light,
-                      ),
-                    ),)
-                  
-                
                 ],
-              )),
+              );
+            },
+          ),
+          floatingActionButton: Stack(
+            children: [
+              Positioned(
+                  right: 0,
+                  top: MediaQuery.of(context).size.width / 12,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: BlocBuilder<BuilderBloc, BuilderState>(
+                      builder: (context, state) {
+                        return Text(
+                          '${state.rows.length}',
+                          style: AppTextStyles.tableColumns,
+                        );
+                      },
+                    ),
+                  )),
+              // Add Button
+              Positioned(
+                right: 0,
+                top: MediaQuery.of(context).size.height / 2 - 100,
+                child: Column(
+                  children: [
+                    FloatingActionButton(
+                      onPressed: () async {
+                        BuilderDialog().showBuilderDialog(context: context);
+                      },
+                      tooltip: 'Add Row',
+                      heroTag: 'add',
+                      backgroundColor: Colors.black,
+                      child: const Icon(Icons.add, color: Colors.white),
+                    ),
+                  ],
+                ),
+              ),
+              Positioned(
+                right: 0, // Distance from the right edge
+                top: MediaQuery.of(context).size.height / 4, // Below the center
+                child: FloatingActionButton(
+                  onPressed: () {
+
+                  if (additional!) {
+                    if(displayKey.currentState!.validate()){
+                      context.read<TemplateBloc>().add(
+                          UploadEvent(rows: rows ?? [], displayName: controller.text));
+                    }
+                  }else{
+                    context.read<TemplateBloc>().add(
+                        UploadEvent(rows: rows ?? []));
+                  }
+                  },
+                  tooltip: 'Save',
+                  heroTag: 'save',
+                  backgroundColor: Colors.green,
+                  child: const Icon(
+                    Icons.save,
+                    color: light,
+                  ),
+                ),
+              )
+            ],
+          )),
     );
-    
   }
-  
+
   Widget customCard(
       {Key? key,
       int? index,
@@ -201,15 +245,14 @@ class _TemplateBuilderState extends State<TemplateBuilder> {
     double width = MediaQuery.of(context).size.width;
     double horizontalPadding = width > 1000 ? width / 4 : width / 8;
     switch (type) {
-      
       case 'Dropdown':
-      
         subtitleWidget = DropdownButtonFormField<String>(
           key: key,
-         // value: range.toString().split(',')[0],
+          // value: range.toString().split(',')[0],
           items: range
               .toString()
-              .split(',').toSet()
+              .split(',')
+              .toSet()
               .map<DropdownMenuItem<String>>((e) => DropdownMenuItem(
                     key: key,
                     value: e,
@@ -272,7 +315,7 @@ class _TemplateBuilderState extends State<TemplateBuilder> {
                 ),
               );
         break;
-        
+
       case 'TextField':
         subtitleWidget = TextFormField(
           key: key,
@@ -280,9 +323,10 @@ class _TemplateBuilderState extends State<TemplateBuilder> {
           maxLines: 3,
           onChanged: (value) {},
         );
-      break;
+        break;
       case 'Dropdown using active workplan columns':
-        subtitleWidget =  Text('Data from ${range} column in active workplan will be use for the Dropdown list');
+        subtitleWidget = Text(
+            'Data from ${range} column in active workplan will be use for the Dropdown list');
         break;
     }
     //here
@@ -311,7 +355,8 @@ class _TemplateBuilderState extends State<TemplateBuilder> {
                 key: key,
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  key: key,overflow: TextOverflow.ellipsis,
+                  key: key,
+                  overflow: TextOverflow.ellipsis,
                   title!,
                   style: const TextStyle(
                       fontSize: 16, fontWeight: FontWeight.bold),
@@ -329,7 +374,10 @@ class _TemplateBuilderState extends State<TemplateBuilder> {
                         editData!(index!);
                       },
                       tooltip: 'Edit',
-                      icon: const Icon(Icons.edit,color: Colors.black,),
+                      icon: const Icon(
+                        Icons.edit,
+                        color: Colors.black,
+                      ),
                     ),
                   ),
                   // Remove Button

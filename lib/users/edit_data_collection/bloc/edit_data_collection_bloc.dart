@@ -27,13 +27,25 @@ class EditDataCollectionBloc
         emit(EditFailureState(message: 'No internet connection'));
         return;
       }
-
+      String? templateName;
       String? _selectedTemplate =
           await MysharedPreference().getPreferences(selectedTemplate);
-      String? workplanTName =
-          await MysharedPreference().getPreferences(workplanTemplateName);
-      String? monthTName =
-          await MysharedPreference().getPreferences(monthlyTemplateName);
+
+      if(_selectedTemplate != null && _selectedTemplate.isNotEmpty){
+        if(_selectedTemplate == 'monthly'){
+          templateName =await MysharedPreference().getPreferences(monthlyTemplateName);
+
+        }else if(_selectedTemplate == 'workplan'){
+          templateName =  await MysharedPreference().getPreferences(workplanTemplateName);
+        }else if(_selectedTemplate == 'additional'){
+          templateName =  await MysharedPreference().getPreferences(additionalTemplateName);
+
+        }
+      }else{
+        emit(EditFailureState(message: 'Template not found'));
+        return;
+      }
+
 
       for (var element in event.data) {
         element.remove('ID');
@@ -51,14 +63,12 @@ class EditDataCollectionBloc
         return;
       }
 
-      if (_selectedTemplate != null &&
-          _selectedTemplate.isNotEmpty &&
-          _selectedTemplate == 'monthly' &&
-          monthTName != null &&
-          monthTName.isNotEmpty) {
+      if (_selectedTemplate != 'workplan' &&
+          templateName != null &&
+          templateName.isNotEmpty) {
         final response = await impl.upload(
             url: TemplateRoutes.uploadTemplateData,
-            templateName: monthTName,
+            templateName: templateName,
             data: event.data,
             token: token);
 
@@ -72,14 +82,13 @@ class EditDataCollectionBloc
         } else {
           return emit(EditFailureState(message: jsonDart.message!));
         }
-      } else if (_selectedTemplate != null &&
-          _selectedTemplate.isNotEmpty &&
+      } else if (
           _selectedTemplate == 'workplan' &&
-          workplanTName != null &&
-          workplanTName.isNotEmpty) {
+          templateName != null &&
+          templateName.isNotEmpty) {
         final response = await impl.upload(
             url: TemplateRoutes.uploadTemplateData,
-            templateName: workplanTName,
+            templateName: templateName,
             data: event.data,
             token: token);
 
@@ -104,8 +113,6 @@ class EditDataCollectionBloc
         } else {
           return emit(EditFailureState(message: jsonDart.message!));
         }
-      } else {
-        return emit(EditFailureState(message: 'Template name not found'));
       }
     });
   }

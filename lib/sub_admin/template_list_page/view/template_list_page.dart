@@ -25,40 +25,36 @@ class TemplatesListPage extends StatefulWidget {
   State<TemplatesListPage> createState() => _TemplatesListPageState();
 }
 
-class _TemplatesListPageState extends State<TemplatesListPage>   with SingleTickerProviderStateMixin {
-
+class _TemplatesListPageState extends State<TemplatesListPage>
+    with SingleTickerProviderStateMixin {
   Future<List<TemplateModel>> loadTemplateFromSharedPreference() async {
     String? templatesJson =
         await MysharedPreference().getPreferences(templateListKeys);
 
     if (templatesJson != null && templatesJson.isNotEmpty) {
-
       final List<dynamic> decodedList = jsonDecode(templatesJson);
-      final List<TemplateModel> templates = decodedList
-          .map((template) {
-            
-            TemplateModel model = TemplateModel.fromJson(template);
-            
-            if (model.purpose == 'wtemplate' && model.status == 'active') {
-            
-              List<RowData> columns = model.values;
-              String names = columns.map((column) => column.columnName).join(',');
-            
-           Future.wait([
-               MysharedPreference().setPreferencesWithoutEncrpytion('activeWorkplan','true'),
-              MysharedPreference().setPreferencesWithoutEncrpytion('activeWorkplanColumns', names)
-            ]);
+      final List<TemplateModel> templates = decodedList.map((template) {
+        TemplateModel model = TemplateModel.fromJson(template);
 
-            }else if(model.purpose == 'wtemplate' && model.status == 'inactive'){
-            
-            Future.wait([
-                MysharedPreference().clearPreference('activeWorkplan'),
-                MysharedPreference().clearPreference('activeWorkplanColumns')
-            ]);
-            }
-            
-            return  model;
-          }).toList();
+        if (model.purpose == 'wtemplate' && model.status == 'active') {
+          List<RowData> columns = model.values;
+          String names = columns.map((column) => column.columnName).join(',');
+
+          Future.wait([
+            MysharedPreference()
+                .setPreferencesWithoutEncrpytion('activeWorkplan', 'true'),
+            MysharedPreference()
+                .setPreferencesWithoutEncrpytion('activeWorkplanColumns', names)
+          ]);
+        } else if (model.purpose == 'wtemplate' && model.status == 'inactive') {
+          Future.wait([
+            MysharedPreference().clearPreference('activeWorkplan'),
+            MysharedPreference().clearPreference('activeWorkplanColumns')
+          ]);
+        }
+
+        return model;
+      }).toList();
 
       return templates;
     } else {
@@ -66,22 +62,20 @@ class _TemplatesListPageState extends State<TemplatesListPage>   with SingleTick
     }
   }
 
-    bool isDialOpen = false;
+  bool isDialOpen = false;
   @override
   Widget build(BuildContext context) {
     return BlocListener<TemplateBloc, TemplateState>(
       listener: (context, state) {
         if (state is TemplateLoadingState) {
-         EasyLoading.show(maskType: EasyLoadingMaskType.black); 
-        }else if(state is TemplateSuccessState){
+          EasyLoading.show(maskType: EasyLoadingMaskType.black);
+        } else if (state is TemplateSuccessState) {
           if (state.message == 'data') {
             context.beamToNamed('/admin/database');
           }
-            setState(() {
-         
-            });
-            EasyLoading.showSuccess(state.message);
-        }else if(state is TemplateFailureState){
+          setState(() {});
+          EasyLoading.showSuccess(state.message);
+        } else if (state is TemplateFailureState) {
           EasyLoading.showError(state.message);
         }
       },
@@ -108,56 +102,68 @@ class _TemplatesListPageState extends State<TemplatesListPage>   with SingleTick
                   itemBuilder: (context, index) {
                     return TemplateListItem(
                         model: snapShot.data![index], context: context);
-                  },itemCount: snapShot.data!.length,
-                ); }}),
+                  },
+                  itemCount: snapShot.data!.length,
+                );
+              }
+            }),
+        floatingActionButton: SpeedDial(
+          backgroundColor: active,
+          //animatedIcon: AnimatedIcons.menu_close,
+          label: Text(
+            'Create Template',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+          overlayOpacity: 0.4, // Scrim opacity
+          //   overlayColor: Colors.black, // Scrim color
+          openCloseDial: ValueNotifier<bool>(isDialOpen),
+          spacing: 30,
+          children: [
+            SpeedDialChild(
+              label: 'Additional Template',
+              labelStyle: TextStyle(fontWeight: FontWeight.bold),
+              onTap: () {
+                context.read<TemplateBloc>().add(TemplatePurposeEvent(
+                    purpose: 'atemplate',
+                    workingTemplate: 'Creating Additional Template'));
+                Navigator.pop(context);
+                context.read<BuilderBloc>().add(ClearBuilderDataEvent());
+                context.beamToNamed('/admin/builder');
+              },
+            ),
+            SpeedDialChild(
+              label: 'Workplan Template',
+              labelStyle: TextStyle(fontWeight: FontWeight.bold),
+              onTap: () {
+                context.read<TemplateBloc>().add(TemplatePurposeEvent(
+                    purpose: 'wtemplate',
+                    workingTemplate: 'Creating Workplan Template'));
+                Navigator.pop(context);
+                context.read<BuilderBloc>().add(ClearBuilderDataEvent());
+                context.beamToNamed('/admin/builder');
+              },
+            ),
+            SpeedDialChild(
+              label: 'Monthly Template',
+              labelStyle: TextStyle(fontWeight: FontWeight.bold),
+              onTap: () async {
+                String? activeWorkplan = await MysharedPreference()
+                    .getPreferencesWithoutEncrpytion('activeWorkplan');
 
-        floatingActionButton: SpeedDial( backgroundColor: active,
-      //animatedIcon: AnimatedIcons.menu_close,
-      label: Text('Create Template',style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold),),
-       overlayOpacity: 0.4, // Scrim opacity
-    //   overlayColor: Colors.black, // Scrim color
-        openCloseDial: ValueNotifier<bool>(isDialOpen),
-        spacing: 30,
-        children: [
-          SpeedDialChild(
-            label: 'Additional Template', labelStyle: TextStyle(fontWeight: FontWeight.bold),
-            onTap: (){
-                      context.read<TemplateBloc>().add(TemplatePurposeEvent(purpose: 'atemplate',
-                      workingTemplate: 'Creating Additional Template'));
-                         Navigator.pop(context);
-                         context.read<BuilderBloc>().add(ClearBuilderDataEvent());
-                     context.beamToNamed('/admin/builder');
-            },
-          ),
-          SpeedDialChild(
-            label: 'Workplan Template', labelStyle: TextStyle(fontWeight: FontWeight.bold),
-            onTap: (){
-                   context.read<TemplateBloc>().add(TemplatePurposeEvent(purpose: 'wtemplate',
-                   workingTemplate: 'Creating Workplan Template'));
-                         Navigator.pop(context);
-                         context.read<BuilderBloc>().add(ClearBuilderDataEvent());
-                         context.beamToNamed('/admin/builder');
-            },
-          ),
-          SpeedDialChild(
-            label: 'Monthly Template', labelStyle: TextStyle(fontWeight: FontWeight.bold),
-            onTap: ()async{
-              String? activeWorkplan = await MysharedPreference().getPreferencesWithoutEncrpytion('activeWorkplan');
-                        
-                        if (activeWorkplan != null && activeWorkplan.isNotEmpty) {
-                          context.read<TemplateBloc>().add(TemplatePurposeEvent(purpose: 'mtemplate',
-                           workingTemplate: 'Creating Monthly Template'));
-                        Navigator.pop(context);
-                        context.read<BuilderBloc>().add(ClearBuilderDataEvent());
-                        context.beamToNamed('/admin/builder');
-                        }else{
-                          EasyLoading.showError('Active Workplan required');
-                        }
-            },
-          ),
-          
-        ],
-      ),
+                if (activeWorkplan != null && activeWorkplan.isNotEmpty) {
+                  context.read<TemplateBloc>().add(TemplatePurposeEvent(
+                      purpose: 'mtemplate',
+                      workingTemplate: 'Creating Monthly Template'));
+                  Navigator.pop(context);
+                  context.read<BuilderBloc>().add(ClearBuilderDataEvent());
+                  context.beamToNamed('/admin/builder');
+                } else {
+                  EasyLoading.showError('Active Workplan required');
+                }
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

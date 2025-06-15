@@ -5,44 +5,38 @@ import '../json2dart/user_json_dart.dart';
 import 'users_repo_abstract.dart';
 
 class UsersRepoImpl extends UsersRepoAbstract {
-
   @override
-  Future<Map<String,dynamic>> addUser({required UserJSON2Dart userData,required String token}) async{
-    
+  Future<Map<String, dynamic>> addUser(
+      {required UserJSON2Dart userData, required String token}) async {
     dynamic body = jsonEncode(userData);
-    Map<String,dynamic> response = await HttpHandlerImpl.instance.post(url: LoginRoutes.register, body: body,token: token);
+    Map<String, dynamic> response = await HttpHandlerImpl.instance
+        .post(url: LoginRoutes.register, body: body, token: token);
     return response;
   }
 
-  
   @override
-  Future<Map<String, dynamic>> deleteUser({required String email, required String token}) async{
-     dynamic body = jsonEncode({"email":email});
-      Map<String,dynamic> response = await HttpHandlerImpl.instance.post(url: UserRoutes.deleteUser, body: body,token: token);
-      return response;
-  }
-  
-  @override
-  Future<Map<String, dynamic>> suspendUser({required String email, required String token}) async{
-      dynamic body = jsonEncode({"email":email});
-    Map<String,dynamic> response = await HttpHandlerImpl.instance.post(url: UserRoutes.suspendUser, body: body,token: token);
+  Future<Map<String, dynamic>> asdUser(
+      {required String email,
+      required String purpose,
+      required String token}) async {
+    dynamic body = jsonEncode({"email": email, "purpose": purpose});
+    Map<String, dynamic> response = await HttpHandlerImpl.instance
+        .post(url: UserRoutes.asdUser, body: body, token: token);
     return response;
   }
-  
+
   @override
-  Future<Map<String, dynamic>> updateUser({required UserJSON2Dart userData, required String token}) async{
-      
-      dynamic body = jsonEncode({"phonenumber":userData.phonenumber,"dept":userData.dept,
-      "unit":userData.unit,"role":userData.role,"email":userData.email});
-    Map<String,dynamic> response = await HttpHandlerImpl.instance.post(url: UserRoutes.updateUser, body: body,token: token);
+  Future<Map<String, dynamic>> updateUser(
+      {required UserJSON2Dart userData, required String token}) async {
+    dynamic body = jsonEncode({
+      "phonenumber": userData.phonenumber,
+      "dept": userData.dept,
+      "unit": userData.unit,
+      "role": userData.role,
+      "email": userData.email
+    });
+    Map<String, dynamic> response = await HttpHandlerImpl.instance
+        .post(url: UserRoutes.updateUser, body: body, token: token);
     return response;
   }
-  
-  @override
-  Future<Map<String, dynamic>> activeUser({required String email, required String token}) async{
-      dynamic body = jsonEncode({"email":email});
-    Map<String,dynamic> response = await HttpHandlerImpl.instance.post(url: UserRoutes.activeUser, body: body,token: token);
-    return response;
-  }
-  
 }

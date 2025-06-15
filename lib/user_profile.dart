@@ -1,13 +1,10 @@
 import 'package:activity_guide/shared/custom_widgets/custom_text.dart';
-import 'package:activity_guide/shared/theme_mode_bloc/theme_bloc.dart';
-import 'package:activity_guide/shared/theme_mode_bloc/theme_event_et_state.dart';
 import 'package:activity_guide/shared/utils/constants.dart';
 import 'package:activity_guide/shared/utils/http_helper/storage_keys.dart';
 import 'package:activity_guide/shared/utils/myshared_preference.dart';
 import 'package:flutter/material.dart';
 import 'package:beamer/beamer.dart';
 import 'shared/utils/colors.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class UserProfile extends StatefulWidget {
   const UserProfile({super.key});

@@ -72,10 +72,13 @@ const defaultDashboard = "https://1drv.ms/x/c/979292c95e1c918d/IQQ71B29H8udTogIb
 const unauthorizedUser = 'Unauthorized User';
 const monthlyTemplateKey = 'monthlyTemplate';
 const workplanTemplateKey = 'workplanTemplate';
+const additionalTemplateKey = 'additionalTemplate';
+const additionalTemplateList = 'additionalTemplateList';
 const dataCollectionKey = 'dataCollection';
 const selectedTemplate = 'stemplate';
 const monthlyTemplateName = 'monthlyTemplateName';
 const workplanTemplateName = 'workplanTemplateName';
+const additionalTemplateName = 'additionalTemplateName';
 
 String templateName(String purpose){
   DateTime dateTime = DateTime.now();
@@ -95,6 +98,6 @@ Widget customCircleIndicator(){
 
 bool isDeviceOffline() {
   
- return html.window.navigator.onLine ?? false;
-  //return true;
+ //return html.window.navigator.onLine ?? false;
+  return true;
 }

@@ -1,5 +1,5 @@
-String baseUrl = "https://www.smarterwayltd.com/endpoints";
-//String baseUrl = "http://localhost:5000/endpoints";
+//String baseUrl = "https://www.smarterwayltd.com/endpoints";
+String baseUrl = "http://localhost:5000/endpoints";
 
 class LoginRoutes {
 static String loginRoute = "$baseUrl/auth/login";
@@ -24,9 +24,8 @@ static String fetchData = "$baseUrl/template/fetch";
 class UserRoutes {
 static String getUsers = "$baseUrl/users";
 static String updateUser = "$getUsers/update";
-static String suspendUser = "$getUsers/suspend";
-static String deleteUser = "$getUsers/delete";
-static String activeUser = "$getUsers/active";
+static String asdUser = "$getUsers/asd";
+
 }
 
 class WorkplanRoutes {

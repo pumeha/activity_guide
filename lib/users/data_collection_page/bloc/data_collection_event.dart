@@ -8,6 +8,12 @@ class LoadDataCollectionMonthlyTemplateEvent extends DataCollectionEvent {
   
 }
 
+class LoadDataCollectionAdditionalTemplateEvent extends DataCollectionEvent{
+  List<dynamic> data;
+  String displayName;
+  LoadDataCollectionAdditionalTemplateEvent({required this.data,required this.displayName});
+}
+
 class LoadDataCollectionWorkplanTemplateEvent extends DataCollectionEvent{}
 
 class LoadSelectedDataCollectionTemplateEvent extends DataCollectionEvent {}

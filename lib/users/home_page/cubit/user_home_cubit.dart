@@ -11,70 +11,49 @@ import 'user_home_state.dart';
 
 class UserHomeCubit extends Cubit<UserHomeState> {
   UserHomeImpl userHomeImpl;
+
   UserHomeCubit(this.userHomeImpl) : super(UserHomeInitial());
 
-  Future<void> downloadMonthlyData() async{
-      emit(UserHomeLoading());
-
-      bool onlineOrOffline = isDeviceOffline();
-      if (!onlineOrOffline) {
-        emit(UserHomeFailure(message: 'No internet connection')); return;
-      }
-
-      String? token = await MysharedPreference().getPreferences(LoginKeys.token);
-      if (token == null || token.isEmpty) {
-       return emit(UserHomeFailure(message: 'Unauthorized user'));
-      }
-
-      String? template = await MysharedPreference().getPreferences(monthlyTemplateName);
-      if (template == null || template.isEmpty) {
-        return emit(UserHomeFailure(message: 'Monthly template not created'));
-      }
-      final response = await userHomeImpl.fetchTemplateData(token: token,templateName: template);
-      GeneralJsonDart data = GeneralJsonDart.fromJson(response);
-
-      if (data.status == HttpStatus.ok) {
-          if(data.data == null || data.data!.isEmpty){
-           return emit(UserHomeFailure(message: 'No record found'));
-          }
-          await MysharedPreference().setPreferencesWithoutEncrpytion(template_data,jsonEncode(data.data!));
-         return emit(UserHomeSuccess(message: 'Data downloaded'));
-      }else{
-       return emit(UserHomeFailure(message: data.message));
-      }
-  }
-
-  Future<void> downloadWorkplanData() async{
+  Future<void> downloadData({required String templateType}) async {
     emit(UserHomeLoading());
 
-      bool onlineOrOffline = isDeviceOffline();
-      if (!onlineOrOffline) {
-      return  emit(UserHomeFailure(message: 'No internet connection'));
-      }
+    bool onlineOrOffline = isDeviceOffline();
+    if (!onlineOrOffline) {
+      emit(UserHomeFailure(message: 'No internet connection'));
+      return;
+    }
 
-      String? token = await MysharedPreference().getPreferences(LoginKeys.token);
-      if (token == null || token.isEmpty) {
-       return emit(UserHomeFailure(message: 'Unauthorized user'));
-      }
+    String? token = await MysharedPreference().getPreferences(LoginKeys.token);
+    if (token == null || token.isEmpty) {
+      return emit(UserHomeFailure(message: 'Unauthorized user'));
+    }
+    String? template;
+    if (templateType == 'Monthly') {
+      template = await MysharedPreference().getPreferences(monthlyTemplateName);
+    } else if (templateType == 'Workplan') {
+      template =
+          await MysharedPreference().getPreferences(workplanTemplateName);
+    } else {
+      template = templateType;
+    }
 
-      String? template = await MysharedPreference().getPreferences(workplanTemplateName);
-      if (template == null || template.isEmpty) {
-        return emit(UserHomeFailure(message: 'Workplan template not created'));
-      }
+    if (template == null || template.isEmpty) {
+      return emit(
+          UserHomeFailure(message: '$templateType template not created'));
+    }
+    final response = await userHomeImpl.fetchTemplateData(
+        token: token, templateName: template);
+    GeneralJsonDart data = GeneralJsonDart.fromJson(response);
 
-      final response = await userHomeImpl.fetchTemplateData(token: token,templateName: template);
-      GeneralJsonDart data = GeneralJsonDart.fromJson(response);
-
-      if (data.status == HttpStatus.ok) {
-          if(data.data == null || data.data!.isEmpty){
-           return emit(UserHomeFailure(message: 'No record found'));
-          }
-          MysharedPreference().setPreferencesWithoutEncrpytion(template_data,jsonEncode(data.data!));
-         return emit(UserHomeSuccess(message: 'Data downloaded'));
-      }else{
-      return  emit(UserHomeFailure(message: data.message));
+    if (data.status == HttpStatus.ok) {
+      if (data.data == null || data.data!.isEmpty) {
+        return emit(UserHomeFailure(message: 'No record found'));
       }
-      
+      await MysharedPreference().setPreferencesWithoutEncrpytion(
+          template_data, jsonEncode(data.data!));
+      return emit(UserHomeSuccess(message: 'Data downloaded'));
+    } else {
+      return emit(UserHomeFailure(message: data.message));
+    }
   }
-
 }

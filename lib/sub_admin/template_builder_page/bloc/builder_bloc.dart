@@ -65,7 +65,7 @@ class BuilderBloc extends Bloc<BuilderEvent, BuilderState> {
     String purpose = event.templateName.split('_')[0];
     String? workingTemplate;
     if (purpose == 'atemplate') {
-      workingTemplate = 'Editing Additional Template';
+      workingTemplate = 'Additional_'+event.displayName!;
     }else if(purpose == 'wtemplate'){
       workingTemplate = 'Editing Workplan Template';
     }else if(purpose == 'mtemplate'){

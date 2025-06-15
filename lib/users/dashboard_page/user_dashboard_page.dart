@@ -70,23 +70,43 @@ class _UserDashboardPageState extends State<UserDashboardPage> {
 
   void _createIframe() {
     viewId = 'dashboard-iframe-${DateTime.now().millisecondsSinceEpoch}';
+    final isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
-    iframe = html.IFrameElement()
-      ..src = dashboardUrl!
-      ..style.border = 'none'
-      ..width = '100%'
-      ..height = '100%'
-      ..style.height = '100%'
-      ..style.width = '100%'
-      ..onLoad.listen((event) {
-        EasyLoading.dismiss();
-        showCustomSnackBar();
-      });
+    if (dashboardUrl == 'not-found') {
+      final backgroundColor =
+          isDarkMode ? '#121212' : Theme.of(context).primaryColor;
+      final textColor = isDarkMode ? '#ffffff' : '#333333';
 
-    // ignore: undefined_prefixed_name
-    ui.platformViewRegistry
-        .registerViewFactory(viewId, (int viewId) => iframe!);
-    EasyLoading.show(status: 'Loading dashboard...');
+      final notFoundDiv = html.DivElement()..setInnerHtml('''
+        <div style="background-color: $backgroundColor; height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; font-family: Arial, sans-serif;">
+          <h1 style="color: $textColor; font-size: 32px;">Dashboard not created</h1>
+          <p style="color: $textColor; font-size: 18px;">
+            The dashboard  has not been set up yet.
+          </p>
+        </div>
+      ''', treeSanitizer: html.NodeTreeSanitizer.trusted);
+
+      // ignore: undefined_prefixed_name
+      ui.platformViewRegistry
+          .registerViewFactory(viewId, (int viewId) => notFoundDiv);
+    } else {
+      iframe = html.IFrameElement()
+        ..src = dashboardUrl!
+        ..style.border = 'none'
+        ..width = '100%'
+        ..height = '100%'
+        ..style.height = '100%'
+        ..style.width = '100%'
+        ..onLoad.listen((event) {
+          EasyLoading.dismiss();
+          showCustomSnackBar();
+        });
+
+      // ignore: undefined_prefixed_name
+      ui.platformViewRegistry
+          .registerViewFactory(viewId, (int viewId) => iframe!);
+      EasyLoading.show(status: 'Loading dashboard...');
+    }
   }
 
   void _refreshIframeFromBloc() {

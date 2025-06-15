@@ -1,3 +1,4 @@
+import 'package:activity_guide/shared/utils/constants.dart';
 import 'package:activity_guide/sub_admin/template_builder_page/bloc/builder_bloc_event.dart';
 import 'package:activity_guide/sub_admin/template_builder_page/view/builder_dialog.dart';
 import 'package:activity_guide/shared/utils/rowdata_model.dart';
@@ -18,6 +19,7 @@ import '../../../shared/utils/http_helper/storage_keys.dart';
 import '../../../shared/utils/myshared_preference.dart';
 import '../../template_list_page/bloc/template_event.dart';
 import '../../template_list_page/bloc/template_state.dart';
+
 class TemplateBuilderUpdate extends StatefulWidget {
   const TemplateBuilderUpdate({super.key});
 
@@ -26,147 +28,203 @@ class TemplateBuilderUpdate extends StatefulWidget {
 }
 
 class _TemplateBuilderUpdateState extends State<TemplateBuilderUpdate> {
- 
   List<RowData>? rows;
+  TextEditingController controller = TextEditingController();
+  final displayKey = GlobalKey<FormState>();
+  String? title;
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double horizontalPadding = width > 1000 ? width / 4 : width / 4;
     return MultiBlocListener(
-        listeners: [
-            BlocListener<BuilderBloc, BuilderState>(
+      listeners: [
+        BlocListener<BuilderBloc, BuilderState>(
           listener: (context, state) {
-          rows = state.rows;
-         
+            rows = state.rows;
           },
-    
         ),
-            BlocListener<TemplateBloc, TemplateState>(
-                listener: (context, state) {
-                if (state is TemplateLoadingState) {
-                  EasyLoading.show(maskType: EasyLoadingMaskType.black);
-                }else if(state is TemplateSuccessState){
-                    EasyLoading.showSuccess('Success');
-                    context.read<BuilderBloc>().add(ClearBuilderDataEvent());
-                    context.beamToNamed('/admin/templates');
-                }else if(state is TemplateFailureState){
-                      EasyLoading.showError(state.message);
-                }
-
-                },
-            ),
-        ],
-              child: Scaffold(
-              body: BlocBuilder<BuilderBloc, BuilderState>(
-                builder: (context, state) {
-                  return Column(
-                    children: [
-                      FutureBuilder<String?>(
-                          future: MysharedPreference().getPreferencesWithoutEncrpytion(BuilderKeys.workingtemplate),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState == ConnectionState.waiting) {
-                              return Text(''); // or a placeholder
-                            } else if (snapshot.hasError) {
-                              return Text('');
-                            } else if (!snapshot.hasData || snapshot.data == null) {
-                              return Text('');
-                            } else {
-                              return Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Text(snapshot.data!,style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
-                              );
-                            }
-                          },
-                        ),
-                      Expanded(
-                        child: ReorderableListView(
-                          padding: EdgeInsets.only(right: horizontalPadding),
-                          onReorder: (oldIndex, newIndex) {
-                            context.read<BuilderBloc>().add(
-                                ReorderEvent(oldIndex: oldIndex, newIndex: newIndex));
-                          },
-                          children: List.generate(state.rows.length, (index) {
-                            List<RowData> data = state.rows;
-                            return customCard(
-                              key: ValueKey(state.rows[index].id),
-                              title: data[index].columnName,
-                              type: data[index].dataType,
-                              range: data[index].range,
-                              index: index,
-                              removeRow: (i) => context
-                                  .read<BuilderBloc>()
-                                  .add(RemoveRowEvent(index: i)),
-                              editData: (i) => BuilderDialog().showBuilderDialog(
-                                  context: context,
-                                  id: i,
-                                  name: data[i].columnName,
-                                  type: data[i].dataType,
-                                  Rvalue: data[i].range),
-                            );
-                          }),
-                        ),
-                      ),
-                    ],
-                  );
-                },
-              ),
-              floatingActionButton: Stack(
+        BlocListener<TemplateBloc, TemplateState>(
+          listener: (context, state) {
+            if (state is TemplateLoadingState) {
+              EasyLoading.show(maskType: EasyLoadingMaskType.black);
+            } else if (state is TemplateSuccessState) {
+              EasyLoading.showSuccess('Success');
+              context.read<BuilderBloc>().add(ClearBuilderDataEvent());
+              context.beamToNamed('/admin/templates');
+            } else if (state is TemplateFailureState) {
+              EasyLoading.showError(state.message);
+            }
+          },
+        ),
+      ],
+      child: Scaffold(
+          body: BlocBuilder<BuilderBloc, BuilderState>(
+            builder: (context, state) {
+              return Column(
                 children: [
-                  Positioned(
-                      right: 0,
-                      top: MediaQuery.of(context).size.width / 12,
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: BlocBuilder<BuilderBloc, BuilderState>(
-                          builder: (context, state) {
-                            return Text(
-                              '${state.rows.length}',
-                              style: AppTextStyles.tableColumns,
-                            );
-                          },
-                        ),
-                      )),
-                  // Add Button
-                  Positioned(
-                    right: 0,
-                    top: MediaQuery.of(context).size.height / 2 - 100,
-                    child: Column(
-                      children: [
-                        FloatingActionButton(
-                          onPressed: () {
-                            BuilderDialog().showBuilderDialog(context: context);
-                          },
-                          tooltip: 'Add Row',
-                          heroTag: 'add',
-                          backgroundColor: Colors.black,
-                          child: const Icon(Icons.add,color: Colors.white,),
-                        ),
-                        
-                      ],
+                  FutureBuilder<String?>(
+                    future: MysharedPreference()
+                        .getPreferencesWithoutEncrpytion(
+                            BuilderKeys.workingtemplate),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Text(''); // or a placeholder
+                      } else if (snapshot.hasError) {
+                        return Text('');
+                      } else if (!snapshot.hasData || snapshot.data == null) {
+                        return Text('');
+                      } else {
+                        if (!snapshot.data!.contains('Additional')) {
+                          controller.text = snapshot.data!;
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              snapshot.data!,
+                              style: const TextStyle(
+                                  fontSize: 14, fontWeight: FontWeight.bold),
+                            ),
+                          );
+                        } else {
+                          title = 'add';
+                          controller.text = snapshot.data!.split('_')[1];
+                          return Column(
+                            children: [
+                              const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Text(
+                                  'Editing Additional Template',
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 300,
+                                child: Form(
+                                  key: displayKey,
+                                  child: TextFormField(
+                                    controller: controller,
+                                    decoration: InputDecoration(
+                                        labelText: 'Display Name'),
+                                    validator: validatorFunction,
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: SizedBox(
+                                  child: Divider(
+                                    thickness: 2,
+                                    color: Theme.of(context).primaryColor,
+                                  ),
+                                  width: 500,
+                                ),
+                              )
+                            ],
+                          );
+                        }
+                      }
+                    },
+                  ),
+                  Expanded(
+                    child: ReorderableListView(
+                      padding: EdgeInsets.only(right: horizontalPadding),
+                      onReorder: (oldIndex, newIndex) {
+                        context.read<BuilderBloc>().add(ReorderEvent(
+                            oldIndex: oldIndex, newIndex: newIndex));
+                      },
+                      children: List.generate(state.rows.length, (index) {
+                        List<RowData> data = state.rows;
+                        return customCard(
+                          key: ValueKey(state.rows[index].id),
+                          title: data[index].columnName,
+                          type: data[index].dataType,
+                          range: data[index].range,
+                          index: index,
+                          removeRow: (i) => context
+                              .read<BuilderBloc>()
+                              .add(RemoveRowEvent(index: i)),
+                          editData: (i) => BuilderDialog().showBuilderDialog(
+                              context: context,
+                              id: i,
+                              name: data[i].columnName,
+                              type: data[i].dataType,
+                              Rvalue: data[i].range),
+                        );
+                      }),
                     ),
                   ),
-                Positioned(
-                    right: 0, // Distance from the right edge
-                    top: MediaQuery.of(context).size.height / 4, // Below the center
-                    child: FloatingActionButton(
-                      onPressed: () {
-                         context.read<TemplateBloc>().add(UpdateEvent(rows: rows ?? []));
+                ],
+              );
+            },
+          ),
+          floatingActionButton: Stack(
+            children: [
+              Positioned(
+                  right: 0,
+                  top: MediaQuery.of(context).size.width / 12,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: BlocBuilder<BuilderBloc, BuilderState>(
+                      builder: (context, state) {
+                        return Text(
+                          '${state.rows.length}',
+                          style: AppTextStyles.tableColumns,
+                        );
                       },
-                      tooltip: 'Update',
-                      heroTag: 'update',
-                      backgroundColor: Colors.green,
+                    ),
+                  )),
+              // Add Button
+              Positioned(
+                right: 0,
+                top: MediaQuery.of(context).size.height / 2 - 100,
+                child: Column(
+                  children: [
+                    FloatingActionButton(
+                      onPressed: () {
+                        BuilderDialog().showBuilderDialog(context: context);
+                      },
+                      tooltip: 'Add Row',
+                      heroTag: 'add',
+                      backgroundColor: Colors.black,
                       child: const Icon(
-                        Icons.upload_file_outlined,
-                        color: light,
+                        Icons.add,
+                        color: Colors.white,
                       ),
                     ),
-                  )
-                ],
-              )),
+                  ],
+                ),
+              ),
+              Positioned(
+                right: 0, // Distance from the right edge
+                top: MediaQuery.of(context).size.height / 4, // Below the center
+                child: FloatingActionButton(
+                  onPressed: () {
+                    if (title != null && title!.isNotEmpty) {
+                      if (displayKey.currentState!.validate()) {
+                        context.read<TemplateBloc>().add(UpdateEvent(
+                            rows: rows ?? [], displayName: controller.text));
+                      }
+                    } else {
+                      context
+                          .read<TemplateBloc>()
+                          .add(UpdateEvent(rows: rows ?? []));
+                    }
+                  },
+                  tooltip: 'Update',
+                  heroTag: 'update',
+                  backgroundColor: Colors.green,
+                  child: const Icon(
+                    Icons.upload_file_outlined,
+                    color: light,
+                  ),
+                ),
+              )
+            ],
+          )),
     );
-    
   }
-  
+
   Widget customCard(
       {Key? key,
       int? index,
@@ -186,7 +244,8 @@ class _TemplateBuilderUpdateState extends State<TemplateBuilderUpdate> {
           key: key,
           items: range
               .toString()
-              .split(',').toSet()
+              .split(',')
+              .toSet()
               .map<DropdownMenuItem<String>>((e) => DropdownMenuItem(
                     key: key,
                     value: e,
@@ -256,9 +315,10 @@ class _TemplateBuilderUpdateState extends State<TemplateBuilderUpdate> {
           maxLines: 3,
           onChanged: (value) {},
         );
-         break;
+        break;
       case 'Dropdown using active workplan columns':
-        subtitleWidget =  Text('Data from ${range} column in active workplan will be use for the Dropdown list');
+        subtitleWidget = Text(
+            'Data from ${range} column in active workplan will be use for the Dropdown list');
         break;
     }
     //here
@@ -305,7 +365,10 @@ class _TemplateBuilderUpdateState extends State<TemplateBuilderUpdate> {
                         editData!(index!);
                       },
                       tooltip: 'Edit',
-                      icon: const Icon(Icons.edit,color: Colors.black,),
+                      icon: const Icon(
+                        Icons.edit,
+                        color: Colors.black,
+                      ),
                     ),
                   ),
                   // Remove Button

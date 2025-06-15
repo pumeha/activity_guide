@@ -102,7 +102,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       return;
     }
 
-    final response = await usersRepoImpl.suspendUser(email: event.email, token: token);
+    final response = await usersRepoImpl.asdUser(email: event.email,purpose: 'suspend', token: token);
     GeneralJsonDart data = GeneralJsonDart.fromJson(response);
 
     if (data.status == HttpStatus.ok) {
@@ -117,7 +117,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
                 MysharedPreference().setPreferences(subAdminLists, subAdminsString)
           ]);
 
-      emit(SuccessState(message: data.message));
+      emit(SuccessState(message: 'User account suspended'));
     } else {
       emit(FailureState(message: data.message));
     }
@@ -139,7 +139,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       return;
     }
 
-    final response = await usersRepoImpl.deleteUser(email: event.email, token: token);
+    final response = await usersRepoImpl.asdUser(email: event.email,purpose: 'delete', token: token);
     GeneralJsonDart data = GeneralJsonDart.fromJson(response);
     
         
@@ -155,7 +155,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
                 MysharedPreference().setPreferences(subAdminLists, subAdminsString)
           ]);            
 
-      emit(SuccessState(message: data.message));
+      emit(SuccessState(message: 'User account deleted'));
     } else {
       emit(FailureState(message: data.message));
     }
@@ -176,7 +176,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
       return;
     }
 
-    final response = await usersRepoImpl.activeUser(email: event.email, token: token);
+    final response = await usersRepoImpl.asdUser(email: event.email,purpose: 'activate', token: token);
     GeneralJsonDart data = GeneralJsonDart.fromJson(response);
     
 
@@ -191,7 +191,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
                 MysharedPreference().setPreferences(usersLists, usersString),
                 MysharedPreference().setPreferences(subAdminLists, subAdminsString)
           ]);          
-      emit(SuccessState(message: data.message));
+      emit(SuccessState(message: 'User account activated'));
     } else {
       emit(FailureState(message: data.message));
     }

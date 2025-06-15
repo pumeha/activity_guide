@@ -7,6 +7,7 @@ class TemplateModel {
   List<RowData> values;
   String? status;
   String purpose;
+  String displayName;
   DateTime createdAt;
   DateTime updatedAt;
 
@@ -16,6 +17,7 @@ class TemplateModel {
     required this.values,
     this.status,
     required this.purpose,
+    required this.displayName,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -27,6 +29,7 @@ class TemplateModel {
       values: (json['values'] as List).map((e) => RowData.fromJson(e)).toList(),
       status: json['status'] == 0 ? 'inactive' : 'active',
       purpose: json['purpose'],
+      displayName: json['display_name'],
       createdAt: DateTime.parse(json['created_at']),
       updatedAt: DateTime.parse(json['updated_at']),
     );
@@ -39,6 +42,7 @@ class TemplateModel {
       'values': values.map((e) => e.toJson()).toList(),
       'status': status,
       'purpose': purpose,
+      'display_name': displayName,
       'created_at': createdAt.toIso8601String(),
       'updated_at': updatedAt.toIso8601String(),
     };

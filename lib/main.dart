@@ -12,11 +12,9 @@ import 'package:activity_guide/users/edit_data_collection/repo/edit_repo_impl.da
 import 'package:activity_guide/users/home_page/cubit/user_home_cubit.dart';
 import 'package:activity_guide/users/home_page/repo/user_home_impl.dart';
 import 'package:beamer/beamer.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:activity_guide/sub_admin/template_builder_page/bloc/builder_bloc.dart';
 import 'package:activity_guide/authentication/cubit/auth_cubit.dart';
 import 'package:activity_guide/authentication/repository/auth_repository_impl.dart';
@@ -25,7 +23,6 @@ import 'package:activity_guide/authentication/routing/login_location.dart';
 import 'sub_admin/routing/admin_routing.dart';
 import 'admin/bloc/user_bloc.dart';
 import 'admin/repository/users_repo_impl.dart';
-import 'shared/utils/colors.dart';
 import 'users/routing/users_routing.dart';
 
 Future main() async {
