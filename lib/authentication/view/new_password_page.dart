@@ -3,6 +3,7 @@ import 'package:activity_guide/authentication/cubit/auth_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../shared/custom_widgets/custom_text.dart';
+import '../../shared/theme/styles.dart';
 import '../../shared/utils/colors.dart';
 import '../../shared/utils/constants.dart';
 import 'package:beamer/beamer.dart';
@@ -52,7 +53,7 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Theme(data: ThemeData.light(),
+    return Theme(data: Styles.lightTheme,
       child: Scaffold(
         body: BlocListener<AuthCubit, AuthCubitState>(
           listener: (context, state) {

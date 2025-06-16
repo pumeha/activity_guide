@@ -32,7 +32,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
   @override
   Widget build(BuildContext context) {
     return Theme(
-      data: ThemeData.light(),
+      data: Styles.lightTheme,
       child: Scaffold(
         body: BlocListener<AuthCubit, AuthCubitState>(
           listener: (context, state) async {
