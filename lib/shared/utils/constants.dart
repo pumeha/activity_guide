@@ -97,7 +97,6 @@ Widget customCircleIndicator(){
 }
 
 bool isDeviceOffline() {
-  
- //return html.window.navigator.onLine ?? false;
-  return true;
+return html.window.navigator.onLine ?? false;
+ //  return true;
 }

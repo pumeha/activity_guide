@@ -31,21 +31,30 @@ class EditDataCollectionBloc
       String? _selectedTemplate =
           await MysharedPreference().getPreferences(selectedTemplate);
 
-      if(_selectedTemplate != null && _selectedTemplate.isNotEmpty){
-        if(_selectedTemplate == 'monthly'){
-          templateName =await MysharedPreference().getPreferences(monthlyTemplateName);
+      if (_selectedTemplate != null && _selectedTemplate.isNotEmpty) {
+        if (_selectedTemplate == 'monthly') {
+          templateName =
+              await MysharedPreference().getPreferences(monthlyTemplateName);
+        } else if (_selectedTemplate == 'workplan') {
+          templateName =
+              await MysharedPreference().getPreferences(workplanTemplateName);
+        } else if (_selectedTemplate == 'additional') {
+          templateName =
+              await MysharedPreference().getPreferences(additionalTemplateName);
+          String? additionalTemplates = await MysharedPreference()
+              .getPreferencesWithoutEncrpytion(additionalTemplateList);
 
-        }else if(_selectedTemplate == 'workplan'){
-          templateName =  await MysharedPreference().getPreferences(workplanTemplateName);
-        }else if(_selectedTemplate == 'additional'){
-          templateName =  await MysharedPreference().getPreferences(additionalTemplateName);
+          List<dynamic> decodedList = jsonDecode(additionalTemplates!);
 
+          templateName = decodedList
+              .where((template) => template['display_name'] == templateName)
+              .map((template) => template['template_name'])
+              .join();
         }
-      }else{
+      } else {
         emit(EditFailureState(message: 'Template not found'));
         return;
       }
-
 
       for (var element in event.data) {
         element.remove('ID');
@@ -82,8 +91,7 @@ class EditDataCollectionBloc
         } else {
           return emit(EditFailureState(message: jsonDart.message!));
         }
-      } else if (
-          _selectedTemplate == 'workplan' &&
+      } else if (_selectedTemplate == 'workplan' &&
           templateName != null &&
           templateName.isNotEmpty) {
         final response = await impl.upload(
@@ -95,18 +103,16 @@ class EditDataCollectionBloc
         GeneralJsonDart jsonDart = GeneralJsonDart.fromJson(response);
         if (jsonDart.status == HttpStatus.created ||
             jsonDart.status == HttpStatus.ok) {
-
           String monthlyTempleJsonString;
 
-          if (jsonDart.data != null ) {
+          if (jsonDart.data != null) {
             final monthlyTempleJson = jsonDart.data as List<dynamic>;
 
             if (monthlyTempleJson.isNotEmpty) {
               monthlyTempleJsonString = jsonEncode(monthlyTempleJson.toList());
 
-
-            await  MysharedPreference().setPreferences(monthlyTemplateKey,monthlyTempleJsonString );
-
+              await MysharedPreference()
+                  .setPreferences(monthlyTemplateKey, monthlyTempleJsonString);
             }
           }
           return emit(EditSuccessState());

@@ -91,10 +91,9 @@ class _TemplatesListPageState extends State<TemplatesListPage>
                 );
               } else if (!snapShot.hasData || snapShot.data!.isEmpty) {
                 return const Center(
-                  child: CustomText(
-                    text: 'No records of template yet \n Create one',
-                    style: FontStyle.italic,
-                    color: active,
+                  child: Text(
+                    'No records of template yet',
+                   style: TextStyle(fontStyle: FontStyle.italic,fontSize: 16,fontWeight: FontWeight.bold),
                   ),
                 );
               } else {

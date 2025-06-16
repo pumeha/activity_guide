@@ -31,7 +31,7 @@ class _TemplateBuilderUpdateState extends State<TemplateBuilderUpdate> {
   List<RowData>? rows;
   TextEditingController controller = TextEditingController();
   final displayKey = GlobalKey<FormState>();
-  String? title;
+  String? title,initailDisplayName;
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -86,6 +86,7 @@ class _TemplateBuilderUpdateState extends State<TemplateBuilderUpdate> {
                           );
                         } else {
                           title = 'add';
+                          initailDisplayName = snapshot.data!.split('_')[1];
                           controller.text = snapshot.data!.split('_')[1];
                           return Column(
                             children: [
@@ -96,6 +97,16 @@ class _TemplateBuilderUpdateState extends State<TemplateBuilderUpdate> {
                                   style: TextStyle(
                                       fontSize: 14,
                                       fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: SizedBox(
+                                  child: Divider(
+                                    thickness: 2,
+                                    color: Colors.black,
+                                  ),
+                                  width: 500,
                                 ),
                               ),
                               SizedBox(

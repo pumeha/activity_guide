@@ -28,7 +28,7 @@ class HttpHandlerImpl extends HttpHandlerAbstract {
       }on SocketException catch(_){
         return {'status':503,'message':'kindly check your internet connection','data':[]};
       }on http.ClientException catch (_){
-          return {'status':503,'message':'No internet connection','data':[]};
+          return {'status':503,'message':'Service Unavailable','data':[]};
       }catch (e) {
        return {'status':500,'message':e.toString(),'data':[]};
       }
@@ -67,7 +67,7 @@ class HttpHandlerImpl extends HttpHandlerAbstract {
       } on SocketException catch (_){
         return {'status':503,'message':'kindly check your internet connection','data':[]};
       }on http.ClientException catch (_){
-          return {'status':503,'message':'No internet connection','data':[]};
+          return {'status':503,'message':'Service Unavailable','data':[]};
       }catch (e) {
        return {'status':500,'message':e.toString(),'data':[]};
       }

@@ -200,6 +200,7 @@ class _UserLandingPageState extends State<UserLandingPage> {
                                 onChanged: (String? value) {
                                   setState(() {
                                     selectedAdditionalTemplate = value;
+
                                   });
                                 },
                                 isExpanded: true,
