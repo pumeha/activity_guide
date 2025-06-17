@@ -63,12 +63,7 @@ class _TemplateBuilderState extends State<TemplateBuilder> {
               context.read<BuilderBloc>().add(ClearBuilderDataEvent());
               context.beamToNamed('/admin/templates');
             } else if (state is TemplateFailureState) {
-              if (!state.message.contains('template')) {
-                EasyLoading.showError(state.message);
-              } else {
-                workingPurpose = state.message;
-               // print('workingPurpose $workingPurpose');
-              }
+              EasyLoading.showError(state.message);
             }
           },
         ),
@@ -94,6 +89,18 @@ class _TemplateBuilderState extends State<TemplateBuilder> {
                           additional = false;
                           controller.text = snapshot.data!;
                           return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              snapshot.data!,
+                              style: const TextStyle(
+                                  fontSize: 14, fontWeight: FontWeight.bold),
+                            ),
+                          );
+                        } else {
+                          additional = true;
+                          return Column(
+                            children: [
+                              Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Text(
                                   snapshot.data!,
@@ -101,37 +108,33 @@ class _TemplateBuilderState extends State<TemplateBuilder> {
                                       fontSize: 14,
                                       fontWeight: FontWeight.bold),
                                 ),
-                              );
-                        } else {
-                          additional = true;
-                          return Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      snapshot.data!,
-                                      style: const TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold),
+                              ),
+                              const Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: SizedBox(
+                                  width: 500,
+                                  child: Divider(
+                                    color: ThemeMode.system == ThemeMode.light ? Colors.black : Colors.white,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                width: 500,
+                                child: Form(
+                                  key: displayKey,
+                                  child: TextFormField(
+                                    maxLines: 2,
+                                    controller: controller,
+                                    validator: validatorFunction,
+                                    decoration: const InputDecoration(
+                                      labelText: 'Display Name',
                                     ),
                                   ),
-                                  SizedBox(
-                                    width: 300,
-                                    child: Form(
-                                      key: displayKey,
-                                      child: TextFormField(
-                                        controller: controller,
-                                        validator: validatorFunction,
-                                        decoration: InputDecoration(labelText: 'Display Name',),
-                                      ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: SizedBox(child: Divider(thickness: 2,color: Theme.of(context).primaryColor,),width: 500,),
-                                  )
-                                ],
-                              );
+                                ),
+                              ),
+
+                            ],
+                          );
                         }
                       }
                     },
@@ -207,16 +210,16 @@ class _TemplateBuilderState extends State<TemplateBuilder> {
                 top: MediaQuery.of(context).size.height / 4, // Below the center
                 child: FloatingActionButton(
                   onPressed: () {
-
-                  if (additional!) {
-                    if(displayKey.currentState!.validate()){
-                      context.read<TemplateBloc>().add(
-                          UploadEvent(rows: rows ?? [], displayName: controller.text));
+                    if (additional!) {
+                      if (displayKey.currentState!.validate()) {
+                        context.read<TemplateBloc>().add(UploadEvent(
+                            rows: rows ?? [], displayName: controller.text));
+                      }
+                    } else {
+                      context
+                          .read<TemplateBloc>()
+                          .add(UploadEvent(rows: rows ?? []));
                     }
-                  }else{
-                    context.read<TemplateBloc>().add(
-                        UploadEvent(rows: rows ?? []));
-                  }
                   },
                   tooltip: 'Save',
                   heroTag: 'save',

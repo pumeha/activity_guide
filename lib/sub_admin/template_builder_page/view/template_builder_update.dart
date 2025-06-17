@@ -99,38 +99,29 @@ class _TemplateBuilderUpdateState extends State<TemplateBuilderUpdate> {
                                       fontWeight: FontWeight.bold),
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
+                              const Padding(
+                                padding: EdgeInsets.all(8.0),
                                 child: SizedBox(
-                                  child: Divider(
-                                    thickness: 2,
-                                    color: Colors.black,
-                                  ),
                                   width: 500,
+                                  child: Divider(
+                                    color: ThemeMode.system == ThemeMode.light ? Colors.black : Colors.white,
+                                  ),
                                 ),
                               ),
                               SizedBox(
-                                width: 300,
+                                width: 500,
                                 child: Form(
                                   key: displayKey,
                                   child: TextFormField(
                                     controller: controller,
-                                    decoration: InputDecoration(
+                                    maxLines:2,
+                                    decoration: const InputDecoration(
                                         labelText: 'Display Name'),
                                     validator: validatorFunction,
                                   ),
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: SizedBox(
-                                  child: Divider(
-                                    thickness: 2,
-                                    color: Theme.of(context).primaryColor,
-                                  ),
-                                  width: 500,
-                                ),
-                              )
+
                             ],
                           );
                         }

@@ -19,6 +19,12 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
     final isDark = prefs.getBool('isDarkMode') ?? false;
     emit(ThemeState(themeMode: isDark ? ThemeMode.dark : ThemeMode.light));
     });
+
+    on<LightTheme>((event,emit){
+        emit(ThemeState(themeMode: ThemeMode.light));
+    });
+
+
   }
 
 

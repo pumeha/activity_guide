@@ -103,6 +103,12 @@ class TemplateBloc extends Bloc<TemplateEvent, TemplateState> {
     on<UpdateEvent>((event, emit) async {
       emit(TemplateLoadingState());
 
+      bool onlineOrOffline = isDeviceOffline();
+
+      if (!onlineOrOffline) {
+        emit(TemplateFailureState(message: 'No internet connection'));
+      }
+
       String? displayName = event.displayName;
       if (displayName != null && displayName.isNotEmpty && event.rows.isEmpty) {
         //here we are just updating the additional display name

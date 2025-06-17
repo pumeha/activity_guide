@@ -11,27 +11,28 @@ class MysharedPreference {
 
 
   Future<String?> getPreferences(String key) async{
-     
-    final pref = await SharedPreferences.getInstance();
-     final encryptedToken  = pref.getString(key);
-     if (encryptedToken == null || _key == null) return '';
-
-    try {
-      final encrypter = Encrypter(AES(_key!));
-      final decrypted = encrypter.decrypt(Encrypted.fromBase64(encryptedToken), iv: _iv);
-      return decrypted;
-    } catch (e) {
-      print('Decryption error: $e');
-      return '';
-    }
+   return getPreferencesWithoutEncrpytion(key);
+    // final pref = await SharedPreferences.getInstance();
+    //  final encryptedToken  = pref.getString(key);
+    //  if (encryptedToken == null || _key == null) return '';
+    //
+    // try {
+    //   final encrypter = Encrypter(AES(_key!));
+    //   final decrypted = encrypter.decrypt(Encrypted.fromBase64(encryptedToken), iv: _iv);
+    //   return decrypted;
+    // } catch (e) {
+    //   print('Decryption error: $e');
+    //   return '';
+    // }
   }
 
   Future<void> setPreferences(String key, String value) async{
-    final s_key = _getSessionKey();
-    final encrypter = Encrypter(AES(s_key));
-    final encrypted = encrypter.encrypt(value, iv: _iv);
-    final pref = await SharedPreferences.getInstance();
-   await pref.setString(key, encrypted.base64);
+      return setPreferencesWithoutEncrpytion(key, value);
+   //  final s_key = _getSessionKey();
+   //  final encrypter = Encrypter(AES(s_key));
+   //  final encrypted = encrypter.encrypt(value, iv: _iv);
+   //  final pref = await SharedPreferences.getInstance();
+   // await pref.setString(key, encrypted.base64);
   }
 
   Future<int?> getPreferencesI(String key) async{

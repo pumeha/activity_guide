@@ -31,183 +31,180 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: Styles.lightTheme,
-      child: Scaffold(
-        body: BlocListener<AuthCubit, AuthCubitState>(
-          listener: (context, state) async {
-            if (state is AuthLoading) {
-              EasyLoading.show(maskType: EasyLoadingMaskType.black);
-            } else if (state is AuthSuccess) {
-              EasyLoading.dismiss();
-              switch (state.message) {
-                case 'admin':
-                  context.beamToReplacementNamed('/super_admin');
-                  break;
-                case subAdmin:
-                  context.beamToReplacementNamed('/admin');
-                  break;
-                case 'user':
-                  context.beamToReplacementNamed('/home');
-                case 'verification':
-                  context.beamToReplacementNamed('/account_verification');
-                default:
-              }
-            } else if (state is AuthFailure) {
-              EasyLoading.showError(state.error);
+    return Scaffold(
+      body: BlocListener<AuthCubit, AuthCubitState>(
+        listener: (context, state) async {
+          if (state is AuthLoading) {
+            EasyLoading.show(maskType: EasyLoadingMaskType.black);
+          } else if (state is AuthSuccess) {
+            EasyLoading.dismiss();
+            switch (state.message) {
+              case 'admin':
+                context.beamToReplacementNamed('/super_admin');
+                break;
+              case subAdmin:
+                context.beamToReplacementNamed('/admin');
+                break;
+              case 'user':
+                context.beamToReplacementNamed('/home');
+              case 'verification':
+                context.beamToReplacementNamed('/account_verification');
+              default:
             }
-          },
-          child: Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage('/images/background.jpg'),
-                  fit: BoxFit.cover,
-                  opacity: 0.7),
-            ),
-            child: Center(
-              child: Container(
-                constraints: const BoxConstraints(maxWidth: 400),
-                padding: const EdgeInsets.all(24),
-                child: SingleChildScrollView(
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              ' ACTIVITY ',
-                              style: TextStyle(
-                                  backgroundColor: Colors.green[900],
-                                  fontSize: 36,
+          } else if (state is AuthFailure) {
+            EasyLoading.showError(state.error);
+          }
+        },
+        child: Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage('/images/background.jpg'),
+                fit: BoxFit.cover,
+                opacity: 0.7),
+          ),
+          child: Center(
+            child: Container(
+              constraints: const BoxConstraints(maxWidth: 400),
+              padding: const EdgeInsets.all(24),
+              child: SingleChildScrollView(
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            ' ACTIVITY ',
+                            style: TextStyle(
+                                backgroundColor: Colors.green[900],
+                                fontSize: 36,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white),
+                          ),
+                          Text(
+                            'GUIDE',
+                            style: TextStyle(
+                                fontSize: 36,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.green[900]),
+                          )
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      Row(
+                        children: [
+                          Text("Login",
+                              style: GoogleFonts.roboto(
+                                  fontSize: 30,
                                   fontWeight: FontWeight.bold,
-                                  color: Colors.white),
-                            ),
-                            Text(
-                              'GUIDE',
-                              style: TextStyle(
-                                  fontSize: 36,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.green[900]),
-                            )
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 30,
-                        ),
-                        Row(
-                          children: [
-                            Text("Login",
-                                style: GoogleFonts.roboto(
-                                    fontSize: 30,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.black)),
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        TextFormField(
-                          controller: emailController,
-                          keyboardType: TextInputType.emailAddress,
-                          decoration: InputDecoration(
-                              labelStyle: TextStyle(color: active),
-                              labelText: "Email",
-                              hintText: "abc@domain.com",
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(20)),
-                              focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                  borderSide: BorderSide(color: active))),
-                          validator: (v) {
-                            if (v == null || v.isEmpty) {
-                              return '*required';
-                            } else if (!Constants().isValidEmail(v)) {
-                              return '*valid email address required';
-                            } else {
-                              return null;
-                            }
-                          },
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        TextFormField(
-                          controller: passwordController,
-                          keyboardType: TextInputType.visiblePassword,
-                          obscureText: showPassword,
-                          decoration: InputDecoration(
-                              fillColor: Colors.white,
-                              labelText: "Password",
-                              hintText: "********",
-                              labelStyle: TextStyle(color: active),
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(20)),
-                              focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(20),
-                                  borderSide: BorderSide(color: active)),
-                              suffixIcon: IconButton(
-                                  onPressed: () {
-                                    setState(() {
-                                      showPassword = !showPassword;
-                                    });
-                                  },
-                                  icon: showPassword
-                                      ? Icon(Icons.visibility)
-                                      : Icon(Icons.visibility_off))),
-                          validator: (v) {
-                            String? result = Constants().isValidPassword(v!);
-                            if (result == null) {
-                              return null;
-                            } else {
-                              return result;
-                            }
-                          },
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            TextButton(
-                              onPressed: () {
-                                context
-                                    .beamToReplacementNamed('/reset_password');
-                              },
-                              child: Text("Forgot password?",
-                                  style: TextStyle(color: active)),
-                            )
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 15,
-                        ),
-                        InkWell(
-                          onTap: () async {
-                            if (_formKey.currentState!.validate()) {
-                              context.read<AuthCubit>().login(
-                                  emailController.text.trim(),
-                                  passwordController.text.trim());
-                            }
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                                color: active,
+                                  color: Colors.black)),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      TextFormField(
+                        controller: emailController,
+                        keyboardType: TextInputType.emailAddress,
+                        decoration: InputDecoration(
+                            labelStyle: TextStyle(color: active),
+                            labelText: "Email",
+                            hintText: "abc@domain.com",
+                            border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(20)),
-                            alignment: Alignment.center,
-                            width: double.maxFinite,
-                            padding: const EdgeInsets.symmetric(vertical: 16),
-                            child: Text(
-                              "Login",
-                              style: TextStyle(color: Colors.white),
-                            ),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20),
+                                borderSide: BorderSide(color: active))),
+                        validator: (v) {
+                          if (v == null || v.isEmpty) {
+                            return '*required';
+                          } else if (!Constants().isValidEmail(v)) {
+                            return '*valid email address required';
+                          } else {
+                            return null;
+                          }
+                        },
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      TextFormField(
+                        controller: passwordController,
+                        keyboardType: TextInputType.visiblePassword,
+                        obscureText: showPassword,
+                        decoration: InputDecoration(
+                            fillColor: Colors.white,
+                            labelText: "Password",
+                            hintText: "********",
+                            labelStyle: TextStyle(color: active),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20)),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(20),
+                                borderSide: BorderSide(color: active)),
+                            suffixIcon: IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    showPassword = !showPassword;
+                                  });
+                                },
+                                icon: showPassword
+                                    ? Icon(Icons.visibility)
+                                    : Icon(Icons.visibility_off))),
+                        validator: (v) {
+                          String? result = Constants().isValidPassword(v!);
+                          if (result == null) {
+                            return null;
+                          } else {
+                            return result;
+                          }
+                        },
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          TextButton(
+                            onPressed: () {
+                              context
+                                  .beamToReplacementNamed('/reset_password');
+                            },
+                            child: Text("Forgot password?",
+                                style: TextStyle(color: active)),
+                          )
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      InkWell(
+                        onTap: () async {
+                          if (_formKey.currentState!.validate()) {
+                            context.read<AuthCubit>().login(
+                                emailController.text.trim(),
+                                passwordController.text.trim());
+                          }
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                              color: active,
+                              borderRadius: BorderRadius.circular(20)),
+                          alignment: Alignment.center,
+                          width: double.maxFinite,
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          child: Text(
+                            "Login",
+                            style: TextStyle(color: Colors.white),
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
               ),

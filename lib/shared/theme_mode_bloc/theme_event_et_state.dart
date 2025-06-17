@@ -7,6 +7,7 @@ class ToggleTheme extends ThemeEvent {}
 
 class LoadTheme extends ThemeEvent {}
 
+class LightTheme extends ThemeEvent{}
 
 class ThemeState {
   final ThemeMode themeMode;
