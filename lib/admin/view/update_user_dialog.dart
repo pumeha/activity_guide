@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../shared/utils/colors.dart';
@@ -11,23 +10,25 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'users_page.dart';
 
 class UpdateUserDialog {
-
-  UpdateUserDialog.dialog({required UserJSON2Dart userdata,required BuildContext context}) {
+  UpdateUserDialog.dialog(
+      {required UserJSON2Dart userdata, required BuildContext context}) {
     final _formKey = GlobalKey<FormState>();
-    TextEditingController firstNameController = TextEditingController(text: userdata.firstname);
-    TextEditingController lastNameController = TextEditingController(text: userdata.lastname);
-    TextEditingController phoneNumberController = TextEditingController(text: userdata.phonenumber);
-    TextEditingController emailController = TextEditingController(text: userdata.email);
+    TextEditingController firstNameController =
+        TextEditingController(text: userdata.firstname);
+    TextEditingController lastNameController =
+        TextEditingController(text: userdata.lastname);
+    TextEditingController phoneNumberController =
+        TextEditingController(text: userdata.phonenumber);
+    TextEditingController emailController =
+        TextEditingController(text: userdata.email);
     String range = 'sub-admin,user';
 
-    
-
     Map<dynamic, String> partialSave = {};
-     partialSave['role'] = userdata.role!;
-     partialSave['dept'] = userdata.dept!;
-     partialSave['unit'] = userdata.unit!;
+    partialSave['role'] = userdata.role!;
+    partialSave['dept'] = userdata.dept!;
+    partialSave['unit'] = userdata.unit!;
 
-     showDialog(
+    showDialog(
         context: context,
         barrierDismissible: false,
         builder: (BuildContext context) {
@@ -62,20 +63,26 @@ class UpdateUserDialog {
                         DropdownButtonFormField<String>(
                           hint: const Text('Select User role'),
                           value: partialSave['role'],
-                          items: range.toString().split(',')
+                          items: range
+                              .toString()
+                              .split(',')
                               .map<DropdownMenuItem<String>>(
                                   (e) => DropdownMenuItem(
                                         value: e,
                                         child: Tooltip(
                                           message: e,
-                                          child: Text(e,),),)).toList(),
-                          onChanged: (String? value) {
-                            partialSave['role'] = value!;
-                          },
+                                          child: Text(
+                                            e,
+                                          ),
+                                        ),
+                                      ))
+                              .toList(),
+                          onChanged: null,
                           isExpanded: true,
                           validator: validatorFunction,
                           decoration: const InputDecoration(
                               border: OutlineInputBorder()),
+
                         ),
                         const SizedBox(
                           height: 12,
@@ -84,7 +91,8 @@ class UpdateUserDialog {
                           width: 300,
                           child: userTextField(
                               labelText: 'First name',
-                              controller: firstNameController,enabled: false),
+                              controller: firstNameController,
+                              enabled: false),
                         ),
                         const SizedBox(
                           height: 12,
@@ -93,7 +101,8 @@ class UpdateUserDialog {
                           width: 300,
                           child: userTextField(
                               labelText: 'Last name',
-                              controller: lastNameController,enabled: false),
+                              controller: lastNameController,
+                              enabled: false),
                         ),
                         const SizedBox(
                           height: 12,
@@ -134,62 +143,68 @@ class UpdateUserDialog {
                         const SizedBox(
                           height: 12,
                         ),
-                        DropdownButtonFormField<String>(
-                          hint: Text('Select Dept'),
-                          value: partialSave['dept'],
-                          items: departmentOptions
-                              .keys
-                              .map<DropdownMenuItem<String>>(
-                                  (e) => DropdownMenuItem(
-                                        value: e,
-                                        child: Tooltip(
-                                          message: e,
-                                          child: Text(
-                                            e,
-                                          ),
-                                        ),
-                                      ))
-                              .toList(),
-                          onChanged: (String? value) {
-                            
-                            setState(() {
-                            partialSave['dept'] = value!;
-                            partialSave['unit'] = departmentOptions[ partialSave['dept']]!.first;
-                            });
-                            
-                          },
-                          isExpanded: true,
-                          validator: validatorFunction,
-                          decoration: const InputDecoration(
-                              border: OutlineInputBorder()),
-                        ),
-                        const SizedBox(
-                          height: 12,
-                        ),
-                        if(partialSave['dept'] != null)
-                        DropdownButtonFormField<String>(
-                          hint: Text('Select Unit'),
-                          value: partialSave['unit'],
-                          items: departmentOptions[partialSave['dept']]!
-                              .map<DropdownMenuItem<String>>(
-                                  (e) => DropdownMenuItem(
-                                        value: e,
-                                        child: Tooltip(
-                                          message: e,
-                                          child: Text(
-                                            e,
-                                          ),
-                                        ),
-                                      ))
-                              .toList(),
-                          onChanged: (String? value) {
-                            partialSave['unit'] = value!;
-                          },
-                          isExpanded: true,
-                          validator: validatorFunction,
-                          decoration: const InputDecoration(
-                              border: OutlineInputBorder()),
-                        ),
+                        Visibility(
+                            visible: partialSave['role'] == 'user',
+                            child: Column(
+                              children: [
+                                DropdownButtonFormField<String>(
+                                  hint: Text('Select Dept'),
+                                  value: partialSave['dept'],
+                                  items: departmentOptions.keys
+                                      .map<DropdownMenuItem<String>>(
+                                          (e) => DropdownMenuItem(
+                                                value: e,
+                                                child: Tooltip(
+                                                  message: e,
+                                                  child: Text(
+                                                    e,
+                                                  ),
+                                                ),
+                                              ))
+                                      .toList(),
+                                  onChanged: (String? value) {
+                                    setState(() {
+                                      partialSave['dept'] = value!;
+                                      partialSave['unit'] = departmentOptions[
+                                              partialSave['dept']]!
+                                          .first;
+                                    });
+                                  },
+                                  isExpanded: true,
+                                  validator: validatorFunction,
+                                  decoration: const InputDecoration(
+                                      border: OutlineInputBorder()),
+                                ),
+                                const SizedBox(
+                                  height: 12,
+                                ),
+                                if (partialSave['dept'] != null)
+                                  DropdownButtonFormField<String>(
+                                    hint: Text('Select Unit'),
+                                    value: partialSave['unit'],
+                                    items:
+                                        departmentOptions[partialSave['dept']]!
+                                            .map<DropdownMenuItem<String>>(
+                                                (e) => DropdownMenuItem(
+                                                      value: e,
+                                                      child: Tooltip(
+                                                        message: e,
+                                                        child: Text(
+                                                          e,
+                                                        ),
+                                                      ),
+                                                    ))
+                                            .toList(),
+                                    onChanged: (String? value) {
+                                      partialSave['unit'] = value!;
+                                    },
+                                    isExpanded: true,
+                                    validator: validatorFunction,
+                                    decoration: const InputDecoration(
+                                        border: OutlineInputBorder()),
+                                  ),
+                              ],
+                            ))
                       ],
                     ),
                   ),
@@ -216,8 +231,12 @@ class UpdateUserDialog {
                               firstname: firstNameController.text,
                               lastname: lastNameController.text,
                               email: emailController.text,
-                              dept: partialSave['dept'],
-                              unit: partialSave['unit'],
+                              dept: partialSave['role'] == 'user'
+                                  ? partialSave['dept']
+                                  : 'sub-admin',
+                              unit: partialSave['role'] == 'user'
+                                  ? partialSave['unit']
+                                  : 'sub-admin',
                               phonenumber: phoneNumberController.text)));
                     }
                   },
@@ -230,5 +249,4 @@ class UpdateUserDialog {
           );
         });
   }
-
-  }
+}

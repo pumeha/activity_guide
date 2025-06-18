@@ -89,7 +89,7 @@ class _UsersPageState extends State<UsersPage> {
                               .toList(),
                           onChanged: (String? value) {
                             partialSave['role'] = value!;
-                    
+                            setState((){});
                           },
                           isExpanded: true,
                           validator: validatorFunction,
@@ -151,60 +151,65 @@ class _UsersPageState extends State<UsersPage> {
                         const SizedBox(
                           height: 12,
                         ),
-                        DropdownButtonFormField<String>(
-                          hint: Text('Select Dept'),
-                          value: partialSave['dept'],
-                          items: departmentOptions.keys
-                              .map<DropdownMenuItem<String>>(
-                                  (e) => DropdownMenuItem(
-                                        value: e,
-                                        child: Tooltip(
-                                          message: e,
-                                          child: Text(
-                                            e,
-                                          ),
+                        Visibility( visible: partialSave['role'] == 'user',
+                          child: Column(children: [
+                            DropdownButtonFormField<String>(
+                              hint: Text('Select Dept'),
+                              value: partialSave['dept'],
+                              items: departmentOptions.keys
+                                  .map<DropdownMenuItem<String>>(
+                                      (e) => DropdownMenuItem(
+                                    value: e,
+                                    child: Tooltip(
+                                      message: e,
+                                      child: Text(
+                                        e,
+                                      ),
+                                    ),
+                                  ))
+                                  .toList(),
+                              onChanged: (String? value) {
+                                setState(() {
+                                  partialSave['dept'] = value!;
+                                  partialSave['unit'] = departmentOptions[partialSave['dept']]!.first;
+                                });
+                              },
+                              isExpanded: true,
+                              validator: validatorFunction,
+                              decoration: const InputDecoration(
+                                  border: OutlineInputBorder()),
+                            ),
+                            const SizedBox(
+                              height: 12,
+                            ),
+                            if(partialSave['dept'] != null)
+
+                              DropdownButtonFormField<String>(
+                                hint: Text('Select Unit'),
+                                value: partialSave['unit'],
+                                items: departmentOptions[partialSave['dept']]!
+                                    .map<DropdownMenuItem<String>>(
+                                        (e) => DropdownMenuItem(
+                                      value: e,
+                                      child: Tooltip(
+                                        message: e,
+                                        child: Text(
+                                          e,
                                         ),
-                                      ))
-                              .toList(),
-                          onChanged: (String? value) {
-                        setState(() {
-                            partialSave['dept'] = value!;
-                          partialSave['unit'] = departmentOptions[partialSave['dept']]!.first;
-                              });
-                          },
-                          isExpanded: true,
-                          validator: validatorFunction,
-                          decoration: const InputDecoration(
-                              border: OutlineInputBorder()),
+                                      ),
+                                    ))
+                                    .toList(),
+                                onChanged: (String? value) {
+                                  partialSave['unit'] = value!;
+                                },
+                                isExpanded: true,
+                                validator: validatorFunction,
+                                decoration: const InputDecoration(
+                                    border: OutlineInputBorder()),
+                              )
+                          ],),
                         ),
-                        const SizedBox(
-                          height: 12,
-                        ),
-                        if(partialSave['dept'] != null)
-                        
-                        DropdownButtonFormField<String>(
-                          hint: Text('Select Unit'),
-                          value: partialSave['unit'],
-                          items: departmentOptions[partialSave['dept']]!
-                              .map<DropdownMenuItem<String>>(
-                                  (e) => DropdownMenuItem(
-                                        value: e,
-                                        child: Tooltip(
-                                          message: e,
-                                          child: Text(
-                                            e,
-                                          ),
-                                        ),
-                                      ))
-                              .toList(),
-                          onChanged: (String? value) {
-                            partialSave['unit'] = value!;
-                          },
-                          isExpanded: true,
-                          validator: validatorFunction,
-                          decoration: const InputDecoration(
-                              border: OutlineInputBorder()),
-                        ),
+
                       ],
                     ),
                   ),
@@ -231,8 +236,8 @@ class _UsersPageState extends State<UsersPage> {
                               firstname: firstNameController.text,
                               lastname: lastNameController.text,
                               email: emailController.text,
-                              dept: partialSave['dept'],
-                              unit: partialSave['unit'],
+                              dept: partialSave['role'] =='user'? partialSave['dept'] : 'sub-admin',
+                              unit: partialSave['role'] == 'user' ? partialSave['unit'] : 'sub-admin',
                               phonenumber: phoneNumberController.text)));
                     }
                   },
@@ -264,7 +269,7 @@ class _UsersPageState extends State<UsersPage> {
     } 
 
     Future<List<UserJSON2Dart>> listSubAdmin() async{
-      print('listSubAdmin');
+
       String? subadmin = await MysharedPreference().getPreferences(subAdminLists);
       if (subadmin != null && subadmin.isNotEmpty) {
         List<dynamic> decodedList = jsonDecode(subadmin);
@@ -315,7 +320,6 @@ class _UsersPageState extends State<UsersPage> {
                 } else if(!snapshot.hasData || snapshot.data!.isEmpty){
                     return const Center(child: CustomText(text: 'No SubAdmin records',weight: FontWeight.bold,),);
                 }else{
-                  print('else');
                   return ListView.builder(itemCount: snapshot.data!.length,
                     itemBuilder: (context,index){
                      final user = snapshot.data![index];
@@ -451,7 +455,7 @@ class _UsersPageState extends State<UsersPage> {
                                         ),
                                         Padding(
                                           padding: EdgeInsets.all(8.0),
-                                          child: CustomText(text: user.dept!+'-'+user.unit!),
+                                          child: CustomText(text: user.role! == 'user' ? user.dept!+'-'+user.unit! : 'CPSCD'),
                                         ),
                                       ],
                                     ),

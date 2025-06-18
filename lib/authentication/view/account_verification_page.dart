@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:activity_guide/authentication/cubit/auth_cubit.dart';
-import 'package:activity_guide/shared/theme/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../../shared/custom_widgets/custom_text.dart';
@@ -232,9 +231,8 @@ class _AccountVerificationPageState extends State<AccountVerificationPage> {
                         alignment: Alignment.center,
                         width: double.maxFinite,
                         padding: const EdgeInsets.symmetric(vertical: 16),
-                        child: const CustomText(
-                          text: "Verify",
-                          color: Colors.white,
+                        child: const Text("Verify",
+                          style: TextStyle(color: Colors.white),
                         ),
                       ),
                     ),
@@ -247,9 +245,8 @@ class _AccountVerificationPageState extends State<AccountVerificationPage> {
                           onPressed: () {
                             context.beamToNamed('/login');
                           },
-                          child: CustomText(
-                            text: 'Return to Login Page',
-                            color: Colors.white,
+                          child: Text( 'Return to Login Page',
+                           style: TextStyle(color: Colors.white),
                           ),
                           style: ButtonStyle(
                               backgroundColor:
