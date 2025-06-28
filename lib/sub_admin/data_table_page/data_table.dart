@@ -1,21 +1,14 @@
 import 'dart:convert';
-import 'dart:html';
 import 'package:activity_guide/shared/utils/http_helper/storage_keys.dart';
 import 'package:activity_guide/shared/utils/myshared_preference.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_datagrid/datagrid.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
 import '../../shared/utils/constants.dart';
-import 'package:syncfusion_flutter_datagrid_export/export.dart';
-import 'package:syncfusion_flutter_xlsio/xlsio.dart' hide Column, Row;
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'dart:html' as html;
 import 'dart:typed_data';
 import 'package:syncfusion_flutter_xlsio/xlsio.dart' as xlsio;
-import 'package:path_provider/path_provider.dart';
-import 'package:open_file/open_file.dart';
-import 'package:universal_platform/universal_platform.dart';
-import 'dart:io' as io; // for mobile
+// for mobile
 
 class MyTable extends StatefulWidget {
   const MyTable({super.key});
@@ -111,7 +104,13 @@ class _MyTableState extends State<MyTable> {
   }
 
   final DataGridController controller = DataGridController();
+  void viewData(BuildContext context){
+    showDialog(context: context, builder: (BuildContext context){
+      return AlertDialog(actions: [
 
+      ],);
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -138,6 +137,12 @@ class _MyTableState extends State<MyTable> {
                 showHorizontalScrollbar: true,
                 navigationMode: GridNavigationMode.row,
                 selectionMode: SelectionMode.single,
+                onCellDoubleTap: (v){
+                  dynamic index = v.rowColumnIndex.rowIndex-1;
+
+                  List<dynamic> editData = [data[index]];
+
+                },
               ),
             );
           }

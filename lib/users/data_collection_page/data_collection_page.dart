@@ -298,7 +298,7 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
                         child: TextFormField(
                       controller: _controllers[index],
                       validator: validatorFunction,
-                      enabled: false,
+                      readOnly: true,
                     )),
                     TextButton(
                       child: Icon(Icons.arrow_drop_down_circle),
