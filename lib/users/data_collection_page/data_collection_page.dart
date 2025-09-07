@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:activity_guide/shared/custom_widgets/custom_metric.dart';
 import 'package:activity_guide/users/data_collection_page/bloc/data_collection_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -228,6 +229,8 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
 
   Widget CustomCard(int index, String title, String type, String range,
       Key _key, List<dynamic> editValues, List<dynamic> labels) {
+
+
     Widget subtitleWidget = Container();
     // Get the width of the device
     double width = MediaQuery.of(context).size.width;
@@ -311,6 +314,22 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
               );
         break;
       case 'TextField':
+        final match = RegExp(r'Q(\d+)').firstMatch(title);
+
+        match != null ?
+
+            subtitleWidget =  CustomMetric(quarter: int.parse(match.group(1)!),
+            onChanged: (Map<String, int> data) {
+              // // Store values like Q1_m1, Q1_m2, Q1_t, etc.
+              // partialSave['Q$quarter_m1'] = data['m1'];
+              // partialSave['Q$quarter_m2'] = data['m2'];
+              // partialSave['Q$quarter_m3'] = data['m3'];
+              // partialSave['Q$quarter_t'] = data['t'];
+              _controllers[index].text = data.toString();
+              partialSave[title] = data.toString();
+              // Optional: print for debugging
+              print('Quarter updated: $data');
+            },) :
         subtitleWidget = TextFormField(
           controller: _controllers[index],
           minLines: 1,
@@ -331,7 +350,7 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
             padding: const EdgeInsets.all(8.0),
             child: Text(
               title,
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
           ),
           subtitle: Padding(

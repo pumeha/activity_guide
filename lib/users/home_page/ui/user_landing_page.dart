@@ -302,6 +302,23 @@ class _UserLandingPageState extends State<UserLandingPage> {
                     ],
                   ),
                 ),
+
+                Padding(
+                  padding: const EdgeInsets.only(top: 60),
+                  child: CustomText(
+                    text: 'SMARTERWAY SOLUTIONS LTD',
+                    size: 24,
+                    color: active,
+                    weight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 8,),
+                CustomText(
+                  text: '+2349037200210',
+                  size: 18,
+                  color: active,
+                  weight: FontWeight.bold,
+                ),
               ],
             ),
           ),

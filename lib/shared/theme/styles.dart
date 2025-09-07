@@ -41,5 +41,5 @@ class Styles {
                 TargetPlatform.iOS: FadeUpwardsPageTransitionsBuilder(),
                 TargetPlatform.android: FadeUpwardsPageTransitionsBuilder(),
                 
-              }),dialogTheme: DialogTheme(barrierColor: Color.fromARGB(68, 75, 141, 117)));
+              }),dialogTheme: DialogThemeData(barrierColor: Color.fromARGB(68, 75, 141, 117)));
 }
