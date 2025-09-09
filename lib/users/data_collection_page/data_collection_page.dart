@@ -26,6 +26,7 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
   late List<TextEditingController> _controllers;
   late List<String> _labels;
   List<dynamic> _editValues = [];
+  int plannedEnd = 0,actualEnd = 0;
 
   @override
   void initState() {
@@ -70,6 +71,12 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
                     key: _formKey,
                     child: Column(
                       children: List.generate(data.length, (index) {
+
+                        if(data[index].name.contains('PLANNED END')){
+                          plannedEnd = index;
+                        }else if(data[index].name.contains('ACTUAL END')){
+                          actualEnd = index;
+                        }
                         return CustomCard(
                             index,
                             data[index].name,
@@ -281,7 +288,7 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
                         child: TextFormField(
                       controller: _controllers[index],
                       validator: validatorFunction,
-                      enabled: false,
+                      readOnly: true,
                     )),
                     TextButton(
                       child: Icon(Icons.arrow_drop_down_circle),
@@ -316,29 +323,58 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
       case 'TextField':
         final match = RegExp(r'Q(\d+)').firstMatch(title);
 
-        match != null ?
-
-            subtitleWidget =  CustomMetric(quarter: int.parse(match.group(1)!),
-            onChanged: (Map<String, int> data) {
-              // // Store values like Q1_m1, Q1_m2, Q1_t, etc.
-              // partialSave['Q$quarter_m1'] = data['m1'];
-              // partialSave['Q$quarter_m2'] = data['m2'];
-              // partialSave['Q$quarter_m3'] = data['m3'];
-              // partialSave['Q$quarter_t'] = data['t'];
+        if (match != null) {
+          subtitleWidget = CustomMetric(
+            quarter: int.parse(match.group(1)!),
+            onChanged: (Map<String, String> data) {
               _controllers[index].text = data.toString();
               partialSave[title] = data.toString();
-              // Optional: print for debugging
-              print('Quarter updated: $data');
-            },) :
-        subtitleWidget = TextFormField(
-          controller: _controllers[index],
-          minLines: 1,
-          maxLines: 3,
-          onChanged: (value) {
-            partialSave[title] = value;
-          },
-          validator: validatorFunction,
-        );
+            },
+          );
+        }else if(title.contains('END')){
+          subtitleWidget = TextFormField(
+            controller: _controllers[index],
+            minLines: 1,
+            maxLines: 3,
+            onChanged: (value) {
+
+              partialSave[title] = value;
+            },
+            validator: validatorFunction,
+            readOnly: true,
+          );
+        }else if(title.contains('DURATION')){
+          subtitleWidget = TextFormField(
+            controller: _controllers[index],
+            minLines: 1,
+            maxLines: 3,
+            onChanged: (value) {
+
+              partialSave[title] = value;
+              if(title.contains('ACTUAL DURATION')){
+
+                _controllers[actualEnd].text = partialSave['ACTUAL START']+'-'+value;
+              }else if(title.contains('PLANNED DURATION')){
+
+                _controllers[plannedEnd].text = partialSave['PLANNED START']+'-'+value;
+
+              }
+            },
+            validator: validatorFunction,
+
+          );
+        }else {
+          subtitleWidget = TextFormField(
+            controller: _controllers[index],
+            minLines: 1,
+            maxLines: 3,
+            onChanged: (value) {
+              partialSave[title] = value;
+
+            },
+            validator: validatorFunction,
+          );
+        }
     }
 
     return Padding(
