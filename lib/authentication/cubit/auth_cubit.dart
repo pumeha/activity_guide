@@ -76,6 +76,9 @@ class AuthCubit extends Cubit<AuthCubitState> {
         String monthlyTempleJsonString;
 
         if (data.data![0][monthlyTemplateKey] != null) {
+
+          print(data.data![0][monthlyTemplateKey]);
+
           final monthlyTempleJson =
               data.data![0][monthlyTemplateKey] as List<dynamic>;
 
@@ -88,6 +91,7 @@ class AuthCubit extends Cubit<AuthCubitState> {
               MysharedPreference()
                   .setPreferences(monthlyTemplateKey, monthlyTempleJsonString)
             ]);
+
           }
         }
 

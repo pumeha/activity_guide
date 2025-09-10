@@ -19,13 +19,13 @@ static String templateActive = "$baseUrl/template/active";
 static String dashboard = "$baseUrl/template/dashboard";
 static String uploadTemplateData = "$baseUrl/template/upload";
 static String fetchData = "$baseUrl/template/fetch";
+static String fetchMonthlyTemplateData = "$baseUrl/template/monthly";
 }
 
 class UserRoutes {
 static String getUsers = "$baseUrl/users";
 static String updateUser = "$getUsers/update";
 static String asdUser = "$getUsers/asd";
-
 }
 
 class WorkplanRoutes {

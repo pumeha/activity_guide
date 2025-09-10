@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:activity_guide/shared/custom_widgets/custom_metric.dart';
@@ -327,8 +328,9 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
           subtitleWidget = CustomMetric(
             quarter: int.parse(match.group(1)!),
             onChanged: (Map<String, String> data) {
-              _controllers[index].text = data.toString();
-              partialSave[title] = data.toString();
+              _controllers[index].text = jsonEncode(data);
+              partialSave[title] = jsonEncode(data);
+
             },
           );
         }else if(title.contains('END')){

@@ -17,8 +17,14 @@ class CustomMetric extends StatefulWidget {
 }
 
 class _CustomMetricState extends State<CustomMetric> {
-  late TextEditingController m1Controller, m2Controller, m3Controller, totalController;
-  late TextEditingController c1Controller, c2Controller, c3Controller, ctController;
+  late TextEditingController m1Controller,
+      m2Controller,
+      m3Controller,
+      totalController;
+  late TextEditingController c1Controller,
+      c2Controller,
+      c3Controller,
+      ctController;
   late List<String> labels;
 
   @override
@@ -68,20 +74,20 @@ class _CustomMetricState extends State<CustomMetric> {
     final m3 = int.tryParse(m3Controller.text) ?? 0;
     final total = m1 + m2 + m3;
 
-    final c1 = c1Controller.text;
-    final c2 = c2Controller.text;
-    final c3 = c3Controller.text;
-    final ct = ctController.text;
+    final c1 = c1Controller.text.isEmpty? '':'-${c1Controller.text}';
+    final c2 = c2Controller.text.isEmpty? '':'-${c2Controller.text}';
+    final c3 = c3Controller.text.isEmpty? '':'-${c3Controller.text}';
+    final ct = ctController.text.isEmpty? '':'-${ctController.text}';
 
     if (totalController.text != total.toString()) {
       totalController.text = total.toString();
     }
 
     widget.onChanged?.call({
-      'm1': '$m1-$c1',
-      'm2': '$m2-$c2',
-      'm3': '$m3-$c3',
-      't': '$total-$ct',
+      'm1': '$m1$c1',
+      'm2': '$m2$c2',
+      'm3': '$m3$c3',
+      't': '$total$ct',
     });
   }
 
@@ -100,15 +106,25 @@ class _CustomMetricState extends State<CustomMetric> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(scrollDirection: Axis.horizontal,
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _customLabel(label: labels[0], controller: m1Controller, commentController: c1Controller),
+          _customLabel(
+              label: labels[0],
+              controller: m1Controller,
+              commentController: c1Controller),
           const SizedBox(width: 8),
-          _customLabel(label: labels[1], controller: m2Controller, commentController: c2Controller),
+          _customLabel(
+              label: labels[1],
+              controller: m2Controller,
+              commentController: c2Controller),
           const SizedBox(width: 8),
-          _customLabel(label: labels[2], controller: m3Controller, commentController: c3Controller),
+          _customLabel(
+              label: labels[2],
+              controller: m3Controller,
+              commentController: c3Controller),
           const SizedBox(width: 8),
           _customLabel(
             label: 'Total',
@@ -147,7 +163,7 @@ class _CustomMetricState extends State<CustomMetric> {
             width: 100,
             child: TextFormField(
               controller: commentController,
-              readOnly: readOnly && label == 'Total', // Optionally make total comment read-only
+              // readOnly: readOnly && label == 'Total', // Optionally make total comment read-only
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 hintText: 'Comment',

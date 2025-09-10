@@ -12,4 +12,12 @@ class UserHomeImpl extends UserHomeAbstr {
         .post(url: TemplateRoutes.fetchData, body: body, token: token);
     return response;
   }
+
+  @override
+  Future<Map<String, dynamic>> fetchMonthlyTemplateData({required String token}) async{
+
+    final response = await HttpHandlerImpl.instance
+        .post(url: TemplateRoutes.fetchMonthlyTemplateData, body: '', token: token);
+    return response;
+  }
 }

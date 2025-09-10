@@ -56,4 +56,36 @@ class UserHomeCubit extends Cubit<UserHomeState> {
       return emit(UserHomeFailure(message: data.message));
     }
   }
+
+  Future<void> fetchMonthlyTemplateData() async {
+    emit(UserHomeLoading());
+
+    bool onlineOrOffline = isDeviceOffline();
+    if (!onlineOrOffline) {
+      emit(UserHomeFailure(message: 'No internet connection'));
+      return;
+    }
+
+    String? token = await MysharedPreference().getPreferences(LoginKeys.token);
+    if (token == null || token.isEmpty) {
+      return emit(UserHomeFailure(message: 'Unauthorized user'));
+    }
+    final response = await userHomeImpl.fetchMonthlyTemplateData(
+        token: token);
+    GeneralJsonDart data = GeneralJsonDart.fromJson(response);
+
+    if (data.status == HttpStatus.ok) {
+      if (data.data == null || data.data!.isEmpty) {
+        return emit(UserHomeFailure(message: 'No record found'));
+      }
+      print( jsonEncode(data.data!));
+      // await MysharedPreference().setPreferencesWithoutEncrpytion(
+      //     template_data, jsonEncode(data.data!));
+      return emit(UserHomeSuccess(message: 'Data downloaded'));
+    } else {
+      return emit(UserHomeFailure(message: data.message));
+    }
+
+  }
+
 }
