@@ -2,33 +2,59 @@ import 'dart:convert';
 import 'package:activity_guide/shared/utils/constants.dart';
 import 'package:activity_guide/shared/utils/http_helper/storage_keys.dart';
 import 'package:activity_guide/shared/utils/myshared_preference.dart';
+import 'package:activity_guide/shared/utils/output_metric_json.dart';
 import 'package:bloc/bloc.dart';
 import 'data_collection_event.dart';
 import 'data_collection_state.dart';
 
-class DataCollectionBloc
-    extends Bloc<DataCollectionEvent, DataCollectionState> {
+class DataCollectionBloc extends Bloc<DataCollectionEvent, DataCollectionState> {
+
   DataCollectionBloc() : super(DataCollectionStateInitial()) {
+
     on<LoadDataCollectionMonthlyTemplateEvent>((event, emit) async {
       emit(DataCollectionStateLoading());
-      await Future.wait([
-        MysharedPreference().clearPreference(dataCollectionKey),
-        MysharedPreference().setPreferences(selectedTemplate, 'monthly'),
-        MysharedPreference().setPreferencesWithoutEncrpytion(
-            BuilderKeys.workingtemplate, 'Monthly Template')
-      ]);
 
-      String? monthlyTemplate =
-          await MysharedPreference().getPreferences(monthlyTemplateKey);
-      if (monthlyTemplate != null && monthlyTemplate.isNotEmpty) {
-        final monthlyTemplateList =
-            jsonDecode(monthlyTemplate) as List<dynamic>;
-        emit(DataCollectionStateSuccess(
-            dataList: monthlyTemplateList, templateType: 'Monthly Template'));
-      } else {
-        emit(DataCollectionStateFailure(
-            errorMessage: 'Monthly template not created'));
+      String? _outputMetric =
+      await MysharedPreference().getPreferencesWithoutEncrpytion(outputAndMetric);
+
+      if (_outputMetric != null && _outputMetric.isNotEmpty) {
+        final _data = jsonDecode(_outputMetric) as List<dynamic>;
+
+        List<OutputMetricJson> filtered = _data.map((e)=>OutputMetricJson.fromJson(e)).toList();
+        filtered = filtered.where((e){
+          return (e.monthValue!.isNotEmpty && !(e.monthValue!.startsWith('0')));
+        }).toList();
+
+        if(filtered.isEmpty){
+          emit(DataCollectionStateFailure(errorMessage: 'No Active Monthly Outputs'));
+         return;
+        }
+
+        await Future.wait([
+          MysharedPreference().clearPreference(dataCollectionKey),
+          MysharedPreference().setPreferences(selectedTemplate, 'monthly'),
+          MysharedPreference().setPreferencesWithoutEncrpytion(BuilderKeys.workingtemplate, 'Monthly Template')
+        ]);
+
+        String? monthlyTemplate =
+        await MysharedPreference().getPreferences(monthlyTemplateKey);
+
+        if (monthlyTemplate != null && monthlyTemplate.isNotEmpty) {
+          final monthlyTemplateList =
+          jsonDecode(monthlyTemplate) as List<dynamic>;
+          emit(DataCollectionStateSuccess(
+              dataList: monthlyTemplateList, templateType: 'Monthly Template',outputMetric: filtered));
+          return;
+        }else{
+          emit(DataCollectionStateFailure(errorMessage: 'Monthly template not created'));
+          return;
+        }
+
+      }else{
+        emit(DataCollectionStateFailure(errorMessage: 'No Active Monthly Outputs'));
+        return;
       }
+
     });
 
     on<LoadDataCollectionWorkplanTemplateEvent>((event, emit) async {

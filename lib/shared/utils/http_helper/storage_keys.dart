@@ -7,6 +7,7 @@ class BuilderKeys {
   static const String template = 'template';
   static const String purpose = 'purpose';
   static const String workingtemplate = 'workingtemplate';
+
 }
 
 class DashboardKey {
@@ -19,3 +20,9 @@ const usersLists = 'usersList';
 const subAdminLists = 'adminList';
 const fullnameKey = 'name';
 const deptKey = 'dept';
+const outputAndMetric = 'outputAndMetric';
+
+List<String> listOfMonths = [
+  "january", "february", "march", "april", "may", "june",
+  "july", "august", "september", "october", "november", "december"
+];

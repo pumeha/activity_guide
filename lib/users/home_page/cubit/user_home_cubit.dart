@@ -70,18 +70,20 @@ class UserHomeCubit extends Cubit<UserHomeState> {
     if (token == null || token.isEmpty) {
       return emit(UserHomeFailure(message: 'Unauthorized user'));
     }
-    final response = await userHomeImpl.fetchMonthlyTemplateData(
-        token: token);
+
+    final response = await userHomeImpl.fetchMonthlyTemplateData(token: token);
+
     GeneralJsonDart data = GeneralJsonDart.fromJson(response);
 
     if (data.status == HttpStatus.ok) {
       if (data.data == null || data.data!.isEmpty) {
         return emit(UserHomeFailure(message: 'No record found'));
       }
-      print( jsonEncode(data.data!));
-      // await MysharedPreference().setPreferencesWithoutEncrpytion(
-      //     template_data, jsonEncode(data.data!));
-      return emit(UserHomeSuccess(message: 'Data downloaded'));
+
+      await MysharedPreference().setPreferencesWithoutEncrpytion(
+          outputAndMetric, jsonEncode(data.data!));
+
+      return emit(UserHomeSuccess(message: 'MonthlyTemplateData'));
     } else {
       return emit(UserHomeFailure(message: data.message));
     }

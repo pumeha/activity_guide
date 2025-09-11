@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
-
 import 'package:activity_guide/shared/custom_widgets/custom_metric.dart';
+import 'package:activity_guide/shared/utils/output_metric_json.dart';
 import 'package:activity_guide/users/data_collection_page/bloc/data_collection_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,6 +12,7 @@ import 'bloc/data_collection_bloc.dart';
 import 'bloc/data_collection_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:intl/intl.dart';
 
 class DataCollectionPage extends StatefulWidget {
   const DataCollectionPage({super.key});
@@ -27,7 +28,9 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
   late List<TextEditingController> _controllers;
   late List<String> _labels;
   List<dynamic> _editValues = [];
-  int plannedEnd = 0,actualEnd = 0;
+  int plannedEnd = 0,actualEnd = 0,actualTarget = 0;
+  List<OutputMetricJson> _outputMetric = [];
+  final DateFormat format = DateFormat('M/d/yyyy');
 
   @override
   void initState() {
@@ -41,8 +44,13 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
     return Scaffold(
       body: BlocBuilder<DataCollectionBloc, DataCollectionState>(
         builder: (context, state) {
-          List<TemplateJson> data =
-              state.data!.map((data) => TemplateJson.fromJson(data)).toList();
+          List<TemplateJson> data = state.data!.map((data) => TemplateJson.fromJson(data)).toList();
+          data.forEach((e) {
+            if (e.name.toLowerCase() == 'output') {
+              e.range = state.outputMetric!.map((e) => e.output).join(',');
+            }
+          });
+          _outputMetric = state.outputMetric!;
 
           _controllers = List.generate(data.length, (index) {
             return TextEditingController();
@@ -77,6 +85,9 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
                           plannedEnd = index;
                         }else if(data[index].name.contains('ACTUAL END')){
                           actualEnd = index;
+                        }else if(data[index].name.contains('ACTUAL TARGET')){
+                          actualTarget = index;
+
                         }
                         return CustomCard(
                             index,
@@ -268,8 +279,11 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
                   ))
               .toList(),
           onChanged: (String? value) {
+
             partialSave[title] = value;
             _controllers[index].text = value!;
+            _controllers[actualTarget].text = _outputMetric.firstWhere((e)=> e.output == value).monthValue!;
+            partialSave[_labels[actualTarget]] = _outputMetric.firstWhere((e)=> e.output == value).monthValue!;
           },
           isExpanded: true,
           validator: validatorFunction,
@@ -333,13 +347,12 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
 
             },
           );
-        }else if(title.contains('END')){
+        }else if(title.contains('END') || title.contains('ACTUAL TARGET(METRICS)')){
           subtitleWidget = TextFormField(
             controller: _controllers[index],
             minLines: 1,
             maxLines: 3,
             onChanged: (value) {
-
               partialSave[title] = value;
             },
             validator: validatorFunction,
@@ -355,10 +368,16 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
               partialSave[title] = value;
               if(title.contains('ACTUAL DURATION')){
 
-                _controllers[actualEnd].text = partialSave['ACTUAL START']+'-'+value;
+                _controllers[actualEnd].text = format.format(addBusinessDays(
+                  format.parse(partialSave['ACTUAL START']!),
+                  int.tryParse(value) ?? 0,
+                ));
               }else if(title.contains('PLANNED DURATION')){
 
-                _controllers[plannedEnd].text = partialSave['PLANNED START']+'-'+value;
+                _controllers[plannedEnd].text = format.format(addBusinessDays(
+                  format.parse(partialSave['PLANNED START']!),
+                  int.tryParse(value) ?? 0,
+                ));
 
               }
             },
@@ -398,5 +417,19 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
         ),
       ),
     );
+  }
+  DateTime addBusinessDays(DateTime startDate, int businessDays) {
+    int addedDays = 0;
+    DateTime date = startDate;
+
+    while (addedDays < businessDays) {
+      date = date.add(Duration(days: 1));
+      // Skip Saturday (6) and Sunday (7)
+      if (date.weekday != DateTime.saturday && date.weekday != DateTime.sunday) {
+        addedDays++;
+      }
+    }
+
+    return date;
   }
 }

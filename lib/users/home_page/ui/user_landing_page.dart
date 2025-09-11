@@ -58,7 +58,13 @@ class _UserLandingPageState extends State<UserLandingPage> {
               EasyLoading.show(maskType: EasyLoadingMaskType.black);
             } else if (state is UserHomeSuccess) {
               EasyLoading.showSuccess('Success');
-              context.beamToNamed('/home/database');
+              if(state.message =='MonthlyTemplateData'){
+                context.read<DataCollectionBloc>().add(LoadDataCollectionMonthlyTemplateEvent());
+              }else{
+                context.beamToNamed('/home/database');
+              }
+
+
             } else if (state is UserHomeFailure) {
               EasyLoading.showError(state.message!);
             }
@@ -148,7 +154,6 @@ class _UserLandingPageState extends State<UserLandingPage> {
                           if (template['values'] is String) {
                             template['values'] = jsonDecode(template['values']);
                           }
-
                           return TemplateModel.fromJson(template);
                         }).toList();
 
@@ -226,8 +231,9 @@ class _UserLandingPageState extends State<UserLandingPage> {
                         onPressed: () {
                           if (template.name == 'Monthly') {
                             context
-                                .read<DataCollectionBloc>()
-                                .add(LoadDataCollectionMonthlyTemplateEvent());
+                                .read<UserHomeCubit>()
+                                .fetchMonthlyTemplateData();
+
                           } else if (template.name == 'Workplan') {
                             context
                                 .read<DataCollectionBloc>()
