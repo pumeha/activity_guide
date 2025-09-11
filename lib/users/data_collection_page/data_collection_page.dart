@@ -45,12 +45,16 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
       body: BlocBuilder<DataCollectionBloc, DataCollectionState>(
         builder: (context, state) {
           List<TemplateJson> data = state.data!.map((data) => TemplateJson.fromJson(data)).toList();
-          data.forEach((e) {
-            if (e.name.toLowerCase() == 'output') {
-              e.range = state.outputMetric!.map((e) => e.output).join(',');
-            }
-          });
-          _outputMetric = state.outputMetric!;
+
+          if(state.outputMetric != null){
+            data.forEach((e) {
+              if (e.name.toLowerCase() == 'output') {
+                e.range = state.outputMetric!.map((e) => e.output).join(',');
+              }
+            });
+            _outputMetric = state.outputMetric!;
+          }
+
 
           _controllers = List.generate(data.length, (index) {
             return TextEditingController();
