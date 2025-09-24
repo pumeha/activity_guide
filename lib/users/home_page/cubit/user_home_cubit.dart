@@ -5,6 +5,7 @@ import 'package:activity_guide/shared/utils/constants.dart';
 import 'package:activity_guide/shared/utils/http_helper/general_json_dart.dart';
 import 'package:activity_guide/shared/utils/http_helper/storage_keys.dart';
 import 'package:activity_guide/shared/utils/myshared_preference.dart';
+import 'package:activity_guide/users/dashboard_page/monthly_j2d.dart';
 import 'package:activity_guide/users/home_page/repo/user_home_impl.dart';
 import 'package:bloc/bloc.dart';
 import 'user_home_state.dart';
@@ -49,8 +50,11 @@ class UserHomeCubit extends Cubit<UserHomeState> {
       if (data.data == null || data.data!.isEmpty) {
         return emit(UserHomeFailure(message: 'No record found'));
       }
+
       await MysharedPreference().setPreferencesWithoutEncrpytion(
           template_data, jsonEncode(data.data!));
+      final List<dynamic> _monthlyRawdata = data.data!;
+
       return emit(UserHomeSuccess(message: 'Data downloaded'));
     } else {
       return emit(UserHomeFailure(message: data.message));

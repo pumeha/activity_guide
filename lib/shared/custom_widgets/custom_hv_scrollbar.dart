@@ -13,10 +13,7 @@ class CustomHVScrollBar extends StatelessWidget {
       child: SingleChildScrollView( controller: h, scrollDirection: Axis.horizontal,
         child: Scrollbar( controller: v, thumbVisibility: true,
           child: SingleChildScrollView( controller: v, scrollDirection: Axis.vertical,
-            child: Padding(
-                padding: const EdgeInsets.only(left: 240,right: 240),
-                child: child
-            ),
+            child: Center(child: child),
           ),
         ),
       ),

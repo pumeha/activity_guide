@@ -84,7 +84,7 @@ class _CustomDashboardPageState extends State<CustomDashboardPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          filterDialog(context: context, onPressed: () {});
+
         },
         backgroundColor: active,
         child: const Icon(
