@@ -77,20 +77,18 @@ class HorizontalColumnChart extends StatelessWidget {
 class DoughnutChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Card(color: Colors.white,
-      child: SfCircularChart(
-        title: ChartTitle(text: 'Milestone Weight',backgroundColor: Colors.black,textStyle: TextStyle(color: Colors.white)),
-        tooltipBehavior: TooltipBehavior(enable: true),
-       legend: Legend(isVisible: true),
-        series: <DoughnutSeries<ChartData, String>>[
-          DoughnutSeries<ChartData, String>(
-            dataSource: getChartData(),
-            xValueMapper: (ChartData data, _) => data.category,
-            yValueMapper: (ChartData data, _) => data.value,
-            dataLabelSettings: DataLabelSettings(isVisible: true),
-          ),
-        ],
-      ),
+    return SfCircularChart(
+     title: ChartTitle(text: 'Milestone Weight',backgroundColor: Colors.black,textStyle: TextStyle(color: Colors.white)),
+      tooltipBehavior: TooltipBehavior(enable: true),
+     legend: Legend(isVisible: true),
+      series: <DoughnutSeries<ChartData, String>>[
+        DoughnutSeries<ChartData, String>(
+          dataSource: getChartData(),
+          xValueMapper: (ChartData data, _) => data.category,
+          yValueMapper: (ChartData data, _) => data.value,
+          dataLabelSettings: DataLabelSettings(isVisible: true),
+        ),
+      ],
     );
   }
 
@@ -143,7 +141,7 @@ class _ChartData {
 
 class QualitativeSpeedometer extends StatelessWidget {
   // Example value: from 0 to 100 (you can adjust range)
-  final double value = 75;
+  final double value = 30;
 
   // Helper to convert numeric value to category text
   String getCategory(double val) {
@@ -156,9 +154,8 @@ class QualitativeSpeedometer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final category = getCategory(value);
-
     return SfRadialGauge(
-      title: const GaugeTitle(text: 'Status of Milestone',backgroundColor: Colors.black,textStyle: TextStyle(color: Colors.white)),
+     title: const GaugeTitle(text: 'Status of Milestone',backgroundColor: Colors.black,textStyle: TextStyle(color: Colors.white)),
       axes: [
         RadialAxis(
           minimum: 0,
@@ -179,12 +176,12 @@ class QualitativeSpeedometer extends StatelessWidget {
               value: value,
               markerType: MarkerType.text,
               text: category,
-              textStyle: GaugeTextStyle(
+              textStyle: const GaugeTextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
               ),
-              markerOffset: -25,
+              markerOffset: 40,
             ),
           ],
 

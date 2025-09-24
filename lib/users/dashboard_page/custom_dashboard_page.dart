@@ -1,5 +1,6 @@
 import 'package:activity_guide/shared/custom_widgets/app_text.dart';
 import 'package:activity_guide/shared/custom_widgets/custom_button.dart';
+import 'package:activity_guide/shared/custom_widgets/custom_hv_scrollbar.dart';
 import 'package:activity_guide/shared/custom_widgets/reuseable_dropdown.dart';
 import 'package:activity_guide/shared/theme/text_styles.dart';
 import 'package:activity_guide/shared/utils/colors.dart';
@@ -21,14 +22,73 @@ class _CustomDashboardPageState extends State<CustomDashboardPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: _body(),
+      body: CustomHVScrollBar(
+        child: Column(mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            _title(),
+            const Divider(),
+            Row(spacing: 4,children: [
+              _filters(context: context, onPressed: () {}),
+              Column(
+                children: [
+                  Card(
+                    color: Colors.white,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        _widget(
+                            title: 'Total Activities',
+                            value: '12',
+                            titleBackground: Colors.lightBlue),
+                        _widget(
+                            title: 'Active Activities',
+                            value: '4',
+                            titleBackground: active),
+                        _widget(
+                            title: 'Inactive Activities',
+                            value: '8',
+                            titleBackground: Colors.red),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 12,
+                  ),
+                  Row(
+                    children: [
+                      HorizontalColumnChart(
+                        barColor: Colors.teal,
+                        title: 'Top 3 Activities',
+                      ),
+                      HorizontalColumnChart(
+                        barColor: Colors.orange,
+                        title: 'Bottom 3 Activities',
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              Column(
+                children: [
+                  SizedBox(child: DoughnutChart(),
+                    height: 200,),
+                  SizedBox(child: QualitativeSpeedometer(),
+                    width: 300,height: 300,),
+
+                ],
+              )
+
+            ],)
+          ],
+        ),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           filterDialog(context: context, onPressed: () {});
         },
         backgroundColor: active,
         child: const Icon(
-          Icons.filter_alt,
+          Icons.refresh,
           color: Colors.white,
         ),
       ),
@@ -95,8 +155,7 @@ class _CustomDashboardPageState extends State<CustomDashboardPage> {
                       Column(
                         children: [
                           DoughnutChart(),
-                          SizedBox(child: QualitativeSpeedometer(),height: 300,),
-                          SizedBox(height: 12,),
+                          QualitativeSpeedometer(),
                         ],
                       )
 
@@ -142,15 +201,7 @@ class _CustomDashboardPageState extends State<CustomDashboardPage> {
               ),
             ),
           ),
-          ElevatedButton(
-            onPressed: () {},
-            child: Text(
-              'Refresh',
-              style: TextStyle(color: Colors.white),
-            ),
-            style: ButtonStyle(
-                backgroundColor: WidgetStatePropertyAll(Colors.green[800])),
-          )
+
         ],
       ),
     );
@@ -222,6 +273,15 @@ class _CustomDashboardPageState extends State<CustomDashboardPage> {
                   readOnly: true,
                 ),
               ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: CustomButton(
+                  text: 'Filter',
+                  onPressed: onPressed,
+                  fullWidth: true,
+                  trailing: Icon(Icons.filter_alt,color: Colors.white,),
+                ),
+              ),
               // Padding(
               //   padding: const EdgeInsets.all(8.0),
               //   child: Row(
@@ -235,12 +295,7 @@ class _CustomDashboardPageState extends State<CustomDashboardPage> {
               //           textColor: Colors.red,
               //         ),
               //       ),
-              //       Expanded(
-              //         child: CustomButton(
-              //           text: 'Proceed',
-              //           onPressed: onPressed,
-              //         ),
-              //       ),
+
               //     ],
               //   ),
               // ),
