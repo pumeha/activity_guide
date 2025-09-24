@@ -36,27 +36,11 @@ AppBar topNavigationBar(
           ],
         ),
         actions: [
-         
-            BlocBuilder<UserDashboardCubit, UserDashboardState>(
-              builder: (c, state) {
-                 final currentLocation = Beamer.of(c).currentBeamLocation;
 
-                if (currentLocation.state.routeInformation.uri.toString() == '/home/dashboard') {
-                return TextButton(
-                  onPressed: () {
-                  c.read<UserDashboardCubit>().refreshDashoard();
-                  },
-                  child: const Text('Refresh\nDashboard'),
-                  
-                );
-              }else{
-               return  IconButton(onPressed: (){
-                     context.read<ThemeBloc>().add(ToggleTheme());
-              }, icon:  Icon(Icons.brightness_6_sharp,size: 20,
-              color: const Color.fromARGB(255, 255, 200, 0),));
-              }
-              },
-            ),
+          IconButton(onPressed: (){
+            context.read<ThemeBloc>().add(ToggleTheme());
+          }, icon:  Icon(Icons.brightness_6_sharp,size: 20,
+            color: const Color.fromARGB(255, 255, 200, 0),)),
            
           IconButton(
               onPressed: () {

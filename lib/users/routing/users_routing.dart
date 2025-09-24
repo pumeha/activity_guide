@@ -1,3 +1,4 @@
+import 'package:activity_guide/users/dashboard_page/custom_dashboard_page.dart';
 import 'package:activity_guide/users/home_page/ui/user_landing_page.dart';
 import 'package:beamer/beamer.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -39,7 +40,7 @@ class UserDashboardLocation extends BeamLocation {
       BuildContext context, RouteInformationSerializable<dynamic> state) {
     return [
       const BeamPage(
-          child: UserDashboardPage(),
+          child: CustomDashboardPage(),
           key: ValueKey('dashboard'),
           title: 'Activity Guide')
     ];

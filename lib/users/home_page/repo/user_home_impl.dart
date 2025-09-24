@@ -10,6 +10,7 @@ class UserHomeImpl extends UserHomeAbstr {
     dynamic body = jsonEncode({'template_name': templateName});
     final response = await HttpHandlerImpl.instance
         .post(url: TemplateRoutes.fetchData, body: body, token: token);
+    print(response);
     return response;
   }
 
