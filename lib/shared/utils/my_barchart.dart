@@ -1,12 +1,15 @@
+import 'package:activity_guide/shared/custom_widgets/app_text.dart';
+import 'package:activity_guide/shared/custom_widgets/my_card.dart';
+import 'package:activity_guide/shared/custom_widgets/reuseable_dropdown.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+
 class ColumnChartExample extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SfCartesianChart(
       title: ChartTitle(text: 'Sales Analysis'),
-
       tooltipBehavior: TooltipBehavior(enable: true),
       primaryXAxis: CategoryAxis(),
       primaryYAxis: NumericAxis(
@@ -41,18 +44,28 @@ class SalesData {
   final double sales;
 }
 
-
 class HorizontalColumnChart extends StatelessWidget {
   Color barColor;
   String title;
-  HorizontalColumnChart({super.key,required this.barColor,required this.title});
+  HorizontalColumnChart(
+      {super.key, required this.barColor, required this.title});
   @override
   Widget build(BuildContext context) {
-    return Card(color: Colors.white,
+    return Card(
+      color: Colors.white,
       child: SfCartesianChart(
-        title: ChartTitle(text: title,backgroundColor: Colors.black,textStyle: TextStyle(color: Colors.white)),
-        primaryXAxis: CategoryAxis(),
-        primaryYAxis: NumericAxis(),
+        title: ChartTitle(
+            text: title,
+            backgroundColor: Colors.black,
+            textStyle: TextStyle(color: Colors.white)),
+        primaryXAxis: CategoryAxis(
+          majorGridLines:
+              const MajorGridLines(width: 0), // Remove vertical grid lines
+        ),
+        primaryYAxis: NumericAxis(
+          majorGridLines:
+              const MajorGridLines(width: 0), // Remove horizontal grid lines
+        ),
         series: <BarSeries<SalesData, String>>[
           BarSeries<SalesData, String>(
             dataSource: getChartData(),
@@ -74,13 +87,80 @@ class HorizontalColumnChart extends StatelessWidget {
   }
 }
 
+class DataTableWidget extends StatelessWidget {
+  final List<String> detailsList;
+
+  const DataTableWidget({Key? key, required this.detailsList})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 300,
+      child: SingleChildScrollView(
+        child: DataTable(
+          columns: const [
+            DataColumn(label: Text('S/N')),
+            DataColumn(label: Text('Details')),
+          ],
+          rows: List.generate(detailsList.length, (index) {
+            return DataRow(cells: [
+              DataCell(Text('${index + 1}')),
+              DataCell(Text(detailsList[index])),
+            ]);
+          }),
+        ),
+      ),
+    );
+  }
+}
+
+class ColumnChart extends StatelessWidget {
+  Color barColor;
+  String title;
+  ColumnChart({super.key, required this.barColor, required this.title});
+  @override
+  Widget build(BuildContext context) {
+    return SfCartesianChart(
+      title: ChartTitle(
+          text: title,
+          backgroundColor: Colors.black,
+          textStyle: TextStyle(color: Colors.white)),
+      primaryXAxis: CategoryAxis(
+        majorGridLines: const MajorGridLines(width: 0),
+      ),
+      primaryYAxis: NumericAxis(
+        majorGridLines: const MajorGridLines(width: 0),
+      ),
+      series: <ColumnSeries<SalesData, String>>[
+        ColumnSeries<SalesData, String>(
+          dataSource: getChartData(),
+          xValueMapper: (SalesData data, _) => data.year,
+          yValueMapper: (SalesData data, _) => data.sales,
+          color: barColor,
+        ),
+      ],
+    );
+  }
+
+  List<SalesData> getChartData() {
+    return [
+      SalesData('Target', 35),
+      SalesData('Achieved', 28),
+    ];
+  }
+}
+
 class DoughnutChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SfCircularChart(
-     title: ChartTitle(text: 'Milestone Weight',backgroundColor: Colors.black,textStyle: TextStyle(color: Colors.white)),
+      title: ChartTitle(
+          text: 'Milestone Weight',
+          backgroundColor: Colors.black,
+          textStyle: TextStyle(color: Colors.white)),
       tooltipBehavior: TooltipBehavior(enable: true),
-     legend: Legend(isVisible: true),
+      legend: Legend(isVisible: true),
       series: <DoughnutSeries<ChartData, String>>[
         DoughnutSeries<ChartData, String>(
           dataSource: getChartData(),
@@ -108,7 +188,6 @@ class ChartData {
   final double value;
 }
 
-
 class HalfmoonChartApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -123,7 +202,7 @@ class HalfmoonChartApp extends StatelessWidget {
           xValueMapper: (_ChartData data, _) => data.category,
           yValueMapper: (_ChartData data, _) => data.value,
           startAngle: 180, // Start from the middle
-          endAngle: 360,   // End at the bottom
+          endAngle: 360, // End at the bottom
         ),
       ],
     );
@@ -137,11 +216,9 @@ class _ChartData {
   _ChartData(this.category, this.value);
 }
 
-
-
 class QualitativeSpeedometer extends StatelessWidget {
   // Example value: from 0 to 100 (you can adjust range)
-  final double value = 30;
+  final double value = 90;
 
   // Helper to convert numeric value to category text
   String getCategory(double val) {
@@ -155,7 +232,10 @@ class QualitativeSpeedometer extends StatelessWidget {
   Widget build(BuildContext context) {
     final category = getCategory(value);
     return SfRadialGauge(
-     title: const GaugeTitle(text: 'Status of Milestone',backgroundColor: Colors.black,textStyle: TextStyle(color: Colors.white)),
+      title: const GaugeTitle(
+          text: 'Status of Milestone',
+          backgroundColor: Colors.black,
+          textStyle: TextStyle(color: Colors.white)),
       axes: [
         RadialAxis(
           minimum: 0,
@@ -171,20 +251,20 @@ class QualitativeSpeedometer extends StatelessWidget {
             GaugeRange(startValue: 80, endValue: 100, color: Colors.green),
           ],
           pointers: [
-            NeedlePointer(value: value),
-            MarkerPointer(
+            NeedlePointer(
               value: value,
-              markerType: MarkerType.text,
-              text: category,
-              textStyle: const GaugeTextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: Colors.black,
-              ),
-              markerOffset: 40,
             ),
           ],
-
+          annotations: [
+            GaugeAnnotation(
+              widget: Text(
+                category,
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              angle: 90,
+              positionFactor: 0.5,
+            ),
+          ],
         )
       ],
     );

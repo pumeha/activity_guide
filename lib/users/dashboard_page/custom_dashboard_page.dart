@@ -1,10 +1,13 @@
 import 'package:activity_guide/shared/custom_widgets/app_text.dart';
 import 'package:activity_guide/shared/custom_widgets/custom_button.dart';
 import 'package:activity_guide/shared/custom_widgets/custom_hv_scrollbar.dart';
+import 'package:activity_guide/shared/custom_widgets/my_card.dart';
 import 'package:activity_guide/shared/custom_widgets/reuseable_dropdown.dart';
 import 'package:activity_guide/shared/theme/text_styles.dart';
 import 'package:activity_guide/shared/utils/colors.dart';
 import 'package:activity_guide/shared/utils/constants.dart';
+import 'package:activity_guide/sub_admin/data_table_page/data_table.dart';
+import 'package:activity_guide/users/dashboard_page/piechart.dart';
 import 'package:flutter/material.dart';
 
 import '../../shared/utils/my_barchart.dart';
@@ -18,77 +21,156 @@ class CustomDashboardPage extends StatefulWidget {
 
 class _CustomDashboardPageState extends State<CustomDashboardPage> {
   TextEditingController dateRangeController = TextEditingController();
+  final List<String> myData = [
+    '''This item includes a comprehensive overview of the user interface components used in the dashboard.
+It covers layout, responsiveness, and accessibility.''',
+    '''This entry outlines the backend integration process with RESTful APIs and authentication flow.
+It also discusses error handling and security best practices.''',
+    '''This item describes the data visualization techniques applied using charts and graphs for analytics.
+It includes examples using bar charts, pie charts, and line graphs.''',
+    '''This item includes a comprehensive overview of the user interface components used in the dashboard.
+It covers layout, responsiveness, and accessibility.''',
+    '''This entry outlines the backend integration process with RESTful APIs and authentication flow.
+It also discusses error handling and security best practices.''',
+    '''This item describes the data visualization techniques applied using charts and graphs for analytics.
+It includes examples using bar charts, pie charts, and line graphs.''',
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       body: CustomHVScrollBar(
-        child: Column(mainAxisAlignment: MainAxisAlignment.start,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             _title(),
-            const Divider(),
-            Row(spacing: 4,children: [
-              _filters(context: context, onPressed: () {}),
-              Column(
-                children: [
-                  Card(
-                    color: Colors.white,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        _widget(
-                            title: 'Total Activities',
-                            value: '12',
-                            titleBackground: Colors.lightBlue),
-                        _widget(
-                            title: 'Active Activities',
-                            value: '4',
-                            titleBackground: active),
-                        _widget(
-                            title: 'Inactive Activities',
-                            value: '8',
-                            titleBackground: Colors.red),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 12,
-                  ),
-                  Row(
-                    children: [
-                      HorizontalColumnChart(
-                        barColor: Colors.teal,
-                        title: 'Top 3 Activities',
+            Row(
+              spacing: 4,
+              children: [
+                _filters(context: context, onPressed: () {}),
+                Column(
+                  children: [
+                    Card(elevation: 4,
+                      color: Colors.white,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          _widget(
+                              title: 'Total Activities',
+                              value: '12',
+                              titleBackground: Colors.lightBlue),
+                          _widget(
+                              title: 'Active Activities',
+                              value: '4',
+                              titleBackground: active),
+                          _widget(
+                              title: 'Inactive Activities',
+                              value: '8',
+                              titleBackground: Colors.red),
+                        ],
                       ),
-                      HorizontalColumnChart(
-                        barColor: Colors.orange,
-                        title: 'Bottom 3 Activities',
+                    ),
+                    const SizedBox(
+                      height: 12,
+                    ),
+                    MyCard(
+                      child: Row(
+                        children: [
+                          HorizontalColumnChart(
+                            barColor: Colors.teal,
+                            title: 'Top 3 Activities',
+                          ),
+                          HorizontalColumnChart(
+                            barColor: Colors.orange,
+                            title: 'Bottom 3 Activities',
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                MyCard(
+                  child: Column(mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(
+                        child: DoughnutChart(),
+                        height: 200,
+                      ),
+                      SizedBox(
+                        child: QualitativeSpeedometer(),
+                        width: 300,
+                      height: 300,
                       ),
                     ],
                   ),
-                ],
-              ),
-              Column(
-                children: [
-                  SizedBox(child: DoughnutChart(),
-                    height: 200,),
-                  SizedBox(child: QualitativeSpeedometer(),
-                    width: 300,height: 300,),
-
-                ],
-              )
-
-            ],)
+                )
+              ],
+            ),
+            Row(
+              spacing: 4,
+              children: [
+                SizedBox(
+                  width: 500,
+                  child: MyCard(
+                    child: Column(
+                      children: [
+                        CustomDropdown(
+                            labelText: '',
+                            selectedItem: 'All Activities',
+                            items: [
+                              'All Activities',
+                              'Active Activities',
+                              'Inactive Activities'
+                            ],
+                            onChanged: (v) {}),
+                        DataTableWidget(
+                          detailsList: myData,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Row(
+                  spacing: 12,
+                  children: [
+                    SizedBox(width: 400,
+                      child: MyCard(
+                        child: Column(
+                          children: [
+                            CustomDropdown(
+                                labelText: '',
+                                selectedItem: 'All Activities',
+                                items: [
+                                  'All Activities',
+                                  'Active Activities',
+                                  'Inactive Activities'
+                                ],
+                                onChanged: (v) {}),
+                            ColumnChart(
+                              barColor: Colors.teal,
+                              title: 'Target vs Achieved',
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    PieChartWithPercentages(),
+                  ],
+                )
+              ],
+            ),
+            const SizedBox(
+              height: 50,
+            )
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-
-        },
+        onPressed: () {},
         backgroundColor: active,
         child: const Icon(
-          Icons.refresh,
+          Icons.update,size: 24,
           color: Colors.white,
         ),
       ),
@@ -100,12 +182,14 @@ class _CustomDashboardPageState extends State<CustomDashboardPage> {
       child: Column(
         children: [
           _title(),
-          Row(mainAxisAlignment: MainAxisAlignment.start,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Expanded(child: _filters(context: context, onPressed: () {})),
               Expanded(
                   flex: 5,
-                  child: Row(spacing: 8,
+                  child: Row(
+                    spacing: 8,
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -158,7 +242,6 @@ class _CustomDashboardPageState extends State<CustomDashboardPage> {
                           QualitativeSpeedometer(),
                         ],
                       )
-
                     ],
                   ))
             ],
@@ -201,7 +284,6 @@ class _CustomDashboardPageState extends State<CustomDashboardPage> {
               ),
             ),
           ),
-
         ],
       ),
     );
@@ -217,7 +299,7 @@ class _CustomDashboardPageState extends State<CustomDashboardPage> {
         child: Card(
           color: Colors.white,
           child: Column(
-           mainAxisSize: MainAxisSize.min,
+            mainAxisSize: MainAxisSize.min,
             children: [
               const AppText(
                 text: 'Filters',
@@ -279,7 +361,10 @@ class _CustomDashboardPageState extends State<CustomDashboardPage> {
                   text: 'Filter',
                   onPressed: onPressed,
                   fullWidth: true,
-                  trailing: Icon(Icons.filter_alt,color: Colors.white,),
+                  trailing: Icon(
+                    Icons.filter_alt,
+                    color: Colors.white,
+                  ),
                 ),
               ),
               // Padding(
@@ -299,7 +384,6 @@ class _CustomDashboardPageState extends State<CustomDashboardPage> {
               //     ],
               //   ),
               // ),
-
             ],
           ),
         ),
