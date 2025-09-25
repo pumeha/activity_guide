@@ -10,7 +10,7 @@ class UserHomeImpl extends UserHomeAbstr {
     dynamic body = jsonEncode({'template_name': templateName});
     final response = await HttpHandlerImpl.instance
         .post(url: TemplateRoutes.fetchData, body: body, token: token);
-    print(response);
+
     return response;
   }
 
@@ -21,4 +21,15 @@ class UserHomeImpl extends UserHomeAbstr {
         .post(url: TemplateRoutes.fetchMonthlyTemplateData, body: '', token: token);
     return response;
   }
+
+  @override
+  Future<Map<String, dynamic>> fetchDashboardData({required String token, required String templateName}) async{
+    dynamic body = jsonEncode({'template_name': templateName});
+    final response = await HttpHandlerImpl.instance
+        .post(url: TemplateRoutes.fetchDashboardData, body: body, token: token);
+
+    return response;
+  }
+
+
 }

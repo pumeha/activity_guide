@@ -1,10 +1,14 @@
 class OutputMetricJson {
   final String output;
   final String? monthValue;
+  final String dept;
+  final String unit;
 
   OutputMetricJson({
     required this.output,
     this.monthValue,
+    required this.dept,
+    required this.unit
   });
 
   factory OutputMetricJson.fromJson(Map<String, dynamic> json) {
@@ -16,7 +20,7 @@ class OutputMetricJson {
 
     return OutputMetricJson(
       output: json['output'] ?? '',
-      monthValue: monthKey.isNotEmpty ? json[monthKey]?.toString() : null,
+      monthValue: monthKey.isNotEmpty ? json[monthKey]?.toString() : null, dept: json['dept'] ?? '', unit:json['unit'] ?? '',
     );
   }
 

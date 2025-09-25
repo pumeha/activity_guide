@@ -1,13 +1,14 @@
+import 'package:intl/intl.dart';
 class MonthlyJ2D {
   final int id;
   final String dept;
   final String unit;
   final String output;
   final DateTime plannedStart;
-  final int plannedDuration;
+  final String plannedDuration;
   final DateTime plannedEnd;
   final DateTime actualStart;
-  final int actualDuration;
+  final String actualDuration;
   final DateTime actualEnd;
   final String target;
   final String activitiesDescription;
@@ -56,21 +57,23 @@ class MonthlyJ2D {
   });
 
   factory MonthlyJ2D.fromJson(Map<String, dynamic> json) {
+    final DateFormat customFormat = DateFormat('dd/MM/yyyy');
+
     return MonthlyJ2D(
       id: json['id'],
       dept: json['dept'],
       unit: json['unit'],
       output: json['output'],
-      plannedStart: DateTime.parse(json['planned_start']),
+      plannedStart: customFormat.parse(json['planned_start']),
       plannedDuration: json['planned_duration'],
-      plannedEnd: DateTime.parse(json['planned_end']),
-      actualStart: DateTime.parse(json['actual_start']),
+      plannedEnd: customFormat.parse(json['planned_end']),
+      actualStart: customFormat.parse(json['actual_start']),
       actualDuration: json['actual_duration'],
-      actualEnd: DateTime.parse(json['actual_end']),
+      actualEnd: customFormat.parse(json['actual_end']),
       target: json['target'],
       activitiesDescription: json['activities_decription'],
       outcome: json['outcome'],
-      percentCompleted: json['%completed'],
+      percentCompleted: int.tryParse(json['%completed'].toString()) ?? 0,
       milestone: json['milestone'],
       actualTargetMetrics: json['actual_target(metrics)'],
       actualAchievedMetrics: json['actual_achieved(metrics)'],
@@ -81,10 +84,11 @@ class MonthlyJ2D {
       moreFunds: json['more_funds'],
       challenges: json['challenges'],
       remarks: json['remarks'],
-      createdAt: DateTime.parse(json['created_at']),
+      createdAt: DateTime.parse(json['created_at']), // Already ISO format
       updatedAt: DateTime.parse(json['updated_at']),
     );
   }
+
 
   Map<String, dynamic> toJson() {
     return {

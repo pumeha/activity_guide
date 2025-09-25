@@ -20,6 +20,7 @@ static String dashboard = "$baseUrl/template/dashboard";
 static String uploadTemplateData = "$baseUrl/template/upload";
 static String fetchData = "$baseUrl/template/fetch";
 static String fetchMonthlyTemplateData = "$baseUrl/template/monthly";
+static String fetchDashboardData = "$baseUrl/template/dashdata";
 }
 
 class UserRoutes {

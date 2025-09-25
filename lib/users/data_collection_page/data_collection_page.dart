@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:math';
+import 'package:activity_guide/shared/custom_widgets/app_text.dart';
 import 'package:activity_guide/shared/custom_widgets/custom_metric.dart';
 import 'package:activity_guide/shared/utils/output_metric_json.dart';
 import 'package:activity_guide/users/data_collection_page/bloc/data_collection_event.dart';
@@ -30,7 +31,7 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
   List<dynamic> _editValues = [];
   int plannedEnd = 0,actualEnd = 0,actualTarget = 0;
   List<OutputMetricJson> _outputMetric = [];
-  final DateFormat format = DateFormat('M/d/yyyy');
+  final DateFormat format = DateFormat('dd/MM/yyyy');
 
   @override
   void initState() {
@@ -224,7 +225,7 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
     );
     if (selectedDate != null) {
       String _date =
-          '${selectedDate.month}/${selectedDate.day}/${selectedDate.year}';
+          '${selectedDate.day}/${selectedDate.month}/${selectedDate.year}';
       partialSave[title] = _date;
       controller.text = partialSave[title];
     }
@@ -240,9 +241,9 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
         .then((onValue) {
       if (onValue != null) {
         String startDate =
-            '${onValue.start.month}/${onValue.start.day}/${onValue.start.year}';
+            '${onValue.start.day}/${onValue.start.month}/${onValue.start.year}';
         String endDate =
-            '${onValue.end.month}/${onValue.end.day}/${onValue.end.year}';
+            '${onValue.end.day}/${onValue.end.month}/${onValue.end.year}';
         multipleDateString = startDate + '-' + endDate;
         partialSave[title] = multipleDateString;
         controller.text = partialSave[title];
@@ -362,6 +363,17 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
             validator: validatorFunction,
             readOnly: true,
           );
+        }else if(title.contains('ACTUAL ACHIEVED(METRICS)')){
+
+          subtitleWidget = TextFormField(
+            controller: _controllers[index],
+            onChanged: (value) {
+              partialSave[title] = value;
+            },
+            validator: validatorFunction,
+            keyboardType: TextInputType.number,
+          );
+
         }else if(title.contains('DURATION')){
           subtitleWidget = TextFormField(
             controller: _controllers[index],

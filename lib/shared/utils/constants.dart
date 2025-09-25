@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'colors.dart';
+
 import 'dart:html' as html;
 class Constants{
  bool isValidEmail(String email) {
@@ -102,3 +103,6 @@ bool isDeviceOffline() {
 return html.window.navigator.onLine ?? false;
  //  return true;
 }
+
+
+

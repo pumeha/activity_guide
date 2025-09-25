@@ -1,6 +1,7 @@
 import 'package:activity_guide/shared/custom_widgets/app_text.dart';
 import 'package:activity_guide/shared/custom_widgets/my_card.dart';
 import 'package:activity_guide/shared/custom_widgets/reuseable_dropdown.dart';
+import 'package:activity_guide/users/dashboard_page/custom_dashboard_page.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -47,8 +48,9 @@ class SalesData {
 class HorizontalColumnChart extends StatelessWidget {
   Color barColor;
   String title;
+  List<ActivityAndValues> data;
   HorizontalColumnChart(
-      {super.key, required this.barColor, required this.title});
+      {super.key, required this.barColor, required this.title,required this.data});
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -66,11 +68,11 @@ class HorizontalColumnChart extends StatelessWidget {
           majorGridLines:
               const MajorGridLines(width: 0), // Remove horizontal grid lines
         ),
-        series: <BarSeries<SalesData, String>>[
-          BarSeries<SalesData, String>(
-            dataSource: getChartData(),
-            xValueMapper: (SalesData data, _) => data.year,
-            yValueMapper: (SalesData data, _) => data.sales,
+        series: <BarSeries<ActivityAndValues, String>>[
+          BarSeries<ActivityAndValues, String>(
+            dataSource: data,
+            xValueMapper: (ActivityAndValues data, _) => data.output,
+            yValueMapper: (ActivityAndValues data, _) => data.percentCompleted,
             color: barColor,
           ),
         ],
@@ -78,13 +80,7 @@ class HorizontalColumnChart extends StatelessWidget {
     );
   }
 
-  List<SalesData> getChartData() {
-    return [
-      SalesData('2018', 35),
-      SalesData('2019', 28),
-      SalesData('2020', 34),
-    ];
-  }
+
 }
 
 class DataTableWidget extends StatelessWidget {

@@ -3,14 +3,21 @@ import 'package:activity_guide/shared/custom_widgets/custom_button.dart';
 import 'package:activity_guide/shared/custom_widgets/custom_hv_scrollbar.dart';
 import 'package:activity_guide/shared/custom_widgets/my_card.dart';
 import 'package:activity_guide/shared/custom_widgets/reuseable_dropdown.dart';
-import 'package:activity_guide/shared/theme/text_styles.dart';
 import 'package:activity_guide/shared/utils/colors.dart';
 import 'package:activity_guide/shared/utils/constants.dart';
-import 'package:activity_guide/sub_admin/data_table_page/data_table.dart';
+import 'package:activity_guide/shared/utils/output_metric_json.dart';
+import 'package:activity_guide/users/dashboard_page/monthly_j2d.dart';
 import 'package:activity_guide/users/dashboard_page/piechart.dart';
+import 'package:activity_guide/users/home_page/cubit/user_home_cubit.dart';
+import 'package:activity_guide/users/home_page/cubit/user_home_state.dart';
 import 'package:flutter/material.dart';
-
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../shared/utils/my_barchart.dart';
+import 'package:intl/intl.dart';
+
+import 'dashboard_helper.dart';
+import 'dashboard_output_metric.dart';
 
 class CustomDashboardPage extends StatefulWidget {
   const CustomDashboardPage({super.key});
@@ -35,221 +42,215 @@ It also discusses error handling and security best practices.''',
     '''This item describes the data visualization techniques applied using charts and graphs for analytics.
 It includes examples using bar charts, pie charts, and line graphs.''',
   ];
+  List<MonthlyJ2D> allMonthlyData = [];
+  List<DashboardOutputMetric> allOutputMetric = [];
+  List<String> listOfAvaliableDepts = [];
+  List<MonthlyJ2D> filteredMonthlyData = [];
+  List<String> listOfUnits = [];
+  List<ActivityAndValues> top3Activities = [];
+  List<ActivityAndValues> bottom3Activities = [];
+  String? selectedDept, selectedUnit;
+  int? totalSelectedDateRangeActivity = 0;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: CustomHVScrollBar(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            _title(),
-            Row(
-              spacing: 4,
-              children: [
-                _filters(context: context, onPressed: () {}),
-                Column(
-                  children: [
-                    Card(elevation: 4,
-                      color: Colors.white,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          _widget(
-                              title: 'Total Activities',
-                              value: '12',
-                              titleBackground: Colors.lightBlue),
-                          _widget(
-                              title: 'Active Activities',
-                              value: '4',
-                              titleBackground: active),
-                          _widget(
-                              title: 'Inactive Activities',
-                              value: '8',
-                              titleBackground: Colors.red),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 12,
-                    ),
-                    MyCard(
-                      child: Row(
-                        children: [
-                          HorizontalColumnChart(
-                            barColor: Colors.teal,
-                            title: 'Top 3 Activities',
-                          ),
-                          HorizontalColumnChart(
-                            barColor: Colors.orange,
-                            title: 'Bottom 3 Activities',
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                MyCard(
-                  child: Column(mainAxisSize: MainAxisSize.min,
+    return BlocListener<UserHomeCubit,UserHomeState>(
+      listener: (BuildContext context, UserHomeState state) {
+        if (state is UserHomeLoading) {
+          EasyLoading.show(maskType: EasyLoadingMaskType.black);
+        } else if (state is UserHomeSuccess) {
+          EasyLoading.showSuccess('Success');
+          allMonthlyData = state.data[0];
+          allOutputMetric = state.data[1];
+         listOfAvaliableDepts = allOutputMetric.map((e)=>e.dept).toSet().toList();
+        // totalSelectedDateRangeActivity
+          refresh();
+        } else if (state is UserHomeFailure) {
+          EasyLoading.showError(state.message!);
+        }
+      },
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: CustomHVScrollBar(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              _title(),
+              Row(
+                spacing: 4,
+                children: [
+                  _filters(context: context, onPressed: () {
+                    List<String> rangeParts = dateRangeController.text.split('-');
+                    DateTime startDate = DateFormat('d/M/yyyy').parse(rangeParts[0]);
+                    DateTime endDate = DateFormat('d/M/yyyy').parse(rangeParts[1]);
+
+                    filteredMonthlyData = allMonthlyData.where((e){
+                      return e.dept == selectedDept && e.unit == selectedUnit && e.createdAt.isAfter(startDate.subtract(Duration(days: 1))) &&
+                          e.createdAt.isBefore(endDate.add(Duration(days: 1)));
+                    }).toList();
+                    print(allOutputMetric[0].toString());
+                   // final List<OutputActivity> result = filterOutputsByMonthRange(allOutputMetric, rangeParts);
+
+                    //totalSelectedDateRangeActivity = allOutputMetric
+
+
+                    // Step 1: Sort the data
+
+                    List<dynamic> sortedData = List.from(filteredMonthlyData)
+                      ..sort((a, b) => b.percentCompleted.compareTo(a.percentCompleted)); // Descending
+
+                    // Step 2: Take top and bottom 3
+                    top3Activities = sortedData.take(3).map((e) {
+                      return ActivityAndValues(
+                        output: e.output,
+                        percentCompleted: e.percentCompleted, // or e.value if applicable
+                      );
+                    }).toList();
+
+                    bottom3Activities = sortedData.reversed.take(3).map((e) {
+                      return ActivityAndValues(
+                        output: e.output,
+                        percentCompleted: e.percentCompleted,
+                      );
+                    }).toList();
+
+
+                    refresh();
+
+                  }),
+                  Column(
                     children: [
-                      SizedBox(
-                        child: DoughnutChart(),
-                        height: 200,
-                      ),
-                      SizedBox(
-                        child: QualitativeSpeedometer(),
-                        width: 300,
-                      height: 300,
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
-            Row(
-              spacing: 4,
-              children: [
-                SizedBox(
-                  width: 500,
-                  child: MyCard(
-                    child: Column(
-                      children: [
-                        CustomDropdown(
-                            labelText: '',
-                            selectedItem: 'All Activities',
-                            items: [
-                              'All Activities',
-                              'Active Activities',
-                              'Inactive Activities'
-                            ],
-                            onChanged: (v) {}),
-                        DataTableWidget(
-                          detailsList: myData,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Row(
-                  spacing: 12,
-                  children: [
-                    SizedBox(width: 400,
-                      child: MyCard(
-                        child: Column(
+                      Card(elevation: 4,
+                        color: Colors.white,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            CustomDropdown(
-                                labelText: '',
-                                selectedItem: 'All Activities',
-                                items: [
-                                  'All Activities',
-                                  'Active Activities',
-                                  'Inactive Activities'
-                                ],
-                                onChanged: (v) {}),
-                            ColumnChart(
+                            _widget(
+                                title: 'Total Activities',
+                                value: totalSelectedDateRangeActivity.toString(),
+                                titleBackground: Colors.lightBlue),
+                            _widget(
+                                title: 'Active Activities',
+                                value: filteredMonthlyData.length.toString(),
+                                titleBackground: active),
+                            _widget(
+                                title: 'Inactive Activities',
+                                value: '${totalSelectedDateRangeActivity!-filteredMonthlyData.length}',
+                                titleBackground: Colors.red),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 12,
+                      ),
+                      MyCard(
+                        child: Row(
+                          children: [
+                            HorizontalColumnChart(
                               barColor: Colors.teal,
-                              title: 'Target vs Achieved',
+                              title: 'Top 3 Activities', data: top3Activities,
+                            ),
+                            HorizontalColumnChart(
+                              barColor: Colors.orange,
+                              title: 'Bottom 3 Activities',data: bottom3Activities,
                             ),
                           ],
                         ),
                       ),
+                    ],
+                  ),
+                  MyCard(
+                    child: Column(mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SizedBox(
+                          child: DoughnutChart(),
+                          height: 200,
+                        ),
+                        SizedBox(
+                          child: QualitativeSpeedometer(),
+                          width: 300,
+                        height: 300,
+                        ),
+                      ],
                     ),
-                    PieChartWithPercentages(),
-                  ],
-                )
-              ],
-            ),
-            const SizedBox(
-              height: 50,
-            )
-          ],
+                  )
+                ],
+              ),
+              Row(
+                spacing: 4,
+                children: [
+                  SizedBox(
+                    width: 500,
+                    child: MyCard(
+                      child: Column(
+                        children: [
+                          CustomDropdown(
+                              labelText: '',
+                              selectedItem: 'All Activities',
+                              items: [
+                                'All Activities',
+                                'Active Activities',
+                                'Inactive Activities'
+                              ],
+                              onChanged: (v) {}),
+                          DataTableWidget(
+                            detailsList: myData,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Row(
+                    spacing: 12,
+                    children: [
+                      SizedBox(width: 400,
+                        child: MyCard(
+                          child: Column(
+                            children: [
+                              CustomDropdown(
+                                  labelText: '',
+                                  selectedItem: 'All Activities',
+                                  items: [
+                                    'All Activities',
+                                    'Active Activities',
+                                    'Inactive Activities'
+                                  ],
+                                  onChanged: (v) {}),
+                              ColumnChart(
+                                barColor: Colors.teal,
+                                title: 'Target vs Achieved',
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      PieChartWithPercentages(),
+                    ],
+                  )
+                ],
+              ),
+              const SizedBox(
+                height: 50,
+              )
+            ],
+          ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        backgroundColor: active,
-        child: const Icon(
-          Icons.update,size: 24,
-          color: Colors.white,
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            context
+                .read<UserHomeCubit>()
+                .downloadDashboardData(templateType: 'Monthly');
+          },
+          backgroundColor: active,
+          child: const Icon(
+            Icons.update,size: 24,
+            color: Colors.white,
+          ),
         ),
       ),
     );
   }
 
-  Widget _body() {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          _title(),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Expanded(child: _filters(context: context, onPressed: () {})),
-              Expanded(
-                  flex: 5,
-                  child: Row(
-                    spacing: 8,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Column(
-                        children: [
-                          Row(
-                            children: [
-                              Card(
-                                color: Colors.white,
-                                child: Row(
-                                  children: [
-                                    _widget(
-                                        title: 'Total Activities',
-                                        value: '12',
-                                        titleBackground: Colors.lightBlue),
-                                    _widget(
-                                        title: 'Active Activities',
-                                        value: '4',
-                                        titleBackground: active),
-                                    _widget(
-                                        title: 'Inactive Activities',
-                                        value: '8',
-                                        titleBackground: Colors.red),
-                                  ],
-                                  mainAxisSize: MainAxisSize.min,
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 12,
-                          ),
-                          Row(
-                            children: [
-                              HorizontalColumnChart(
-                                barColor: Colors.teal,
-                                title: 'Top 3 Activities',
-                              ),
-                              HorizontalColumnChart(
-                                barColor: Colors.orange,
-                                title: 'Bottom 3 Activities',
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          DoughnutChart(),
-                          QualitativeSpeedometer(),
-                        ],
-                      )
-                    ],
-                  ))
-            ],
-          ),
-        ],
-      ),
-    );
-  }
 
   Widget _title() {
     return Padding(
@@ -289,9 +290,8 @@ It includes examples using bar charts, pie charts, and line graphs.''',
     );
   }
 
-  Widget _filters(
-      {required BuildContext context, required VoidCallback onPressed}) {
-    String? selectedDept, selectedUnit;
+  Widget _filters({required BuildContext context, required VoidCallback onPressed}) {
+
     return SizedBox(
       width: 300,
       child: Padding(
@@ -319,16 +319,24 @@ It includes examples using bar charts, pie charts, and line graphs.''',
                 child: CustomDropdown(
                     labelText: 'Select Dept',
                     selectedItem: selectedDept,
-                    items: const ['CPSCD', 'LEGAL'],
-                    onChanged: (v) {}),
+                    items: listOfAvaliableDepts,
+                    onChanged: (v) {
+                      selectedDept = v;
+                      listOfUnits = allOutputMetric.map((e)=>e.unit).toSet().toList();
+                      setState(() {
+
+                      });
+                    }),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: CustomDropdown(
                     labelText: 'Select Unit',
                     selectedItem: selectedUnit,
-                    items: const ['CPSCD', 'LEGAL'],
-                    onChanged: (v) {}),
+                    items: listOfUnits,
+                    onChanged: (v) {
+                      selectedUnit = v;
+                    }),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -420,35 +428,6 @@ It includes examples using bar charts, pie charts, and line graphs.''',
     );
   }
 
-  filterDialog(
-      {required BuildContext context, required VoidCallback onPressed}) {
-    showGeneralDialog(
-      context: context,
-      barrierDismissible: true,
-      barrierLabel: 'Filter Dialog',
-      transitionDuration: const Duration(milliseconds: 300),
-      pageBuilder: (context, anim1, anim2) {
-        return SafeArea(
-          child: Align(
-            alignment: Alignment.center, // Positions dialog at the bottom
-            child: Material(
-              color: Colors.transparent,
-              child: _filters(context: context, onPressed: onPressed),
-            ),
-          ),
-        );
-      },
-      transitionBuilder: (context, anim1, anim2, child) {
-        return SlideTransition(
-          position: Tween(
-            begin: const Offset(0, 1),
-            end: Offset.zero,
-          ).animate(anim1),
-          child: child,
-        );
-      },
-    );
-  }
 
   void doubleDateDialog(TextEditingController controller) {
     String multipleDateString = '';
@@ -460,12 +439,34 @@ It includes examples using bar charts, pie charts, and line graphs.''',
         .then((onValue) {
       if (onValue != null) {
         String startDate =
-            '${onValue.start.month}/${onValue.start.day}/${onValue.start.year}';
+            '${onValue.start.day}/${onValue.start.month}/${onValue.start.year}';
         String endDate =
-            '${onValue.end.month}/${onValue.end.day}/${onValue.end.year}';
+            '${onValue.end.day}/${onValue.end.month}/${onValue.end.year}';
         multipleDateString = startDate + '-' + endDate;
-        controller.text = multipleDateString;
+
+        setState(() {
+          controller.text = multipleDateString;
+        });
       }
     });
   }
+
+  void refresh() {
+    setState(() {
+
+    });
+  }
+}
+
+class ActivityAndValues {
+  final String output;
+  final int percentCompleted;
+
+  ActivityAndValues({
+    required this.output,
+    required this.percentCompleted,
+  });
+
+  @override
+  String toString() => 'ActivityAndValues(output: $output, value: $percentCompleted)';
 }
