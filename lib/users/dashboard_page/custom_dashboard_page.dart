@@ -5,7 +5,6 @@ import 'package:activity_guide/shared/custom_widgets/my_card.dart';
 import 'package:activity_guide/shared/custom_widgets/reuseable_dropdown.dart';
 import 'package:activity_guide/shared/utils/colors.dart';
 import 'package:activity_guide/shared/utils/constants.dart';
-import 'package:activity_guide/shared/utils/output_metric_json.dart';
 import 'package:activity_guide/users/dashboard_page/monthly_j2d.dart';
 import 'package:activity_guide/users/dashboard_page/piechart.dart';
 import 'package:activity_guide/users/home_page/cubit/user_home_cubit.dart';
@@ -15,8 +14,6 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../shared/utils/my_barchart.dart';
 import 'package:intl/intl.dart';
-
-import 'dashboard_helper.dart';
 import 'dashboard_output_metric.dart';
 
 class CustomDashboardPage extends StatefulWidget {
