@@ -104,5 +104,18 @@ return html.window.navigator.onLine ?? false;
  //  return true;
 }
 
+double? extractFirstNumberAsDouble(String input) {
+  RegExp regExp = RegExp(r'\d+');
+  String? match = regExp.firstMatch(input)?.group(0);
+  return match != null ? double.parse(match) : null;
+}
+
+String? extractLetters(String input){
+  RegExp regExp = RegExp(r'[A-Za-z]+');
+  Iterable<Match> matches = regExp.allMatches(input);
+
+  String textOnly = matches.map((m) => m.group(0)!).join();
+  return textOnly;
+}
 
 

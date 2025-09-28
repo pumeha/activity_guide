@@ -26,20 +26,7 @@ class CustomDashboardPage extends StatefulWidget {
 
 class _CustomDashboardPageState extends State<CustomDashboardPage> {
   TextEditingController dateRangeController = TextEditingController();
-  final List<String> myData = [
-    '''This item includes a comprehensive overview of the user interface components used in the dashboard.
-It covers layout, responsiveness, and accessibility.''',
-    '''This entry outlines the backend integration process with RESTful APIs and authentication flow.
-It also discusses error handling and security best practices.''',
-    '''This item describes the data visualization techniques applied using charts and graphs for analytics.
-It includes examples using bar charts, pie charts, and line graphs.''',
-    '''This item includes a comprehensive overview of the user interface components used in the dashboard.
-It covers layout, responsiveness, and accessibility.''',
-    '''This entry outlines the backend integration process with RESTful APIs and authentication flow.
-It also discusses error handling and security best practices.''',
-    '''This item describes the data visualization techniques applied using charts and graphs for analytics.
-It includes examples using bar charts, pie charts, and line graphs.''',
-  ];
+  List<String> myData = [];
   List<MonthlyJ2D> allMonthlyData = [];
   List<DashboardOutputMetric> allOutputMetric = [];
   List<String> listOfAvaliableDepts = [];
@@ -48,8 +35,10 @@ It includes examples using bar charts, pie charts, and line graphs.''',
   List<String> listOfUnits = [];
   List<ActivityAndValues> top3Activities = [];
   List<ActivityAndValues> bottom3Activities = [];
-  String? selectedDept, selectedUnit;
+  String? selectedDept, selectedUnit,selectedActivity,selectedActivityTargetAndAchieved;
+  double selectedActivityTarget = 0,selectedActivityAchieved = 0;
   int? totalSelectedDateRangeActivity = 0;
+  String selectedActivityTargetKey = '';
 
   @override
   Widget build(BuildContext context) {
@@ -195,13 +184,25 @@ It includes examples using bar charts, pie charts, and line graphs.''',
                         children: [
                           CustomDropdown(
                               labelText: '',
-                              selectedItem: 'All Activities',
-                              items: [
+                              selectedItem: selectedActivity,
+                              items: const [
                                 'All Activities',
                                 'Active Activities',
                                 'Inactive Activities'
                               ],
-                              onChanged: (v) {}),
+                              onChanged: (v) {
+                                selectedActivity = v;
+                                List<String> all = filteredOutputMetric.map((e)=>e.output).toList();
+                                List<String> activeActivities = filteredMonthlyData.map((e)=>e.output).toList();
+                                if(selectedActivity == 'All Activities'){
+                                  myData = all;
+                                }else if(selectedActivity == 'Active Activities'){
+                                  myData = activeActivities;
+                                }else if(selectedActivity == 'Inactive Activities'){
+                                  myData = all.where((e) => !activeActivities.contains(e)).toList();
+                                }
+                             refresh();
+                              }),
                           DataTableWidget(
                             detailsList: myData,
                           ),
@@ -218,16 +219,20 @@ It includes examples using bar charts, pie charts, and line graphs.''',
                             children: [
                               CustomDropdown(
                                   labelText: '',
-                                  selectedItem: 'All Activities',
-                                  items: [
-                                    'All Activities',
-                                    'Active Activities',
-                                    'Inactive Activities'
-                                  ],
-                                  onChanged: (v) {}),
+                                  selectedItem: selectedActivityTargetAndAchieved,
+                                  items: filteredMonthlyData.map((e)=>e.output).toList(),
+                                  onChanged: (v) {
+                                    selectedActivityTargetAndAchieved = v;
+                                  MonthlyJ2D d =  filteredMonthlyData.firstWhere((e)=>e.output==selectedActivityTargetAndAchieved,
+                                    );
+                                    selectedActivityTargetKey = extractLetters(d.actualTargetMetrics)!;
+                                  selectedActivityTarget = extractFirstNumberAsDouble(d.actualTargetMetrics) ?? 0;
+                                    selectedActivityAchieved = extractFirstNumberAsDouble(d.actualAchievedMetrics) ?? 0;
+                                    refresh();
+                                  }),
                               ColumnChart(
-                                barColor: Colors.teal,
-                                title: 'Target vs Achieved',
+                                barColor: Colors.teal,target: selectedActivityTarget,achieved: selectedActivityAchieved,
+                                title: selectedActivityTargetKey!.isNotEmpty ?'Target vs Achieved[${selectedActivityTargetKey ?? ''}]':'Target vs Achieved',
                               ),
                             ],
                           ),

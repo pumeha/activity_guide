@@ -67,6 +67,8 @@ class HorizontalColumnChart extends StatelessWidget {
         primaryYAxis: NumericAxis(
           majorGridLines:
               const MajorGridLines(width: 0), // Remove horizontal grid lines
+          minimum: 0,
+          maximum: 100,
         ),
         series: <BarSeries<ActivityAndValues, String>>[
           BarSeries<ActivityAndValues, String>(
@@ -114,7 +116,8 @@ class DataTableWidget extends StatelessWidget {
 class ColumnChart extends StatelessWidget {
   Color barColor;
   String title;
-  ColumnChart({super.key, required this.barColor, required this.title});
+  double target,achieved;
+  ColumnChart({super.key, required this.barColor, required this.title,required this.target,required this.achieved});
   @override
   Widget build(BuildContext context) {
     return SfCartesianChart(
@@ -141,8 +144,8 @@ class ColumnChart extends StatelessWidget {
 
   List<SalesData> getChartData() {
     return [
-      SalesData('Target', 35),
-      SalesData('Achieved', 28),
+      SalesData('Target', target),
+      SalesData('Achieved', achieved),
     ];
   }
 }
