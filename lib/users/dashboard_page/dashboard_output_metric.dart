@@ -1,78 +1,69 @@
-class MonthlyValue {
-  final String month;
-  final String value;
-
-  MonthlyValue({required this.month, required this.value});
-
-  factory MonthlyValue.fromJson(Map<String, dynamic> json) {
-    return MonthlyValue(
-      month: json['month'] ?? '',
-      value: json['value'] ?? '',
-    );
-  }
-
-  Map<String, dynamic> toJson() => {
-    'month': month,
-    'value': value,
-  };
-}
-
 class DashboardOutputMetric {
-  final int id;
   final String dept;
   final String unit;
   final String output;
-  final List<MonthlyValue> monthlyValues;
+  final List<String> months;
+  final List<String> values;
 
   DashboardOutputMetric({
-    required this.id,
     required this.dept,
     required this.unit,
     required this.output,
-    required this.monthlyValues,
+    required this.months,
+    required this.values,
   });
 
   factory DashboardOutputMetric.fromJson(Map<String, dynamic> json) {
-    // List of months in order
-    final monthKeys = [
-      'january',
-      'february',
-      'march',
-      'april',
-      'may',
-      'june',
-      'july',
-      'august',
-      'september',
-      'october',
-      'november',
-      'december'
-    ];
-
-    final monthlyValues = monthKeys.map((monthKey) {
-      return MonthlyValue(
-        month: monthKey[0].toUpperCase() + monthKey.substring(1),
-        value: json[monthKey]?.toString() ?? '',
-      );
-    }).toList();
-
     return DashboardOutputMetric(
-      id: json['id'] ?? 0,
       dept: json['dept'] ?? '',
       unit: json['unit'] ?? '',
       output: json['output'] ?? '',
-      monthlyValues: monthlyValues,
+      months: List<String>.from(json['months'] ?? []),
+      values: List<String>.from(json['values'] ?? []),
     );
   }
 
   Map<String, dynamic> toJson() {
-    final data = {
-      'id': id,
+    return {
       'dept': dept,
       'unit': unit,
       'output': output,
-      'monthlyValues': monthlyValues.map((e) => e.toJson()).toList(),
+      'months': months,
+      'values': values,
     };
-    return data;
   }
+}
+
+List<DashboardOutputMetric> processRawData(List<Map<String, dynamic>> rawData) {
+  const monthKeys = [
+    "january", "february", "march", "april", "may", "june",
+    "july", "august", "september", "october", "november", "december"
+  ];
+
+  List<DashboardOutputMetric> results = [];
+
+  for (var item in rawData) {
+    List<String> validMonths = [];
+    List<String> validValues = [];
+
+    for (var month in monthKeys) {
+      final value = item[month];
+      if (value != null && value.toString().trim().isNotEmpty && value != "0") {
+        validMonths.add(month);
+        validValues.add(value.toString());
+      }
+    }
+
+    if (validMonths.isNotEmpty) {
+      results.add(DashboardOutputMetric(
+        dept: item['dept'],
+        unit: item['unit'],
+        output: item['output'],
+        months: validMonths,
+        values: validValues,
+      ));
+    }
+  }
+
+  return results;
 }

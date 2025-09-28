@@ -104,7 +104,10 @@ class UserHomeCubit extends Cubit<UserHomeState> {
 
 
     final List<MonthlyJ2D> _monthlyRawdata = _monthly.map((e)=> MonthlyJ2D.fromJson(e)).toList();
-    final List<DashboardOutputMetric> _outputMetric = _output.map((e)=> DashboardOutputMetric.fromJson(e)).toList();
+      final rawList = _output.map((e){
+        return Map<String, dynamic>.from(e);
+      }).toList();
+    final List<DashboardOutputMetric> _outputMetric = processRawData(rawList);
       return emit(UserHomeSuccess(message: 'Data downloaded', data: [_monthlyRawdata,_outputMetric]));
     } else {
       return emit(UserHomeFailure(message: data.message));

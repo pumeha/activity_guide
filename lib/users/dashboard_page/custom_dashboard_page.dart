@@ -5,6 +5,7 @@ import 'package:activity_guide/shared/custom_widgets/my_card.dart';
 import 'package:activity_guide/shared/custom_widgets/reuseable_dropdown.dart';
 import 'package:activity_guide/shared/utils/colors.dart';
 import 'package:activity_guide/shared/utils/constants.dart';
+import 'package:activity_guide/users/dashboard_page/dashboard_helper.dart';
 import 'package:activity_guide/users/dashboard_page/monthly_j2d.dart';
 import 'package:activity_guide/users/dashboard_page/piechart.dart';
 import 'package:activity_guide/users/home_page/cubit/user_home_cubit.dart';
@@ -43,6 +44,7 @@ It includes examples using bar charts, pie charts, and line graphs.''',
   List<DashboardOutputMetric> allOutputMetric = [];
   List<String> listOfAvaliableDepts = [];
   List<MonthlyJ2D> filteredMonthlyData = [];
+  List<DashboardOutputMetric> filteredOutputMetric = [];
   List<String> listOfUnits = [];
   List<ActivityAndValues> top3Activities = [];
   List<ActivityAndValues> bottom3Activities = [];
@@ -59,6 +61,8 @@ It includes examples using bar charts, pie charts, and line graphs.''',
           EasyLoading.showSuccess('Success');
           allMonthlyData = state.data[0];
           allOutputMetric = state.data[1];
+          allOutputMetric.map((e)=>print(e.dept+'-'+e.unit+'-'+e.output+'-'+e.months.toString())).toList();
+
          listOfAvaliableDepts = allOutputMetric.map((e)=>e.dept).toSet().toList();
         // totalSelectedDateRangeActivity
           refresh();
@@ -85,10 +89,18 @@ It includes examples using bar charts, pie charts, and line graphs.''',
                       return e.dept == selectedDept && e.unit == selectedUnit && e.createdAt.isAfter(startDate.subtract(Duration(days: 1))) &&
                           e.createdAt.isBefore(endDate.add(Duration(days: 1)));
                     }).toList();
-                    print(allOutputMetric[0].toString());
-                   // final List<OutputActivity> result = filterOutputsByMonthRange(allOutputMetric, rangeParts);
+                    List<String> selectedMonths = getMonthsInRange(dateRangeController.text);
+                    filteredOutputMetric = allOutputMetric.where((e){
+                      return e.dept == selectedDept && e.unit == selectedUnit && e.months.any((month) => selectedMonths.contains(month));
+                    }).toList();
 
-                    //totalSelectedDateRangeActivity = allOutputMetric
+                    totalSelectedDateRangeActivity = filteredOutputMetric.length;
+                    List data = allOutputMetric.map((e)=>e.values).toList();
+
+                    data.map((e)=>print(e)).toList();
+                    data = allOutputMetric.map((e)=>e.months).toList();
+
+                    data.map((e)=>print(e)).toList();
 
 
                     // Step 1: Sort the data
@@ -132,7 +144,7 @@ It includes examples using bar charts, pie charts, and line graphs.''',
                                 titleBackground: active),
                             _widget(
                                 title: 'Inactive Activities',
-                                value: '${totalSelectedDateRangeActivity!-filteredMonthlyData.length}',
+                                value:  totalSelectedDateRangeActivity == 0?'0':'${totalSelectedDateRangeActivity!-filteredMonthlyData.length}',
                                 titleBackground: Colors.red),
                           ],
                         ),
