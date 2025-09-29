@@ -91,7 +91,9 @@ class _CustomDashboardPageState extends State<CustomDashboardPage> {
 
                     data.map((e)=>print(e)).toList();
 
-
+                    myData.clear();
+                    selectedActivityTarget = 0;
+                    selectedActivityAchieved = 0;
                     // Step 1: Sort the data
 
                     List<dynamic> sortedData = List.from(filteredMonthlyData)
