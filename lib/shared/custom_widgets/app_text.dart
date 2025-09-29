@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 class AppText extends StatelessWidget {
   final String text;
   final Color? color;
+  final Color? backgroundColor;
   final double? fontSize;
   final bool bold;
   final TextAlign? textAlign;
@@ -15,7 +16,8 @@ class AppText extends StatelessWidget {
     this.color = Colors.black,
     this.fontSize,
     this.bold = false,
-    this.textAlign,this.softWrap,this.currency = false
+    this.textAlign,this.softWrap,this.currency = false,
+    this.backgroundColor = Colors.transparent
   }) : super(key: key);
 
   @override
@@ -29,7 +31,7 @@ class AppText extends StatelessWidget {
         color: color,) : GoogleFonts.outfit(//textStyle: Theme.of(context).textTheme.bodySmall,
         fontSize: fontSize,
         fontWeight: bold ? FontWeight.w700 : FontWeight.normal,
-        color: color,
+        color: color,backgroundColor: backgroundColor
       ),
     );
   }

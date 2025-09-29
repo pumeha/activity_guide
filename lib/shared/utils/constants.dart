@@ -118,4 +118,9 @@ String? extractLetters(String input){
   return textOnly;
 }
 
-
+double average({required double value}){
+  if(value == 0.0){
+    return value;
+  }
+  return value/100;
+}

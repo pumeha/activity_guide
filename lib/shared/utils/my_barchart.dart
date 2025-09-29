@@ -76,6 +76,16 @@ class HorizontalColumnChart extends StatelessWidget {
             xValueMapper: (ActivityAndValues data, _) => data.output,
             yValueMapper: (ActivityAndValues data, _) => data.percentCompleted,
             color: barColor,
+            dataLabelSettings: const DataLabelSettings(
+        isVisible: true,
+        labelAlignment: ChartDataLabelAlignment.middle, // or .top / .auto / .center
+        textStyle: TextStyle(
+          fontSize: 16,
+          color: Colors.black,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+
           ),
         ],
       ),
@@ -137,6 +147,15 @@ class ColumnChart extends StatelessWidget {
           xValueMapper: (SalesData data, _) => data.year,
           yValueMapper: (SalesData data, _) => data.sales,
           color: barColor,
+          dataLabelSettings: const DataLabelSettings(
+            isVisible: true,
+            labelAlignment: ChartDataLabelAlignment.middle, // or .top / .auto / .center
+            textStyle: TextStyle(
+              fontSize: 16,
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ),
       ],
     );
@@ -173,10 +192,12 @@ class DoughnutChart extends StatelessWidget {
 
   List<ChartData> getChartData() {
     return [
-      ChartData('Electronics', 35),
-      ChartData('Groceries', 28),
-      ChartData('Clothing', 34),
-      ChartData('Books', 12),
+      ChartData('N/A', 35),
+      ChartData('PROPOSAL', 0),
+      ChartData('PLANNING', 0),
+      ChartData('EXECUTING', 0),
+      ChartData('COMPLETE', 12),
+      ChartData('SUBMISSION', 0),
     ];
   }
 }
@@ -217,7 +238,9 @@ class _ChartData {
 
 class QualitativeSpeedometer extends StatelessWidget {
   // Example value: from 0 to 100 (you can adjust range)
-  final double value = 90;
+  final double value;
+
+  const QualitativeSpeedometer({super.key,required this.value});
 
   // Helper to convert numeric value to category text
   String getCategory(double val) {
