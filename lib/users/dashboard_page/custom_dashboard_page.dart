@@ -5,6 +5,7 @@ import 'package:activity_guide/shared/custom_widgets/my_card.dart';
 import 'package:activity_guide/shared/custom_widgets/reuseable_dropdown.dart';
 import 'package:activity_guide/shared/utils/colors.dart';
 import 'package:activity_guide/shared/utils/constants.dart';
+import 'package:activity_guide/users/dashboard_page/app_barchart.dart';
 import 'package:activity_guide/users/dashboard_page/dashboard_helper.dart';
 import 'package:activity_guide/users/dashboard_page/donut_pie.dart';
 import 'package:activity_guide/users/dashboard_page/monthly_j2d.dart';
@@ -82,235 +83,221 @@ class _CustomDashboardPageState extends State<CustomDashboardPage> {
       },
       child: Scaffold(
         backgroundColor: Colors.white,
-        body: CustomHVScrollBar(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              _title(),
-              Row(
-                spacing: 4,
-                children: [
-                  _filters(
-                      context: context,
-                      onPressed: () {
-                        List<String> rangeParts =
-                            dateRangeController.text.split('-');
-                        DateTime startDate =
-                            DateFormat('d/M/yyyy').parse(rangeParts[0]);
-                        DateTime endDate =
-                            DateFormat('d/M/yyyy').parse(rangeParts[1]);
+        body: Center(
+          child: CustomHVScrollBar(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                _title(),
+                Row(
+                  spacing: 4,
+                  children: [
+                    _filters(
+                        context: context,
+                        onPressed: () {
+                          List<String> rangeParts =
+                              dateRangeController.text.split('-');
+                          DateTime startDate =
+                              DateFormat('d/M/yyyy').parse(rangeParts[0]);
+                          DateTime endDate =
+                              DateFormat('d/M/yyyy').parse(rangeParts[1]);
 
-                        filteredMonthlyData = allMonthlyData.where((e) {
-                          return e.dept == selectedDept &&
-                              e.unit == selectedUnit &&
-                              e.createdAt.isAfter(
-                                  startDate.subtract(Duration(days: 1))) &&
-                              e.createdAt
-                                  .isBefore(endDate.add(Duration(days: 1)));
-                        }).toList();
+                          filteredMonthlyData = allMonthlyData.where((e) {
+                            return e.dept == selectedDept &&
+                                e.unit == selectedUnit &&
+                                e.createdAt.isAfter(
+                                    startDate.subtract(Duration(days: 1))) &&
+                                e.createdAt
+                                    .isBefore(endDate.add(Duration(days: 1)));
+                          }).toList();
 
-                        List<String> selectedMonths =
-                            getMonthsInRange(dateRangeController.text);
-                        filteredOutputMetric = allOutputMetric.where((e) {
-                          return e.dept == selectedDept &&
-                              e.unit == selectedUnit &&
-                              e.months.any(
-                                  (month) => selectedMonths.contains(month));
-                        }).toList();
+                          List<String> selectedMonths =
+                              getMonthsInRange(dateRangeController.text);
+                          filteredOutputMetric = allOutputMetric.where((e) {
+                            return e.dept == selectedDept &&
+                                e.unit == selectedUnit &&
+                                e.months.any(
+                                    (month) => selectedMonths.contains(month));
+                          }).toList();
 
-                        List<int> _listOfMilestone =
-                            filteredMonthlyData.map((e) {
-                          int value = 0;
-                          switch (e.milestone) {
-                            case 'N/A':
-                              value = 0;
-                              break;
-                            case 'PROPOSAL':
-                              value = 20;
-                              break;
-                            case 'PLANNING':
-                              value = 40;
-                              break;
-                            case 'EXECUTING':
-                              value = 60;
-                              break;
-                            case 'COMPLETE':
-                              value = 80;
-                              break;
-                            case 'SUBMISSION':
-                              value = 100;
-                              break;
-                          }
-                          return value;
-                        }).toList();
+                          List<int> _listOfMilestone =
+                              filteredMonthlyData.map((e) {
+                            int value = 0;
+                            switch (e.milestone) {
+                              case 'N/A':
+                                value = 0;
+                                break;
+                              case 'PROPOSAL':
+                                value = 20;
+                                break;
+                              case 'PLANNING':
+                                value = 40;
+                                break;
+                              case 'EXECUTING':
+                                value = 60;
+                                break;
+                              case 'COMPLETE':
+                                value = 80;
+                                break;
+                              case 'SUBMISSION':
+                                value = 100;
+                                break;
+                            }
+                            return value;
+                          }).toList();
 
-                        List<int> _listOfMilestoneNA =
-                            filteredMonthlyData.map((e) {
-                          if (e.milestone == 'N/A') {
+                          List<int> _listOfMilestoneNA =
+                              filteredMonthlyData.map((e) {
+                            if (e.milestone == 'N/A') {
+                              return 0;
+                            }
                             return 0;
-                          }
-                          return 0;
-                        }).toList();
-                        List<int> _listOfMilestoneSUBMISSION =
-                            filteredMonthlyData.map((e) {
-                          if (e.milestone == 'SUBMISSION') {
-                            return 100;
-                          }
-                          return 0;
-                        }).toList();
-                        List<int> _listOfMilestoneCOMPLETE =
-                            filteredMonthlyData.map((e) {
-                          if (e.milestone == 'COMPLETE') {
-                            return 80;
-                          }
-                          return 0;
-                        }).toList();
-                        List<int> _listOfMilestonePLANNING =
-                            filteredMonthlyData.map((e) {
-                          if (e.milestone == 'PLANNING') {
-                            return 40;
-                          }
-                          return 0;
-                        }).toList();
-                        List<int> _listOfMilestonePROPOSAL =
-                            filteredMonthlyData.map((e) {
-                          if (e.milestone == 'PROPOSAL') {
-                            return 20;
-                          }
-                          return 0;
-                        }).toList();
-                        List<int> _listOfMilestoneEXECUTING =
-                            filteredMonthlyData.map((e) {
-                          if (e.milestone == 'EXECUTING') {
-                            return 60;
-                          }
-                          return 0;
-                        }).toList();
+                          }).toList();
+                          List<int> _listOfMilestoneSUBMISSION =
+                              filteredMonthlyData.map((e) {
+                            if (e.milestone == 'SUBMISSION') {
+                              return 100;
+                            }
+                            return 0;
+                          }).toList();
+                          List<int> _listOfMilestoneCOMPLETE =
+                              filteredMonthlyData.map((e) {
+                            if (e.milestone == 'COMPLETE') {
+                              return 80;
+                            }
+                            return 0;
+                          }).toList();
+                          List<int> _listOfMilestonePLANNING =
+                              filteredMonthlyData.map((e) {
+                            if (e.milestone == 'PLANNING') {
+                              return 40;
+                            }
+                            return 0;
+                          }).toList();
+                          List<int> _listOfMilestonePROPOSAL =
+                              filteredMonthlyData.map((e) {
+                            if (e.milestone == 'PROPOSAL') {
+                              return 20;
+                            }
+                            return 0;
+                          }).toList();
+                          List<int> _listOfMilestoneEXECUTING =
+                              filteredMonthlyData.map((e) {
+                            if (e.milestone == 'EXECUTING') {
+                              return 60;
+                            }
+                            return 0;
+                          }).toList();
 
-                        //aveSubmission
-                        aveSubmission = _listOfMilestoneSUBMISSION.isNotEmpty
-                            ? _listOfMilestoneSUBMISSION.fold(
-                                    0, (prev, element) => prev + element) /
-                                _listOfMilestoneSUBMISSION.length
-                            : 0.0;
-                        //aveExecuting
-                        aveExecuting = _listOfMilestoneEXECUTING.isNotEmpty
-                            ? _listOfMilestoneEXECUTING.fold(
-                            0, (prev, element) => prev + element) /
-                            _listOfMilestoneEXECUTING.length
-                            : 0.0;
-                        //aveComplete
-                        aveComplete = _listOfMilestoneCOMPLETE.isNotEmpty
-                            ? _listOfMilestoneCOMPLETE.fold(
-                            0, (prev, element) => prev + element) /
-                            _listOfMilestoneCOMPLETE.length
-                            : 0.0;
-                        //aveProposal
-                        aveProposal = _listOfMilestonePROPOSAL.isNotEmpty
-                            ? _listOfMilestonePROPOSAL.fold(
-                            0, (prev, element) => prev + element) /
-                            _listOfMilestonePROPOSAL.length
-                            : 0.0;
-                        //avePlanning
-                        avePlanning = _listOfMilestonePLANNING.isNotEmpty
-                            ? _listOfMilestonePLANNING.fold(
-                            0, (prev, element) => prev + element) /
-                            _listOfMilestonePLANNING.length
-                            : 0.0;
+                          //aveSubmission
+                          aveSubmission = _listOfMilestoneSUBMISSION.isNotEmpty
+                              ? _listOfMilestoneSUBMISSION.fold(
+                                      0, (prev, element) => prev + element) /
+                                  _listOfMilestoneSUBMISSION.length
+                              : 0.0;
+                          //aveExecuting
+                          aveExecuting = _listOfMilestoneEXECUTING.isNotEmpty
+                              ? _listOfMilestoneEXECUTING.fold(
+                                      0, (prev, element) => prev + element) /
+                                  _listOfMilestoneEXECUTING.length
+                              : 0.0;
+                          //aveComplete
+                          aveComplete = _listOfMilestoneCOMPLETE.isNotEmpty
+                              ? _listOfMilestoneCOMPLETE.fold(
+                                      0, (prev, element) => prev + element) /
+                                  _listOfMilestoneCOMPLETE.length
+                              : 0.0;
+                          //aveProposal
+                          aveProposal = _listOfMilestonePROPOSAL.isNotEmpty
+                              ? _listOfMilestonePROPOSAL.fold(
+                                      0, (prev, element) => prev + element) /
+                                  _listOfMilestonePROPOSAL.length
+                              : 0.0;
+                          //avePlanning
+                          avePlanning = _listOfMilestonePLANNING.isNotEmpty
+                              ? _listOfMilestonePLANNING.fold(
+                                      0, (prev, element) => prev + element) /
+                                  _listOfMilestonePLANNING.length
+                              : 0.0;
 
-                        allZero = aveSubmission == 0 &&
-                            aveComplete == 0 &&
-                            aveExecuting == 0 &&
-                            avePlanning == 0 &&
-                            aveProposal == 0;
+                          allZero = aveSubmission == 0 &&
+                              aveComplete == 0 &&
+                              aveExecuting == 0 &&
+                              avePlanning == 0 &&
+                              aveProposal == 0;
 
-                        deptAndUnitMilestoneWeight = _listOfMilestone.isNotEmpty
-                            ? _listOfMilestone.fold(
-                                    0, (prev, element) => prev + element) /
-                                _listOfMilestone.length
-                            : 0;
+                          deptAndUnitMilestoneWeight = _listOfMilestone.isNotEmpty
+                              ? _listOfMilestone.fold(
+                                      0, (prev, element) => prev + element) /
+                                  _listOfMilestone.length
+                              : 0;
 
-                        totalSelectedDateRangeActivity =
-                            filteredOutputMetric.length;
+                          totalSelectedDateRangeActivity =
+                              filteredOutputMetric.length;
 
-                        myData.clear();
-                        selectedActivityTarget = 0;
-                        selectedActivityAchieved = 0;
-                        // Step 1: Sort the data
+                          myData.clear();
+                          selectedActivityTarget = 0;
+                          selectedActivityAchieved = 0;
+                          // Step 1: Sort the data
 
-                        List<dynamic> sortedData = List.from(
-                            filteredMonthlyData)
-                          ..sort((a, b) =>
-                              b.percentCompleted.compareTo(a.percentCompleted));
+                          List<dynamic> sortedData = List.from(
+                              filteredMonthlyData)
+                            ..sort((a, b) =>
+                                b.percentCompleted.compareTo(a.percentCompleted));
 
-                        // Step 2: Take top and bottom 3
-                        top3Activities = sortedData.take(3).map((e) {
-                          return ActivityAndValues(
-                            output: e.output,
-                            percentCompleted:
-                                e.percentCompleted, // or e.value if applicable
-                          );
-                        }).toList();
+                          // Step 2: Take top and bottom 3
+                          top3Activities = sortedData.take(3).map((e) {
+                            return ActivityAndValues(
+                              output: e.output,
+                              percentCompleted:
+                                  e.percentCompleted, // or e.value if applicable
+                            );
+                          }).toList();
 
-                        bottom3Activities =
-                            sortedData.reversed.take(3).map((e) {
-                          return ActivityAndValues(
-                            output: e.output,
-                            percentCompleted: e.percentCompleted,
-                          );
-                        }).toList();
+                          bottom3Activities =
+                              sortedData.reversed.take(3).map((e) {
+                            return ActivityAndValues(
+                              output: e.output,
+                              percentCompleted: e.percentCompleted,
+                            );
+                          }).toList();
 
-                        refresh();
-                      }),
-                  Column(
-                    children: [
-                      Card(
-                        elevation: 4,
-                        color: Colors.white,
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            _widget(
-                                title: 'Total Activities',
-                                value:
-                                    totalSelectedDateRangeActivity.toString(),
-                                titleBackground: Colors.lightBlue),
-                            _widget(
-                                title: 'Active Activities',
-                                value: filteredMonthlyData.length.toString(),
-                                titleBackground: active),
-                            _widget(
-                                title: 'Inactive Activities',
-                                value: totalSelectedDateRangeActivity == 0
-                                    ? '0'
-                                    : '${totalSelectedDateRangeActivity! - filteredMonthlyData.length}',
-                                titleBackground: Colors.red),
-                          ],
+                          refresh();
+                        }),
+                    Column(
+                      children: [
+                        Card(
+                          elevation: 4,
+                          color: Colors.white,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              _widget(
+                                  title: 'Total Activities',
+                                  value:
+                                      totalSelectedDateRangeActivity.toString(),
+                                  titleBackground: Colors.lightBlue),
+                              _widget(
+                                  title: 'Active Activities',
+                                  value: filteredMonthlyData.length.toString(),
+                                  titleBackground: active),
+                              _widget(
+                                  title: 'Inactive Activities',
+                                  value: totalSelectedDateRangeActivity == 0
+                                      ? '0'
+                                      : '${totalSelectedDateRangeActivity! - filteredMonthlyData.length}',
+                                  titleBackground: Colors.red),
+                            ],
+                          ),
                         ),
-                      ),
-                      const SizedBox(
-                        height: 12,
-                      ),
-                      MyCard(
-                        child: Row(
-                          children: [
-                            HorizontalColumnChart(
-                              barColor: Colors.teal,
-                              title: 'Top 3 Activities',
-                              data: top3Activities,
-                            ),
-                            HorizontalColumnChart(
-                              barColor: Colors.orange,
-                              title: 'Bottom 3 Activities',
-                              data: bottom3Activities,
-                            ),
-                          ],
+                        const SizedBox(
+                          height: 12,
                         ),
-                      ),
-                    ],
-                  ),
-                  MyCard(
-                    child: Column(
+                        AppBarchart(data: top3Activities, top: true,title: 'Top 3 Activities',),
+                        AppBarchart(data: bottom3Activities, top: false,title: 'Bottom 3 Activities',),
+                      ],
+                    ),
+                    Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Padding(
@@ -326,12 +313,12 @@ class _CustomDashboardPageState extends State<CustomDashboardPage> {
                         SizedBox(
                           child: InteractivePieChart(
                             dataMap: {
-                              'SUBMISSION': aveSubmission ,
+                              'SUBMISSION': aveSubmission,
                               'COMPLETE': aveComplete,
                               'EXECUTING': aveExecuting,
                               'PLANNING': avePlanning,
                               'PROPOSAL': aveProposal,
-                              'N/A': allZero ?100:0,
+                              'N/A': allZero ? 100 : 0,
                             },
                           ),
                           height: 250,
@@ -345,15 +332,56 @@ class _CustomDashboardPageState extends State<CustomDashboardPage> {
                         ),
                       ],
                     ),
-                  )
-                ],
-              ),
-              Row(
-                spacing: 4,
-                children: [
-                  SizedBox(
-                    width: 500,
-                    child: MyCard(
+                    Column(
+                      children: [
+
+                        SizedBox(width: 200,height: 90,
+                          child: CustomDropdown(
+                              labelText: '',
+                              selectedItem:
+                              selectedActivityTargetAndAchieved,
+                              items: filteredMonthlyData
+                                  .map((e) => e.output)
+                                  .toList(),
+                              onChanged: (v) {
+                                selectedActivityTargetAndAchieved = v;
+                                MonthlyJ2D d =
+                                filteredMonthlyData.firstWhere(
+                                      (e) =>
+                                  e.output ==
+                                      selectedActivityTargetAndAchieved,
+                                );
+                                selectedActivityTargetKey =
+                                extractLetters(d.actualTargetMetrics)!;
+                                selectedActivityTarget =
+                                    extractFirstNumberAsDouble(
+                                        d.actualTargetMetrics) ??
+                                        0;
+                                selectedActivityAchieved =
+                                    extractFirstNumberAsDouble(
+                                        d.actualAchievedMetrics) ??
+                                        0;
+                                refresh();
+                              }),
+                        ),
+                        ColumnChart(
+                          barColor: Colors.teal,
+                          target: selectedActivityTarget,
+                          achieved: selectedActivityAchieved,
+                          title: selectedActivityTargetKey!.isNotEmpty
+                              ? 'Target vs Achieved[${selectedActivityTargetKey ?? ''}]'
+                              : 'Target vs Achieved',
+                        ),
+                        PieChartWithPercentages(),
+                      ],
+                    ),
+                  ],
+                ),
+                Row(
+                  spacing: 4,
+                  children: [
+                    SizedBox(
+                      width: 500,
                       child: Column(
                         children: [
                           CustomDropdown(
@@ -393,63 +421,14 @@ class _CustomDashboardPageState extends State<CustomDashboardPage> {
                         ],
                       ),
                     ),
-                  ),
-                  Row(
-                    spacing: 12,
-                    children: [
-                      SizedBox(
-                        width: 400,
-                        child: MyCard(
-                          child: Column(
-                            children: [
-                              CustomDropdown(
-                                  labelText: '',
-                                  selectedItem:
-                                      selectedActivityTargetAndAchieved,
-                                  items: filteredMonthlyData
-                                      .map((e) => e.output)
-                                      .toList(),
-                                  onChanged: (v) {
-                                    selectedActivityTargetAndAchieved = v;
-                                    MonthlyJ2D d =
-                                        filteredMonthlyData.firstWhere(
-                                      (e) =>
-                                          e.output ==
-                                          selectedActivityTargetAndAchieved,
-                                    );
-                                    selectedActivityTargetKey =
-                                        extractLetters(d.actualTargetMetrics)!;
-                                    selectedActivityTarget =
-                                        extractFirstNumberAsDouble(
-                                                d.actualTargetMetrics) ??
-                                            0;
-                                    selectedActivityAchieved =
-                                        extractFirstNumberAsDouble(
-                                                d.actualAchievedMetrics) ??
-                                            0;
-                                    refresh();
-                                  }),
-                              ColumnChart(
-                                barColor: Colors.teal,
-                                target: selectedActivityTarget,
-                                achieved: selectedActivityAchieved,
-                                title: selectedActivityTargetKey!.isNotEmpty
-                                    ? 'Target vs Achieved[${selectedActivityTargetKey ?? ''}]'
-                                    : 'Target vs Achieved',
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      PieChartWithPercentages(),
-                    ],
-                  )
-                ],
-              ),
-              const SizedBox(
-                height: 50,
-              )
-            ],
+
+                  ],
+                ),
+                const SizedBox(
+                  height: 50,
+                )
+              ],
+            ),
           ),
         ),
         floatingActionButton: FloatingActionButton(
@@ -471,7 +450,7 @@ class _CustomDashboardPageState extends State<CustomDashboardPage> {
 
   Widget _title() {
     return Padding(
-      padding: const EdgeInsets.only(top: 8, left: 32, right: 50, bottom: 4),
+      padding: const EdgeInsets.only(top: 8, left: 32, right: 50),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         spacing: 12,
@@ -511,105 +490,102 @@ class _CustomDashboardPageState extends State<CustomDashboardPage> {
       {required BuildContext context, required VoidCallback onPressed}) {
     return SizedBox(
       width: 300,
-      child: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Card(
-          color: Colors.white,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const AppText(
-                text: 'Filters',
-                fontSize: 24,
+      child: Card(
+        color: Colors.white,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const AppText(
+              text: 'Filters',
+              fontSize: 24,
+            ),
+            Divider(),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: CustomDropdown(
+                  labelText: 'Select Year',
+                  selectedItem: '2025',
+                  items: const ['2025'],
+                  onChanged: (v) {}),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: CustomDropdown(
+                  labelText: 'Select Dept',
+                  selectedItem: selectedDept,
+                  items: listOfAvaliableDepts,
+                  onChanged: (v) {
+                    selectedDept = v;
+                    listOfUnits =
+                        allOutputMetric.map((e) => e.unit).toSet().toList();
+                    setState(() {});
+                  }),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: CustomDropdown(
+                  labelText: 'Select Unit',
+                  selectedItem: selectedUnit,
+                  items: listOfUnits,
+                  onChanged: (v) {
+                    selectedUnit = v;
+                  }),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  AppText(text: 'Date Range'),
+                  CustomButton(
+                    text: 'Select',
+                    onPressed: () {
+                      doubleDateDialog(dateRangeController);
+                    },
+                    type: ButtonType.outlined,
+                  )
+                ],
               ),
-              Divider(),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: CustomDropdown(
-                    labelText: 'Select Year',
-                    selectedItem: '2025',
-                    items: const ['2025'],
-                    onChanged: (v) {}),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: TextFormField(
+                style: TextStyle(fontSize: 14, color: Colors.black),
+                controller: dateRangeController,
+                validator: validatorFunction,
+                readOnly: true,
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: CustomDropdown(
-                    labelText: 'Select Dept',
-                    selectedItem: selectedDept,
-                    items: listOfAvaliableDepts,
-                    onChanged: (v) {
-                      selectedDept = v;
-                      listOfUnits =
-                          allOutputMetric.map((e) => e.unit).toSet().toList();
-                      setState(() {});
-                    }),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: CustomDropdown(
-                    labelText: 'Select Unit',
-                    selectedItem: selectedUnit,
-                    items: listOfUnits,
-                    onChanged: (v) {
-                      selectedUnit = v;
-                    }),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    AppText(text: 'Date Range'),
-                    CustomButton(
-                      text: 'Select',
-                      onPressed: () {
-                        doubleDateDialog(dateRangeController);
-                      },
-                      type: ButtonType.outlined,
-                    )
-                  ],
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: CustomButton(
+                text: 'Filter',
+                onPressed: onPressed,
+                fullWidth: true,
+                trailing: Icon(
+                  Icons.filter_alt,
+                  color: Colors.white,
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextFormField(
-                  style: TextStyle(fontSize: 14, color: Colors.black),
-                  controller: dateRangeController,
-                  validator: validatorFunction,
-                  readOnly: true,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: CustomButton(
-                  text: 'Filter',
-                  onPressed: onPressed,
-                  fullWidth: true,
-                  trailing: Icon(
-                    Icons.filter_alt,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-              // Padding(
-              //   padding: const EdgeInsets.all(8.0),
-              //   child: Row(
-              //     spacing: 12,
-              //     children: [
-              //       Expanded(
-              //         child: CustomButton(
-              //           text: 'Cancel',
-              //           onPressed: () => Navigator.pop(context),
-              //           type: ButtonType.text,
-              //           textColor: Colors.red,
-              //         ),
-              //       ),
+            ),
+            // Padding(
+            //   padding: const EdgeInsets.all(8.0),
+            //   child: Row(
+            //     spacing: 12,
+            //     children: [
+            //       Expanded(
+            //         child: CustomButton(
+            //           text: 'Cancel',
+            //           onPressed: () => Navigator.pop(context),
+            //           type: ButtonType.text,
+            //           textColor: Colors.red,
+            //         ),
+            //       ),
 
-              //     ],
-              //   ),
-              // ),
-            ],
-          ),
+            //     ],
+            //   ),
+            // ),
+          ],
         ),
       ),
     );

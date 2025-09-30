@@ -152,7 +152,7 @@ class ColumnChart extends StatelessWidget {
             labelAlignment: ChartDataLabelAlignment.middle, // or .top / .auto / .center
             textStyle: TextStyle(
               fontSize: 16,
-              color: Colors.black,
+              color: Colors.white,
               fontWeight: FontWeight.bold,
             ),
           ),

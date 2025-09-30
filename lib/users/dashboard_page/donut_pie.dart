@@ -40,47 +40,44 @@ class _InteractivePieChartState extends State<InteractivePieChart> {
 
     return AspectRatio(
       aspectRatio: 1.3,
-      child: Card(
-        color: Colors.white,
-        child: Column(
-          children: [
-            // Pie Chart
-            Expanded(
-              child: AspectRatio(
-                aspectRatio: 1,
-                child: PieChart(
-                  PieChartData(
-                    pieTouchData: PieTouchData(
-                      touchCallback: (FlTouchEvent event, pieTouchResponse) {
-                        setState(() {
-                          if (!event.isInterestedForInteractions ||
-                              pieTouchResponse == null ||
-                              pieTouchResponse.touchedSection == null) {
-                            touchedIndex = -1;
-                            return;
-                          }
-                          touchedIndex =
-                              pieTouchResponse.touchedSection!.touchedSectionIndex;
-                        });
-                      },
-                    ),
-                    borderData: FlBorderData(show: false),
-                    sectionsSpace: 0,
-                    centerSpaceRadius: 60,
-                    sections: _buildChartSections(milestoneList),
+      child: Column(
+        children: [
+          // Pie Chart
+          Expanded(
+            child: AspectRatio(
+              aspectRatio: 1,
+              child: PieChart(
+                PieChartData(
+                  pieTouchData: PieTouchData(
+                    touchCallback: (FlTouchEvent event, pieTouchResponse) {
+                      setState(() {
+                        if (!event.isInterestedForInteractions ||
+                            pieTouchResponse == null ||
+                            pieTouchResponse.touchedSection == null) {
+                          touchedIndex = -1;
+                          return;
+                        }
+                        touchedIndex =
+                            pieTouchResponse.touchedSection!.touchedSectionIndex;
+                      });
+                    },
                   ),
+                  borderData: FlBorderData(show: false),
+                  sectionsSpace: 0,
+                  centerSpaceRadius: 60,
+                  sections: _buildChartSections(milestoneList),
                 ),
               ),
             ),
+          ),
 
 
 
 
 
 
-            const SizedBox(width: 28),
-          ],
-        ),
+          const SizedBox(width: 28),
+        ],
       ),
     );
   }
