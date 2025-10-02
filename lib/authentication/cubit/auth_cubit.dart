@@ -77,7 +77,7 @@ class AuthCubit extends Cubit<AuthCubitState> {
 
         if (data.data![0][monthlyTemplateKey] != null) {
 
-          print(data.data![0][monthlyTemplateKey]);
+         // print(data.data![0][monthlyTemplateKey]);
 
           final monthlyTempleJson =
               data.data![0][monthlyTemplateKey] as List<dynamic>;
