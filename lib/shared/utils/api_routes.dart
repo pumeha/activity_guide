@@ -1,5 +1,5 @@
 String baseUrl = "http://www.smarterwaysolutions.site/endpoints";
-//String baseUrl = "http://localhost:5000/endpoints";
+//String baseUrl = "http://localhost:5000/endpoints";//activityguide.smarterwaysolutions.site
 
 class LoginRoutes {
 static String loginRoute = "$baseUrl/auth/login";
