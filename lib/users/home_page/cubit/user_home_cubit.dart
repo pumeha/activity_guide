@@ -55,9 +55,10 @@ class UserHomeCubit extends Cubit<UserHomeState> {
 
       await MysharedPreference().setPreferencesWithoutEncrpytion(
           template_data, jsonEncode(data.data!));
-      final List<MonthlyJ2D> _monthlyRawdata = data.data!.map((e)=> MonthlyJ2D.fromJson(e)).toList();
 
-      return emit(UserHomeSuccess(message: 'Data downloaded', data: _monthlyRawdata));
+     // final List<MonthlyJ2D> _monthlyRawdata = data.data!.map((e)=> MonthlyJ2D.fromJson(e)).toList();
+
+      return emit(UserHomeSuccess(message: 'Data downloaded', data: []));
     } else {
       return emit(UserHomeFailure(message: data.message));
     }

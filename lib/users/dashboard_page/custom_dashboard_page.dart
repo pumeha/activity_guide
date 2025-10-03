@@ -431,19 +431,6 @@ class _CustomDashboardPageState extends State<CustomDashboardPage> {
             ),
           ),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            context
-                .read<UserHomeCubit>()
-                .downloadDashboardData(templateType: 'Monthly');
-          },
-          backgroundColor: active,
-          child: const Icon(
-            Icons.update,
-            size: 24,
-            color: Colors.white,
-          ),
-        ),
       ),
     );
   }
@@ -481,6 +468,11 @@ class _CustomDashboardPageState extends State<CustomDashboardPage> {
               ),
             ),
           ),
+          CustomButton(text: 'Refresh Dashboard', onPressed: (){
+            context
+                .read<UserHomeCubit>()
+                .downloadDashboardData(templateType: 'Monthly');
+          })
         ],
       ),
     );

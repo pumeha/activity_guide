@@ -1,4 +1,4 @@
-String baseUrl = "http://www.smarterwaysolutions.site/endpoints";
+String baseUrl = "https://www.smarterwaysolutions.site/endpoints";
 //String baseUrl = "http://localhost:5000/endpoints";//activityguide.smarterwaysolutions.site
 
 class LoginRoutes {
