@@ -37,7 +37,7 @@ class AppBarchart extends StatelessWidget {
             ...data.map(
                   (e) => _body(
                 output: e.output,
-                value: e.percentCompleted.toString(),
+                value: e.percentCompleted.toString().replaceAll('%', ''),
               ),
             )
           else
@@ -77,7 +77,7 @@ class AppBarchart extends StatelessWidget {
                 const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
                 child: Center(
                   child: Text(
-                    value,
+                    '$value%',
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 16,
