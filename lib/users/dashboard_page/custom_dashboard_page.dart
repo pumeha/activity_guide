@@ -509,8 +509,9 @@ class _CustomDashboardPageState extends State<CustomDashboardPage> {
                   onChanged: (v) {
                     selectedDept = v;
                     listOfUnits =
-                        allOutputMetric.map((e) => e.unit).toSet().toList();
-                    setState(() {});
+                        allOutputMetric.where((e)=> e.dept == selectedDept).map((e) => e.unit).toSet().toList();
+                    selectedUnit = listOfUnits[0];
+                   refresh();
                   }),
             ),
             Padding(

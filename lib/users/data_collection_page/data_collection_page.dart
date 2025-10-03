@@ -400,7 +400,19 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
             validator: validatorFunction,
 
           );
-        }else {
+        }else if(title.contains('OUTPUT')){
+          subtitleWidget = TextFormField(
+            controller: _controllers[index],
+            minLines: 1,
+            maxLines: 3,
+            onChanged: (value) {
+              partialSave[title] = value;
+
+            },
+            validator: validatorFunction,
+            inputFormatters: [ReplaceCommaFormatter()],
+          );
+        }else{
           subtitleWidget = TextFormField(
             controller: _controllers[index],
             minLines: 1,
@@ -447,5 +459,19 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
     }
 
     return date;
+  }
+}
+
+class ReplaceCommaFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue,
+      TextEditingValue newValue,
+      ) {
+    final newText = newValue.text.replaceAll(',', ';');
+    return TextEditingValue(
+      text: newText,
+      selection: newValue.selection,
+    );
   }
 }
