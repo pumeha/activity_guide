@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'colors.dart';
 
 import 'dart:html' as html;
-class Constants{
- bool isValidEmail(String email) {
+
+class Constants {
+  bool isValidEmail(String email) {
     // Regular expression for validating an Email
     final RegExp emailRegex = RegExp(
       r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
@@ -11,7 +12,7 @@ class Constants{
     return emailRegex.hasMatch(email);
   }
 
-   String? isValidPassword(String password) {
+  String? isValidPassword(String password) {
     // Password validation criteria
     if (password.length < 8) {
       return "Minimum length";
@@ -30,29 +31,30 @@ class Constants{
     }
     return null; // Password is valid
   }
-    
 }
- String? validatorFunction(String? v){
-    if(v == null || v.isEmpty){
-      return 'required';
-    }
-    return null;
-  }
-  String? isValidEmail(String? email) {
-    // Regular expression for validating an Email
-    final RegExp emailRegex = RegExp(
-      r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
-    );
-    if(email == null || email.isEmpty){
-      return 'required';
-    }else if(!emailRegex.hasMatch(email)){
-        return '*valid email address required';
-    }else{
-    return null;
-    }
-  }
 
-  String formatDateTime(String isoString) {
+String? validatorFunction(String? v) {
+  if (v == null || v.isEmpty) {
+    return 'required';
+  }
+  return null;
+}
+
+String? isValidEmail(String? email) {
+  // Regular expression for validating an Email
+  final RegExp emailRegex = RegExp(
+    r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+  );
+  if (email == null || email.isEmpty) {
+    return 'required';
+  } else if (!emailRegex.hasMatch(email)) {
+    return '*valid email address required';
+  } else {
+    return null;
+  }
+}
+
+String formatDateTime(String isoString) {
   DateTime dateTime = DateTime.parse(isoString).toUtc();
   dateTime = dateTime.add(const Duration(hours: 1));
   final year = dateTime.year.toString().padLeft(4, '0');
@@ -64,14 +66,12 @@ class Constants{
   return '$year-$month-$day $hour:$minute';
 }
 
-
-
-
 const appName = 'Activity Guide';
-const admin  = 'admin';
+const admin = 'admin';
 const subAdmin = 'sub-admin';
 const user = 'user';
-const defaultDashboard = "https://1drv.ms/x/c/979292c95e1c918d/IQQ71B29H8udTogIbikm_fajAVnJ8TicsaX8QVwmsc67aS8?em=2&AllowTyping=True&wdHideGridlines=True&wdHideHeaders=True&wdDownloadButton=True&wdInConfigurator=True&wdInConfigurator=True";
+const defaultDashboard =
+    "https://1drv.ms/x/c/979292c95e1c918d/IQQ71B29H8udTogIbikm_fajAVnJ8TicsaX8QVwmsc67aS8?em=2&AllowTyping=True&wdHideGridlines=True&wdHideHeaders=True&wdDownloadButton=True&wdInConfigurator=True&wdInConfigurator=True";
 const unauthorizedUser = 'Unauthorized User';
 const monthlyTemplateKey = 'monthlyTemplate';
 const workplanTemplateKey = 'workplanTemplate';
@@ -83,25 +83,30 @@ const monthlyTemplateName = 'monthlyTemplateName';
 const workplanTemplateName = 'workplanTemplateName';
 const additionalTemplateName = 'additionalTemplateName';
 
-String templateName(String purpose){
+String templateName(String purpose) {
   DateTime dateTime = DateTime.now();
-  String value = dateTime.year.toString() + (dateTime.month+1).toString() + dateTime.day.toString() +
-                  dateTime.hour.toString() + dateTime.minute.toString() + dateTime.second.toString();
-        return  purpose+'_'+value;          
+  String value = dateTime.year.toString() +
+      (dateTime.month + 1).toString() +
+      dateTime.day.toString() +
+      dateTime.hour.toString() +
+      dateTime.minute.toString() +
+      dateTime.second.toString();
+  return purpose + '_' + value;
 }
 
-Widget customCircleIndicator(){
- return Center(child: CircularProgressIndicator(
+Widget customCircleIndicator() {
+  return Center(
+      child: CircularProgressIndicator(
     strokeWidth: 8,
-    value: 0.24,  // Percentage value between 0.0 and 1.0
-    backgroundColor: Colors.black.withOpacity(0.1),  // Lighter background color
+    value: 0.24, // Percentage value between 0.0 and 1.0
+    backgroundColor: Colors.black.withOpacity(0.1), // Lighter background color
     valueColor: const AlwaysStoppedAnimation<Color>(active), // Progress color
   ));
 }
 
 bool isDeviceOffline() {
-return html.window.navigator.onLine ?? false;
- //  return true;
+  return html.window.navigator.onLine ?? false;
+  //  return true;
 }
 
 double? extractFirstNumberAsDouble(String input) {
@@ -110,7 +115,7 @@ double? extractFirstNumberAsDouble(String input) {
   return match != null ? double.parse(match) : null;
 }
 
-String? extractLetters(String input){
+String? extractLetters(String input) {
   RegExp regExp = RegExp(r'[A-Za-z]+');
   Iterable<Match> matches = regExp.allMatches(input);
 
@@ -118,9 +123,40 @@ String? extractLetters(String input){
   return textOnly;
 }
 
-double average({required double value}){
-  if(value == 0.0){
+double average({required double value}) {
+  if (value == 0.0) {
     return value;
   }
-  return value/100;
+  return value / 100;
+}
+
+Future<String?> showOthersDialog({required BuildContext context}) async {
+   return await showDialog<String>(
+    context: context,
+    builder: (BuildContext context) {
+      final TextEditingController customController = TextEditingController();
+      return AlertDialog(
+        title: const Text('Add others specify'),
+        content: TextField(
+          controller: customController,
+          decoration: const InputDecoration(hintText: 'Enter your value'),
+          autofocus: true,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(null), // Cancel
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              if (customController.text.trim().isNotEmpty) {
+                Navigator.of(context).pop(customController.text.trim());
+              }
+            },
+            child: const Text('OK'),
+          ),
+        ],
+      );
+    },
+  );
 }

@@ -284,11 +284,13 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
                   ))
               .toList(),
           onChanged: (String? value) {
-
             partialSave[title] = value;
             _controllers[index].text = value!;
-            _controllers[actualTarget].text = _outputMetric.firstWhere((e)=> e.output == value).monthValue!;
-            partialSave[_labels[actualTarget]] = _outputMetric.firstWhere((e)=> e.output == value).monthValue!;
+            if(title == 'OUTPUT'){
+              _controllers[actualTarget].text = _outputMetric.firstWhere((e)=> e.output == value).monthValue!;
+              partialSave[_labels[actualTarget]] = _outputMetric.firstWhere((e)=> e.output == value).monthValue!;
+            }
+
           },
           isExpanded: true,
           validator: validatorFunction,

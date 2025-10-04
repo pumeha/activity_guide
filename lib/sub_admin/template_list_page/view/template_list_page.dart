@@ -35,7 +35,9 @@ class _TemplatesListPageState extends State<TemplatesListPage>
       final List<dynamic> decodedList = jsonDecode(templatesJson);
       final List<TemplateModel> templates = decodedList.map((template) {
         TemplateModel model = TemplateModel.fromJson(template);
-
+        if(model.purpose == 'mtemplate'){
+          Future.wait([MysharedPreference().setPreferences(monthlyTemplateName, model.templateName)]);
+        }
         if (model.purpose == 'wtemplate' && model.status == 'active') {
           List<RowData> columns = model.values;
           String names = columns.map((column) => column.columnName).join(',');

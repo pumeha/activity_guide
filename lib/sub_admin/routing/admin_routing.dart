@@ -1,5 +1,6 @@
 import 'package:activity_guide/sub_admin/dashboard_page/dashboard_page.dart';
 import 'package:activity_guide/sub_admin/template_builder_page/view/template_builder_update.dart';
+import 'package:activity_guide/users/dashboard_page/custom_dashboard_page.dart';
 import 'package:beamer/beamer.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import '../../shared/utils/constants.dart';
@@ -67,7 +68,7 @@ class PreviewTemplateLocation extends BeamLocation{
 class DashboardLocation extends BeamLocation{
   @override
   List<BeamPage> buildPages(BuildContext context, RouteInformationSerializable<dynamic> state) {
-    return [BeamPage(child:   DashboardPage(),title: appName,key: ValueKey('dashboard_page'))];
+    return [BeamPage(child:   CustomDashboardPage(),title: appName,key: ValueKey('dashboard_page'))];
   }
 
   @override

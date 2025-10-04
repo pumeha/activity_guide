@@ -312,7 +312,7 @@ class _UserLandingPageState extends State<UserLandingPage> {
                 const Padding(
                   padding: EdgeInsets.only(top: 60),
                   child: CustomText(
-                    text: 'SMARTERWAY SOLUTIONS',
+                    text: 'SMARTERWAY SOLUTIONS LTD',
                     size: 18,
                     color: active,
                     weight: FontWeight.bold,
@@ -320,7 +320,7 @@ class _UserLandingPageState extends State<UserLandingPage> {
                 ),
                 SizedBox(height: 8,),
                 CustomText(
-                  text: '+2349037200210',
+                  text: 'RC No :- 8029005\n(+2349037200210)',
                   size: 16,
                   color: active,
                   weight: FontWeight.bold,

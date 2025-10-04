@@ -5,6 +5,8 @@ import 'package:activity_guide/shared/custom_widgets/my_card.dart';
 import 'package:activity_guide/shared/custom_widgets/reuseable_dropdown.dart';
 import 'package:activity_guide/shared/utils/colors.dart';
 import 'package:activity_guide/shared/utils/constants.dart';
+import 'package:activity_guide/shared/utils/http_helper/storage_keys.dart';
+import 'package:activity_guide/shared/utils/myshared_preference.dart';
 import 'package:activity_guide/users/dashboard_page/app_barchart.dart';
 import 'package:activity_guide/users/dashboard_page/dashboard_helper.dart';
 import 'package:activity_guide/users/dashboard_page/donut_pie.dart';
@@ -38,7 +40,7 @@ class _CustomDashboardPageState extends State<CustomDashboardPage> {
   List<ActivityAndValues> top3Activities = [];
   List<ActivityAndValues> bottom3Activities = [];
   String? selectedDept,
-      selectedUnit,
+      selectedUnit,role,
       selectedActivity,
       selectedActivityTargetAndAchieved;
   double selectedActivityTarget = 0,
@@ -52,6 +54,26 @@ class _CustomDashboardPageState extends State<CustomDashboardPage> {
   int? totalSelectedDateRangeActivity = 0;
   String selectedActivityTargetKey = '';
   bool allZero = true;
+  Map<String,double> challengesData = {};
+
+  Future<void> loadUserDetails() async {
+    role =  await MysharedPreference().getPreferences(LoginKeys.role) ?? '';
+    print(role);
+    if(role == 'user'){
+      String dept = await MysharedPreference().getPreferences(deptKey) ?? '';
+      selectedDept = dept.split('/')[0];
+      selectedUnit = dept.split('/')[1];
+    }
+
+    refresh();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    loadUserDetails();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,16 +85,6 @@ class _CustomDashboardPageState extends State<CustomDashboardPage> {
           EasyLoading.showSuccess('Success');
           allMonthlyData = state.data[0];
           allOutputMetric = state.data[1];
-          allOutputMetric
-              .map((e) => print(e.dept +
-                  '-' +
-                  e.unit +
-                  '-' +
-                  e.output +
-                  '-' +
-                  e.months.toString()))
-              .toList();
-
           listOfAvaliableDepts =
               allOutputMetric.map((e) => e.dept).toSet().toList();
           // totalSelectedDateRangeActivity
@@ -92,9 +104,13 @@ class _CustomDashboardPageState extends State<CustomDashboardPage> {
                 Row(
                   spacing: 4,
                   children: [
-                    _filters(
+                   if(role != 'user') _filters(
                         context: context,
                         onPressed: () {
+                          if(allMonthlyData.isEmpty){
+                            EasyLoading.showError('No data found');
+                            return;
+                          }
                           List<String> rangeParts =
                               dateRangeController.text.split('-');
                           DateTime startDate =
@@ -262,6 +278,15 @@ class _CustomDashboardPageState extends State<CustomDashboardPage> {
                             );
                           }).toList();
 
+                          List<String> challenges  = filteredMonthlyData.map((e)=>e.challenges).toList();
+                          for (var challenge in challenges) {
+                            if (challengesData.containsKey(challenge)) {
+                              challengesData[challenge] = challengesData[challenge]! + 1;
+                            } else {
+                              challengesData[challenge] = 1;
+                            }
+                          }
+
                           refresh();
                         }),
                     Column(
@@ -368,11 +393,14 @@ class _CustomDashboardPageState extends State<CustomDashboardPage> {
                           barColor: Colors.teal,
                           target: selectedActivityTarget,
                           achieved: selectedActivityAchieved,
-                          title: selectedActivityTargetKey!.isNotEmpty
+                          title: selectedActivityTargetKey.isNotEmpty
                               ? 'Target vs Achieved[${selectedActivityTargetKey ?? ''}]'
                               : 'Target vs Achieved',
                         ),
-                        PieChartWithPercentages(),
+                        PieChartWithPercentages(
+                          inputData: challengesData,
+                        ),
+
                       ],
                     ),
                   ],
@@ -472,11 +500,226 @@ class _CustomDashboardPageState extends State<CustomDashboardPage> {
             context
                 .read<UserHomeCubit>()
                 .downloadDashboardData(templateType: 'Monthly');
-          })
+          }),
+          if(role == 'user') CustomButton(text: 'Filter', onPressed: () async{
+            if(allMonthlyData.isEmpty){
+              EasyLoading.showError('No data found');
+              return;
+            }
+           final selectedRange =  await doubleDateDialog(dateRangeController);
+
+            if (selectedRange == null) {
+              // User cancelled the dialog
+              return;
+            }
+            {
+
+              if(dateRangeController.text.isEmpty){
+                EasyLoading.showError('Date Not Select');
+                return;
+              }
+              List<String> rangeParts =
+              dateRangeController.text.split('-');
+              print(rangeParts);
+              DateTime startDate =
+              DateFormat('d/M/yyyy').parse(rangeParts[0]);
+              DateTime endDate =
+              DateFormat('d/M/yyyy').parse(rangeParts[1]);
+
+              filteredMonthlyData = allMonthlyData.where((e) {
+                return e.dept == selectedDept &&
+                    e.unit == selectedUnit &&
+                    e.createdAt.isAfter(
+                        startDate.subtract(Duration(days: 1))) &&
+                    e.createdAt
+                        .isBefore(endDate.add(Duration(days: 1)));
+              }).toList();
+
+              List<String> selectedMonths =
+              getMonthsInRange(dateRangeController.text);
+              filteredOutputMetric = allOutputMetric.where((e) {
+                return e.dept == selectedDept &&
+                    e.unit == selectedUnit &&
+                    e.months.any(
+                            (month) => selectedMonths.contains(month));
+              }).toList();
+
+              List<int> _listOfMilestone =
+              filteredMonthlyData.map((e) {
+                int value = 0;
+                switch (e.milestone) {
+                  case 'N/A':
+                    value = 0;
+                    break;
+                  case 'PROPOSAL':
+                    value = 20;
+                    break;
+                  case 'PLANNING':
+                    value = 40;
+                    break;
+                  case 'EXECUTING':
+                    value = 60;
+                    break;
+                  case 'COMPLETE':
+                    value = 80;
+                    break;
+                  case 'SUBMISSION':
+                    value = 100;
+                    break;
+                }
+                return value;
+              }).toList();
+
+              List<int> _listOfMilestoneNA =
+              filteredMonthlyData.map((e) {
+                if (e.milestone == 'N/A') {
+                  return 0;
+                }
+                return 0;
+              }).toList();
+              List<int> _listOfMilestoneSUBMISSION =
+              filteredMonthlyData.map((e) {
+                if (e.milestone == 'SUBMISSION') {
+                  return 100;
+                }
+                return 0;
+              }).toList();
+              List<int> _listOfMilestoneCOMPLETE =
+              filteredMonthlyData.map((e) {
+                if (e.milestone == 'COMPLETE') {
+                  return 80;
+                }
+                return 0;
+              }).toList();
+              List<int> _listOfMilestonePLANNING =
+              filteredMonthlyData.map((e) {
+                if (e.milestone == 'PLANNING') {
+                  return 40;
+                }
+                return 0;
+              }).toList();
+              List<int> _listOfMilestonePROPOSAL =
+              filteredMonthlyData.map((e) {
+                if (e.milestone == 'PROPOSAL') {
+                  return 20;
+                }
+                return 0;
+              }).toList();
+              List<int> _listOfMilestoneEXECUTING =
+              filteredMonthlyData.map((e) {
+                if (e.milestone == 'EXECUTING') {
+                  return 60;
+                }
+                return 0;
+              }).toList();
+
+              //aveSubmission
+              aveSubmission = _listOfMilestoneSUBMISSION.isNotEmpty
+                  ? _listOfMilestoneSUBMISSION.fold(
+                  0, (prev, element) => prev + element) /
+                  _listOfMilestoneSUBMISSION.length
+                  : 0.0;
+              //aveExecuting
+              aveExecuting = _listOfMilestoneEXECUTING.isNotEmpty
+                  ? _listOfMilestoneEXECUTING.fold(
+                  0, (prev, element) => prev + element) /
+                  _listOfMilestoneEXECUTING.length
+                  : 0.0;
+              //aveComplete
+              aveComplete = _listOfMilestoneCOMPLETE.isNotEmpty
+                  ? _listOfMilestoneCOMPLETE.fold(
+                  0, (prev, element) => prev + element) /
+                  _listOfMilestoneCOMPLETE.length
+                  : 0.0;
+              //aveProposal
+              aveProposal = _listOfMilestonePROPOSAL.isNotEmpty
+                  ? _listOfMilestonePROPOSAL.fold(
+                  0, (prev, element) => prev + element) /
+                  _listOfMilestonePROPOSAL.length
+                  : 0.0;
+              //avePlanning
+              avePlanning = _listOfMilestonePLANNING.isNotEmpty
+                  ? _listOfMilestonePLANNING.fold(
+                  0, (prev, element) => prev + element) /
+                  _listOfMilestonePLANNING.length
+                  : 0.0;
+
+              allZero = aveSubmission == 0 &&
+                  aveComplete == 0 &&
+                  aveExecuting == 0 &&
+                  avePlanning == 0 &&
+                  aveProposal == 0;
+
+              deptAndUnitMilestoneWeight = _listOfMilestone.isNotEmpty
+                  ? _listOfMilestone.fold(
+                  0, (prev, element) => prev + element) /
+                  _listOfMilestone.length
+                  : 0;
+
+              totalSelectedDateRangeActivity =
+                  filteredOutputMetric.length;
+
+              myData.clear();
+              selectedActivityTarget = 0;
+              selectedActivityAchieved = 0;
+              // Step 1: Sort the data
+
+              List<dynamic> sortedData = List.from(
+                  filteredMonthlyData)
+                ..sort((a, b) =>
+                    b.percentCompleted.compareTo(a.percentCompleted));
+
+              // Step 2: Take top and bottom 3
+              top3Activities = sortedData.take(3).map((e) {
+                return ActivityAndValues(
+                  output: e.output,
+                  percentCompleted:
+                  e.percentCompleted, // or e.value if applicable
+                );
+              }).toList();
+
+              bottom3Activities =
+                  sortedData.reversed.take(3).map((e) {
+                    return ActivityAndValues(
+                      output: e.output,
+                      percentCompleted: e.percentCompleted,
+                    );
+                  }).toList();
+
+              List<String> challenges  = filteredMonthlyData.map((e)=>e.challenges).toList();
+              for (var challenge in challenges) {
+                if (challengesData.containsKey(challenge)) {
+                  challengesData[challenge] = challengesData[challenge]! + 1;
+                } else {
+                  challengesData[challenge] = 1;
+                }
+              }
+
+              refresh();
+            }
+          },trailing: Icon(Icons.filter_alt,color: Colors.white,),),
         ],
       ),
     );
   }
+  void showFiltersDialog(BuildContext context, VoidCallback onPressed) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+          child: _filters(
+            context: context,
+            onPressed: () {
+              Navigator.pop(context); // Close dialog
+              onPressed(); // Call your passed function
+            },
+          ),
+        );
+      },
+    );
+  }
+
 
   Widget _filters(
       {required BuildContext context, required VoidCallback onPressed}) {
@@ -532,8 +775,13 @@ class _CustomDashboardPageState extends State<CustomDashboardPage> {
                   AppText(text: 'Date Range'),
                   CustomButton(
                     text: 'Select',
-                    onPressed: () {
-                      doubleDateDialog(dateRangeController);
+                    onPressed: () async{
+                      final selectedRange = await doubleDateDialog(dateRangeController);
+
+                      if (selectedRange == null) {
+                        // User cancelled the dialog
+                        return;
+                      }
                     },
                     type: ButtonType.outlined,
                   )
@@ -613,27 +861,28 @@ class _CustomDashboardPageState extends State<CustomDashboardPage> {
     );
   }
 
-  void doubleDateDialog(TextEditingController controller) {
+  Future<DateTimeRange?> doubleDateDialog(TextEditingController controller) async{
     String multipleDateString = '';
-    showDateRangePicker(
-            context: context,
-            firstDate: DateTime(DateTime.now().year),
-            lastDate: DateTime(DateTime.now().year + 5),
-            initialEntryMode: DatePickerEntryMode.calendarOnly)
-        .then((onValue) {
-      if (onValue != null) {
-        String startDate =
-            '${onValue.start.day}/${onValue.start.month}/${onValue.start.year}';
-        String endDate =
-            '${onValue.end.day}/${onValue.end.month}/${onValue.end.year}';
-        multipleDateString = startDate + '-' + endDate;
+    final pickedRange = await showDateRangePicker(
+        context: context,
+        firstDate: DateTime(DateTime.now().year),
+        lastDate: DateTime(DateTime.now().year + 5),
+        initialEntryMode: DatePickerEntryMode.calendarOnly);
 
-        setState(() {
-          controller.text = multipleDateString;
-        });
-      }
-    });
+    if (pickedRange != null) {
+      String startDate =
+          '${pickedRange.start.day}/${pickedRange.start.month}/${pickedRange.start.year}';
+      String endDate =
+          '${pickedRange.end.day}/${pickedRange.end.month}/${pickedRange.end.year}';
+      multipleDateString = startDate + '-' + endDate;
+
+      setState(() {
+        controller.text = multipleDateString;
+      });
+    }
+    return pickedRange;
   }
+
 
   void refresh() {
     setState(() {});
