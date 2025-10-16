@@ -48,11 +48,12 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
           List<TemplateJson> data = state.data!.map((data) => TemplateJson.fromJson(data)).toList();
 
           if(state.outputMetric != null){
-            data.forEach((e) {
+            for (var e in data) {
               if (e.name.toLowerCase() == 'output') {
                 e.range = state.outputMetric!.map((e) => e.output).join(',');
+
               }
-            });
+            }
             _outputMetric = state.outputMetric!;
           }
 
@@ -92,7 +93,9 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
                           actualEnd = index;
                         }else if(data[index].name.contains('ACTUAL TARGET')){
                           actualTarget = index;
-
+                        }else if(data[index].name.contains('OUTPUT')){
+                         // print('OUTPUT');
+                         // print(data[index].range);
                         }
                         return CustomCard(
                             index,
@@ -265,8 +268,10 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
           editValues[0][labels[index]]; //editValues[0]['Output']
     }
 
+
     switch (type) {
       case 'Dropdown':
+      case 'Dropdown using active workplan columns':
         subtitleWidget = DropdownButtonFormField<String>(
           value: partialSave[title],
           items: range
@@ -351,7 +356,6 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
             onChanged: (Map<String, String> data) {
               _controllers[index].text = jsonEncode(data);
               partialSave[title] = jsonEncode(data);
-
             },
           );
         }else if(title.contains('END') || title.contains('ACTUAL TARGET(METRICS)')){

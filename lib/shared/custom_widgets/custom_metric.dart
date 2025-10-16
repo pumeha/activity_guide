@@ -72,16 +72,16 @@ class _CustomMetricState extends State<CustomMetric> {
     final m1 = int.tryParse(m1Controller.text) ?? 0;
     final m2 = int.tryParse(m2Controller.text) ?? 0;
     final m3 = int.tryParse(m3Controller.text) ?? 0;
-    final total = m1 + m2 + m3;
+    final total = int.tryParse(totalController.text) ?? 0;
 
     final c1 = c1Controller.text.isEmpty? '':'-${c1Controller.text}';
     final c2 = c2Controller.text.isEmpty? '':'-${c2Controller.text}';
     final c3 = c3Controller.text.isEmpty? '':'-${c3Controller.text}';
     final ct = ctController.text.isEmpty? '':'-${ctController.text}';
 
-    if (totalController.text != total.toString()) {
-      totalController.text = total.toString();
-    }
+    // if (totalController.text != total.toString()) {
+    //   totalController.text = total.toString();
+    // }
 
     widget.onChanged?.call({
       'm1': '$m1$c1',
@@ -130,7 +130,6 @@ class _CustomMetricState extends State<CustomMetric> {
             label: 'Total',
             controller: totalController,
             commentController: ctController,
-            readOnly: true,
           ),
         ],
       ),

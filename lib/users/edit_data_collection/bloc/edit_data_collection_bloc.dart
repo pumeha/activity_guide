@@ -94,6 +94,7 @@ class EditDataCollectionBloc
       } else if (_selectedTemplate == 'workplan' &&
           templateName != null &&
           templateName.isNotEmpty) {
+
         final response = await impl.upload(
             url: TemplateRoutes.uploadTemplateData,
             templateName: templateName,
