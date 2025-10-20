@@ -120,7 +120,7 @@ String? extractLetters(String input) {
   Iterable<Match> matches = regExp.allMatches(input);
 
   String textOnly = matches.map((m) => m.group(0)!).join();
-  return textOnly;
+  return input.contains('-') ? input.split('-')[1] : input;
 }
 
 double average({required double value}) {

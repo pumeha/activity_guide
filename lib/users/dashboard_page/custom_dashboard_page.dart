@@ -58,7 +58,6 @@ class _CustomDashboardPageState extends State<CustomDashboardPage> {
 
   Future<void> loadUserDetails() async {
     role =  await MysharedPreference().getPreferences(LoginKeys.role) ?? '';
-    print(role);
     if(role == 'user'){
       String dept = await MysharedPreference().getPreferences(deptKey) ?? '';
       selectedDept = dept.split('/')[0];
@@ -366,8 +365,7 @@ class _CustomDashboardPageState extends State<CustomDashboardPage> {
                               selectedItem:
                               selectedActivityTargetAndAchieved,
                               items: filteredMonthlyData
-                                  .map((e) => e.output)
-                                  .toList(),
+                                  .map((e) => e.output).toSet().toList(),
                               onChanged: (v) {
                                 selectedActivityTargetAndAchieved = v;
                                 MonthlyJ2D d =
@@ -397,8 +395,9 @@ class _CustomDashboardPageState extends State<CustomDashboardPage> {
                               ? 'Target vs Achieved[${selectedActivityTargetKey ?? ''}]'
                               : 'Target vs Achieved',
                         ),
-                        PieChartWithPercentages(
-                          inputData: challengesData,
+                        RadialChallengesChart(
+                          data: challengesData,
+                          size: 350,
                         ),
 
                       ],
@@ -520,7 +519,6 @@ class _CustomDashboardPageState extends State<CustomDashboardPage> {
               }
               List<String> rangeParts =
               dateRangeController.text.split('-');
-              print(rangeParts);
               DateTime startDate =
               DateFormat('d/M/yyyy').parse(rangeParts[0]);
               DateTime endDate =

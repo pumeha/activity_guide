@@ -104,6 +104,7 @@ class UserHomeCubit extends Cubit<UserHomeState> {
       List<dynamic> _output = _data[1];
 
 
+
     final List<MonthlyJ2D> _monthlyRawdata = _monthly.map((e)=> MonthlyJ2D.fromJson(e)).toList();
       final rawList = _output.map((e){
         return Map<String, dynamic>.from(e);

@@ -1,6 +1,3 @@
-import 'package:activity_guide/shared/custom_widgets/app_text.dart';
-import 'package:activity_guide/shared/custom_widgets/my_card.dart';
-import 'package:activity_guide/shared/custom_widgets/reuseable_dropdown.dart';
 import 'package:activity_guide/users/dashboard_page/custom_dashboard_page.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';

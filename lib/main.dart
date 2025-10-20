@@ -19,7 +19,6 @@ import 'package:activity_guide/sub_admin/template_builder_page/bloc/builder_bloc
 import 'package:activity_guide/authentication/cubit/auth_cubit.dart';
 import 'package:activity_guide/authentication/repository/auth_repository_impl.dart';
 import 'package:activity_guide/authentication/routing/login_location.dart';
-
 import 'sub_admin/routing/admin_routing.dart';
 import 'admin/bloc/user_bloc.dart';
 import 'admin/repository/users_repo_impl.dart';
@@ -31,9 +30,7 @@ Future main() async {
 
   runApp(MultiBlocProvider(
     providers: [
-      BlocProvider(
-        create: (_) => AuthCubit(AuthRepositoryImpl()),
-      ),
+      BlocProvider(create: (_) => AuthCubit(AuthRepositoryImpl()),),
       BlocProvider(create: (_) => BuilderBloc()),
       BlocProvider(create: (_) => DashboardCubit(DashboardRepositoryImpl())),
       BlocProvider(create: (_) => UserBloc(UsersRepoImpl())),

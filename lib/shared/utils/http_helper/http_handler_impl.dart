@@ -43,7 +43,7 @@ class HttpHandlerImpl extends HttpHandlerAbstract {
   @override
   Future<Map<String, dynamic>> post({required String url, String? token, required body}) async{
       Map<String,String> header ={};
-      print(body);
+
       if (token == null ||token.isEmpty) {
         header = {'Content-Type' : 'application/json'};
       }else if(token.isNotEmpty){
@@ -60,7 +60,7 @@ class HttpHandlerImpl extends HttpHandlerAbstract {
                         .timeout(const Duration(seconds: 10));
 
       Map<String,dynamic> jsonData = jsonDecode(response.body);
-      print(response.body);
+
       return jsonData;
 
       }on TimeoutException catch (_){
@@ -70,7 +70,7 @@ class HttpHandlerImpl extends HttpHandlerAbstract {
       }on http.ClientException catch (e){
           return {'status':503,'message':e.message,'data':[]};
       }catch (e) {
-      print(e.toString());
+
        return {'status':500,'message':'Internal Server Error','data':[]};
       }
 

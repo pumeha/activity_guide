@@ -24,7 +24,6 @@ class BuilderDialog {
     if (templatePurpose != null && templatePurpose == 'mtemplate') {
       activeWorkplanColumns = await MysharedPreference()
           .getPreferencesWithoutEncrpytion('activeWorkplanColumns');
-      //    print(templatePurpose);
 
       if (activeWorkplanColumns != null && activeWorkplanColumns.isNotEmpty) {
         range =

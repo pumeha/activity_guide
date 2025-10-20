@@ -175,7 +175,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                               context
                                   .beamToReplacementNamed('/reset_password');
                             },
-                            child: Text("Forgot password?",
+                            child: const Text("Forgot password?",
                                 style: TextStyle(color: active)),
                           )
                         ],
