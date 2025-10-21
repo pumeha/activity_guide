@@ -118,6 +118,7 @@ class _CustomDashboardPageState extends State<CustomDashboardPage> {
                               DateFormat('d/M/yyyy').parse(rangeParts[1]);
 
                           filteredMonthlyData = allMonthlyData.where((e) {
+                            selectedActivityTargetAndAchieved = null;
                             return e.dept == selectedDept &&
                                 e.unit == selectedUnit &&
                                 e.createdAt.isAfter(

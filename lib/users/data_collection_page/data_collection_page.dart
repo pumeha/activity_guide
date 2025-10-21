@@ -50,11 +50,15 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
           if(state.outputMetric != null){
             for (var e in data) {
               if (e.name.toLowerCase() == 'output') {
-                e.range = state.outputMetric!.map((e) => e.output).join(',');
+                e.range = state.outputMetric!.map((e) => e.output.replaceAll(',', '')).join(',');
 
               }
             }
             _outputMetric = state.outputMetric!;
+            // _outputMetric.map((e){
+            //   String value = e.monthValue??'';
+            //   return print(e.output + '\t'+value);
+            // }).toList();
           }
 
 
@@ -292,8 +296,12 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
             partialSave[title] = value;
             _controllers[index].text = value!;
             if(title == 'OUTPUT'){
-              _controllers[actualTarget].text = _outputMetric.firstWhere((e)=> e.output == value).monthValue!;
-              partialSave[_labels[actualTarget]] = _outputMetric.firstWhere((e)=> e.output == value).monthValue!;
+
+              _controllers[actualTarget].text = _outputMetric.firstWhere((e){
+                return e.output.replaceAll(',', '') == value;
+              }).monthValue!;
+              //print(_controllers[actualTarget].text);
+              partialSave[_labels[actualTarget]] = _outputMetric.firstWhere((e)=> e.output.replaceAll(',', '') == value).monthValue!;
             }
 
           },
