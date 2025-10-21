@@ -55,10 +55,7 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
               }
             }
             _outputMetric = state.outputMetric!;
-            // _outputMetric.map((e){
-            //   String value = e.monthValue??'';
-            //   return print(e.output + '\t'+value);
-            // }).toList();
+
           }
 
 
@@ -98,8 +95,7 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
                         }else if(data[index].name.contains('ACTUAL TARGET')){
                           actualTarget = index;
                         }else if(data[index].name.contains('OUTPUT')){
-                         // print('OUTPUT');
-                         // print(data[index].range);
+
                         }
                         return CustomCard(
                             index,
@@ -300,7 +296,7 @@ class _DataCollectionPageState extends State<DataCollectionPage> {
               _controllers[actualTarget].text = _outputMetric.firstWhere((e){
                 return e.output.replaceAll(',', '') == value;
               }).monthValue!;
-              //print(_controllers[actualTarget].text);
+
               partialSave[_labels[actualTarget]] = _outputMetric.firstWhere((e)=> e.output.replaceAll(',', '') == value).monthValue!;
             }
 

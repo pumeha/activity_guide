@@ -21,9 +21,9 @@ class DataCollectionBloc extends Bloc<DataCollectionEvent, DataCollectionState> 
         final _data = jsonDecode(_outputMetric) as List<dynamic>;
 
         List<OutputMetricJson> filtered = _data.map((e)=>OutputMetricJson.fromJson(e)).toList();
-        filtered = filtered.where((e){
-          return (e.monthValue!.isNotEmpty && !(e.monthValue!.startsWith('0')));
-        }).toList();
+        // filtered = filtered.where((e){
+        //   return (e.monthValue!.isNotEmpty && !(e.monthValue!.startsWith('0')));
+        // }).toList();
 
         if(filtered.isEmpty){
           emit(DataCollectionStateFailure(errorMessage: 'No Active Monthly Outputs'));
@@ -72,7 +72,7 @@ class DataCollectionBloc extends Bloc<DataCollectionEvent, DataCollectionState> 
       if (workplanTemplate != null && workplanTemplate.isNotEmpty) {
         final workplanTemplateList =
             jsonDecode(workplanTemplate) as List<dynamic>;
-        print(workplanTemplateList);
+
         emit(DataCollectionStateSuccess(
             dataList: workplanTemplateList, templateType: 'Workplan Template'));
       } else {
