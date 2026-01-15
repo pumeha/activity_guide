@@ -2,12 +2,6 @@
 
 Activity guide is a role-based project and activity management platform designed to help organizations plan, execute, and track performance efficiently. It combines structured activity templates, real-time dashboards, and performance analytics to support data-driven decision-making across teams.
 
-## Getting Started
-
-Activity Guide streamlines corporate planning by providing a centralized system where administrators define structure, users execute activities, and performance is tracked at both individual and organizational levels.
-
-The platform supports hierarchical administration, ensuring control, accountability, and transparency throughout the project lifecycle.
-
 
 ## 🔐 User Roles & Permissions
 
@@ -29,6 +23,7 @@ The platform supports hierarchical administration, ensuring control, accountabil
 - Submits activity updates and feedback
 - Views **monthly performance metrics** via a personal dashboard
 - Tracks productivity and progress over time
+
 
 
 
