@@ -1,18 +1,35 @@
-# attendance_system
+# activity_guide
 
-A new Flutter project.
+Activity guide is a role-based project and activity management platform designed to help organizations plan, execute, and track performance efficiently. It combines structured activity templates, real-time dashboards, and performance analytics to support data-driven decision-making across teams.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+Activity Guide streamlines corporate planning by providing a centralized system where administrators define structure, users execute activities, and performance is tracked at both individual and organizational levels.
 
-A few resources to get you started if this is your first Flutter project:
+The platform supports hierarchical administration, ensuring control, accountability, and transparency throughout the project lifecycle.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 🔐 User Roles & Permissions
 
-a working format
+### 👑 Super Admin
+- Creates and manages accounts for:
+  - Admins
+  - Sub Admins
+  - Users
+- Oversees system-wide configurations
+- Has full access to all organizational data and performance metrics
+
+### 🛠 Admin / Sub Admin
+- Creates and manages activity templates
+- Manages assigned users
+- Views aggregated and individual performance analytics
+- Monitors team productivity and compliance
+
+### 👤 User
+- Executes assigned activities using predefined templates
+- Submits activity updates and feedback
+- Views **monthly performance metrics** via a personal dashboard
+- Tracks productivity and progress over time
+
+
+
