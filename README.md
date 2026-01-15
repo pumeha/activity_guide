@@ -13,13 +13,12 @@ The platform supports hierarchical administration, ensuring control, accountabil
 
 ### 👑 Super Admin
 - Creates and manages accounts for:
-  - Admins
   - Sub Admins
   - Users
 - Oversees system-wide configurations
 - Has full access to all organizational data and performance metrics
 
-### 🛠 Admin / Sub Admin
+### 🛠 Sub Admin
 - Creates and manages activity templates
 - Manages assigned users
 - Views aggregated and individual performance analytics
@@ -30,6 +29,7 @@ The platform supports hierarchical administration, ensuring control, accountabil
 - Submits activity updates and feedback
 - Views **monthly performance metrics** via a personal dashboard
 - Tracks productivity and progress over time
+
 
 
 
